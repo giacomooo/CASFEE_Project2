@@ -1,0 +1,23 @@
+<mat-card>
+  <h3>Finde deinen Parkplatz</h3>
+  <form class="search-form">
+    <mat-form-field appearance="fill">
+      <input type="input" matInput placeholder="Ort">
+    </mat-form-field>
+    <div class="buttons">
+      <button mat-raised-button color="primary">Datum/Zeit</button>
+      <button mat-raised-button color="primary">ab sofort</button>
+    </div>
+  </form>
+</mat-card>
+<mat-card>
+  <mat-list>
+    <mat-list-item *ngFor="let parking of parkings">{{ parking.street }}</mat-list-item>
+  </mat-list>
+</mat-card>
+<mat-card *ngIf="isLoggedIn">
+  <button type="button" (click)="logout()">Log out</button>
+</mat-card>
+<mat-card *ngIf="!isLoggedIn">
+  <button type="button" (click)="login()">Log in</button>
+</mat-card>
