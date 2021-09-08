@@ -7,7 +7,7 @@ declare var Keycloak: any;
 @Injectable({
   providedIn: 'root'
 })
-export class AuthService extends KeycloakService {
+export class AuthService {
 
   private keycloakAuth: any;
 

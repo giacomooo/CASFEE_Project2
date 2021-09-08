@@ -4,8 +4,8 @@
     <!--<mat-toolbar>Menu</mat-toolbar>-->
     <mat-nav-list>
       <a mat-list-item routerLink="/parking" routerLinkActive="active">Parkplatz finden</a>
-      <a mat-list-item routerLink="/reservation" routerLinkActive="active">Reservationen</a>
-      <a mat-list-item routerLink="/account" routerLinkActive="active">Michael Gfeller</a>
+      <a mat-list-item routerLink="/reservation" routerLinkActive="active" *ngIf="isLoggedIn">Reservationen</a>
+      <a mat-list-item routerLink="/account" routerLinkActive="active" *ngIf="isLoggedIn">{{ this.userProfile?.firstName }} {{ this.userProfile?.lastName }}</a>
     </mat-nav-list>
   </mat-sidenav>
   <mat-sidenav-content>

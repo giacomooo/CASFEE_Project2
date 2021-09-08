@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
+import { KeycloakService } from 'keycloak-angular';
 
 @Component({
   selector: 'app-account',
@@ -7,9 +9,12 @@ import { Component, OnInit } from '@angular/core';
 })
 export class AccountComponent implements OnInit {
 
-  constructor() { }
+  constructor(private router: Router, private readonly keycloak: KeycloakService) { }
 
   ngOnInit(): void {
   }
 
+  logout() {
+    this.keycloak.logout(window.location.origin + '/parking');
+  }
 }

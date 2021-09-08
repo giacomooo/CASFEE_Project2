@@ -17,7 +17,6 @@ import { ParkingComponent } from './parking/parking.component';
 import { ReservationComponent } from './reservation/reservation.component';
 import { AccountComponent } from './account/account.component';
 import { KeycloakAngularModule, KeycloakService } from 'keycloak-angular';
-import { AuthService } from './services/auth.service';
 import { HttpClientModule } from '@angular/common/http';
 
 // export function keycloakFactory(authService: AuthService) {
