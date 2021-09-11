@@ -9,30 +9,19 @@ import { IParking, ParkingService } from '../services/parking.service';
   styleUrls: ['./parking.component.scss']
 })
 export class ParkingComponent implements OnInit {
-
   public isLoggedIn = false;
   public userProfile: KeycloakProfile | null = null;
-  parkings: any;
 
-  constructor(private readonly keycloak: KeycloakService, private parkingService: ParkingService) { }
+  public location: string = '';
+  public alternativeDateTime = false;
+  public dateTimeFrom: string = '';
+  public duration: number = 1;
+
+  constructor(private readonly keycloak: KeycloakService, private parkingService: ParkingService) {
+    this.dateTimeFrom = new Date().toISOString().slice(0,16);
+  }
 
   public async ngOnInit() {
-    this.isLoggedIn = await this.keycloak.isLoggedIn();
 
-    if (this.isLoggedIn) {
-      this.userProfile = await this.keycloak.loadUserProfile();
-      console.warn(this.userProfile);
-    }
-
-    this.parkings = await this.parkingService.readParkings();
   }
-
-  public login() {
-    this.keycloak.login();
-  }
-
-  public logout() {
-    this.keycloak.logout();
-  }
-
 }

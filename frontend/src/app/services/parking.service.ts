@@ -1,6 +1,8 @@
 import { HttpClient, HttpHeaderResponse, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
+import { Parking } from '../models/Parking';
 
 
 @Injectable({
@@ -24,15 +26,11 @@ export class ParkingService {
     return new HttpHeaderResponse({headers: this.getHttpHeaders()});
   }
 
-  async readParkings() {
-    let readParkings = new Promise((resolve, reject) => {
-      this.http.get(this.url + 'parking/', this.getHttpHeaderResponse()).toPromise().then(
-        res => {
-          console.log(res);
-          resolve(res);
-        }
-      );
-    });
+  public readParkings(search?: string | null): Observable<Parking[]> {
+    let readParkings = this.http.get<Parking[]>(`${this.url}parking/?search=${search}`, this.getHttpHeaderResponse());
+    readParkings.subscribe((result) => {
+      console.log('loaded');
+    })
     return readParkings;
   }
 }

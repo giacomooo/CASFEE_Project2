@@ -18,6 +18,7 @@ import { ReservationComponent } from './reservation/reservation.component';
 import { AccountComponent } from './account/account.component';
 import { KeycloakAngularModule, KeycloakService } from 'keycloak-angular';
 import { HttpClientModule } from '@angular/common/http';
+import { ParkingListComponent } from './parking/parkingList/parkingList.component';
 
 // export function keycloakFactory(authService: AuthService) {
 //   return () => authService.init();
@@ -44,6 +45,7 @@ function initializeKeycloak(keycloak: KeycloakService) {
     AppComponent,
     NavComponent,
     ParkingComponent,
+    ParkingListComponent,
     ReservationComponent,
     AccountComponent
   ],
