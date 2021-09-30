@@ -1,0 +1,8 @@
+<mat-card>
+  <mat-list>
+    <mat-list-item *ngFor="let reservation of reservations"> ReservationId: {{ reservation.id }} MieterId: {{ reservation.ID_Renter }} {{reservation.PricePerHour}} Chf/h <br>
+      {{ reservation.Parking.Street }} {{ reservation.Parking.StreetNo }}{{ reservation.Parking.StreetNoSuffix }}, {{ reservation.Parking.ZIP }} {{ reservation.Parking.Location }}
+      <div *ngIf="!reservation.IsCanceled"> StornoButton</div>
+    </mat-list-item>
+  </mat-list>
+</mat-card>

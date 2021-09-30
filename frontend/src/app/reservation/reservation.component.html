@@ -1,7 +1,6 @@
 <mat-card>
-  <mat-list>
-    <mat-list-item>Mövenstrasse 17a</mat-list-item>
-    <mat-list-item>Brauerstrasse 185</mat-list-item>
-    <mat-list-item>Zürcherstrasse 176</mat-list-item>
-  </mat-list>
+  <h3>Meine Reservationen</h3>
+  <mat-checkbox>Vergangene anzeigen</mat-checkbox>
+  <app-reservation-list [reservations]="reservations">
+  </app-reservation-list>
 </mat-card>
