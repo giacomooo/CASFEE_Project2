@@ -13,7 +13,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatListModule } from '@angular/material/list';
 import { MatCardModule } from '@angular/material/card';
-import { MatInput, MatInputModule } from '@angular/material/input';
+import { MatInputModule } from '@angular/material/input';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { ParkingComponent } from './parking/parking.component';
 import { ReservationComponent } from './reservation/reservation.component';
@@ -23,6 +23,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { ParkingListComponent } from './parking/parkingList/parkingList.component';
 import { ReservationListComponent } from './reservation/reservation-list/reservation-list.component';
 import { ParkingAdministrationComponent } from './parkingAdministration/parkingAdministration.component';
+import { ReservationEditComponent } from './reservation/reservation-edit/reservation-edit.component';
 
 // export function keycloakFactory(authService: AuthService) {
 //   return () => authService.init();
@@ -53,7 +54,8 @@ function initializeKeycloak(keycloak: KeycloakService) {
     ReservationComponent,
     AccountComponent,
     ReservationListComponent,
-    ParkingAdministrationComponent
+    ParkingAdministrationComponent,
+    ReservationEditComponent
    ],
   imports: [
     BrowserModule,
