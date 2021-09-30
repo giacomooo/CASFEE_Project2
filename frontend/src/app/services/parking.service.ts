@@ -1,5 +1,6 @@
 import { HttpClient, HttpHeaderResponse, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { KeycloakService } from 'keycloak-angular';
 import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { Parking } from '../models/Parking';
@@ -11,14 +12,14 @@ import { Parking } from '../models/Parking';
 export class ParkingService {
   private url: String;
 
-  constructor(private http: HttpClient) {
+  constructor(private http: HttpClient, protected keycloakAngular: KeycloakService) {
     this.url = environment.backendUrl;
   }
 
   private getHttpHeaders(){
     return new HttpHeaders({
       'Content-Type':  'application/json',
-      'Access-Control-Allow-Origin': '*',
+      'Authorization': 'Bearer ' + this.keycloakAngular.getToken(),
     })
   }
 
