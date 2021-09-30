@@ -18,7 +18,8 @@ class Parking(models.Model):
         return self.title
 
 class ParkingFilter(filters.FilterSet):
-    Location = filters.CharFilter(field_name="Location")
+    Location = filters.CharFilter(lookup_expr='contains')
+    ZIP = filters.NumberFilter(lookup_expr='contains')
 
 
 class Reservation(models.Model):
