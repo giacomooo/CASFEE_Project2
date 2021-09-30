@@ -8,5 +8,6 @@ export interface Reservation {
   DateFrom: Date;
   DateTo: Date;
   PricePerHour: number;
+  Amount: number;
   IsCanceled: boolean;
 }
