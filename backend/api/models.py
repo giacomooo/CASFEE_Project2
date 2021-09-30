@@ -1,4 +1,5 @@
 from django.db import models
+from django_filters import rest_framework as filters
 
 class Parking(models.Model):
     class Meta:
@@ -15,6 +16,10 @@ class Parking(models.Model):
 
     def __str__(self):
         return self.title
+
+class ParkingFilter(filters.FilterSet):
+    Location = filters.CharFilter(field_name="Location")
+
 
 class Reservation(models.Model):
     class Meta:

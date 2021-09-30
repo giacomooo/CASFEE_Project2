@@ -1,3 +1,4 @@
+import { HttpParams } from '@angular/common/http';
 import { NONE_TYPE } from '@angular/compiler';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
@@ -15,13 +16,17 @@ export class ParkingListComponent implements OnInit {
   private searchQuery: string | null = '';
 
   constructor(private parkingService: ParkingService, private route: ActivatedRoute) {
-    this.route.queryParams.subscribe(params => {
-      this.searchQuery = params['location'];
-    })
   }
 
   ngOnInit() {
-    this.parkingService.readParkings(this.searchQuery).subscribe(result => {
+    const httpParams = new HttpParams().set('Location', 'Appenzell')
+    this.route.queryParams.subscribe(params => {
+      console.log(params);
+      this.searchQuery = params['location'];
+      console.log(this.searchQuery);
+    })
+
+    this.parkingService.readParkings(httpParams).subscribe(result => {
       this.parkings = result;
     });
   }

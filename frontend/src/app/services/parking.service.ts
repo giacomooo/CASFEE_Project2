@@ -1,4 +1,4 @@
-import { HttpClient, HttpHeaderResponse, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpHeaderResponse, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { KeycloakService } from 'keycloak-angular';
 import { Observable } from 'rxjs';
@@ -27,8 +27,8 @@ export class ParkingService {
     return new HttpHeaderResponse({headers: this.getHttpHeaders()});
   }
 
-  public readParkings(search?: string | null): Observable<Parking[]> {
-    let readParkings = this.http.get<Parking[]>(`${this.url}parking/?search=${search}`, this.getHttpHeaderResponse());
+  public readParkings(params: HttpParams): Observable<Parking[]> {
+    let readParkings = this.http.get<Parking[]>(`${this.url}parking/${params}`, this.getHttpHeaderResponse());
     readParkings.subscribe((result) => {
       console.log('loaded');
     })
