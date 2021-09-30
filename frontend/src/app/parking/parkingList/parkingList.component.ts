@@ -14,6 +14,7 @@ import { ParkingComponent } from '../parking.component';
 export class ParkingListComponent implements OnInit {
   public parkings?: Parking[];
   private searchQuery: string | null = '';
+  public IsReservationPending: boolean = true;
 
   constructor(private parkingService: ParkingService, private route: ActivatedRoute) {
   }
