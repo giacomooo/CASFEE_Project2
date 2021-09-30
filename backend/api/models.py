@@ -1,7 +1,7 @@
 from datetime import datetime
 from django.db import models
 from django_filters import rest_framework as filters
-from django_filters.filters import DateTimeFromToRangeFilter
+from django_filters.filters import DateTimeFromToRangeFilter, ModelChoiceFilter
 
 class Parking(models.Model):
     class Meta:
@@ -39,19 +39,18 @@ class Reservation(models.Model):
     Amount = models.DecimalField(null=False, decimal_places=2, max_digits=7)
 
 class ReservationFilter(filters.FilterSet):
-    withHistory = filters.BooleanFilter(field_name='withHistory', method='filterHistory', required=True)
+    withHistory = filters.BooleanFilter(label='withHistory', method='filterHistory', required=True)
 
     class Meta:
         model = Reservation
-        fields = ['ID_Renter']
+        fields = ['ID_Renter', 'ID_Parking__ID_Landlord']
 
-    def filterHistory(self, queryset, value, *args, **kwargs):
+    def filterHistory(self, queryset, name, value):
         try:
-            if args[0] == True:
+            if value == True:
                 return queryset
             else:
                 return queryset.filter(DateTimeTo__gt=datetime.now())
         except ValueError:
-            print('hier2')
             return queryset.filter(DateTimeTo__gt=datetime.now())
          
