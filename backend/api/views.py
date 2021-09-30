@@ -7,7 +7,8 @@ from . import serializers, models
 class ParkingViewSet(viewsets.ModelViewSet):
     pagination_class = None
     filter_backends = [rest_framework.DjangoFilterBackend, filters.OrderingFilter, filters.SearchFilter]
-    # filterset_fields = ['Location']
+    filterset_fields = ['Location', 'ID_Landlord']
+    filterset_class = models.ParkingFilter
     serializer_class = serializers.ParkingSerializer
     queryset = models.Parking.objects.all()
     search_fields = ['Location']
