@@ -2,3 +2,23 @@
 
 html, body { height: 100%; }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+
+.hiddenField {
+  display: none !important;
+}
+
+.field50 {
+  width: 50px;
+}
+
+.field100 {
+  width: 100px;
+}
+
+.field150 {
+  width: 150px;
+}
+
+.field300 {
+  width: 300px;
+}

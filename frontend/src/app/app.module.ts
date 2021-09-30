@@ -14,7 +14,6 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatListModule } from '@angular/material/list';
 import { MatCardModule } from '@angular/material/card';
 import { MatInput, MatInputModule } from '@angular/material/input';
-import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { ParkingComponent } from './parking/parking.component';
 import { ReservationComponent } from './reservation/reservation.component';
 import { AccountComponent } from './account/account.component';
@@ -23,6 +22,11 @@ import { HttpClientModule } from '@angular/common/http';
 import { ParkingListComponent } from './parking/parkingList/parkingList.component';
 import { ReservationListComponent } from './reservation/reservation-list/reservation-list.component';
 import { ParkingAdministrationComponent } from './parkingAdministration/parkingAdministration.component';
+import { ParkingAdministrationListComponent } from './parkingAdministration/parkingAdministrationList/parkingAdministrationList.component';
+import { ParkingAdministrationItemComponent } from './parkingAdministration/parkingAdministrationItem/parkingAdministrationItem.component';
+import { ParkingAdministrationItemEditComponent } from './parkingAdministration/parkingAdministrationItemEdit/parkingAdministrationItemEdit.component';
+import { ReactiveFormsModule } from '@angular/forms';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
 
 // export function keycloakFactory(authService: AuthService) {
 //   return () => authService.init();
@@ -53,7 +57,10 @@ function initializeKeycloak(keycloak: KeycloakService) {
     ReservationComponent,
     AccountComponent,
     ReservationListComponent,
-    ParkingAdministrationComponent
+    ParkingAdministrationComponent,
+    ParkingAdministrationListComponent,
+    ParkingAdministrationItemComponent,
+    ParkingAdministrationItemEditComponent,
    ],
   imports: [
     BrowserModule,
@@ -62,6 +69,7 @@ function initializeKeycloak(keycloak: KeycloakService) {
     HttpClientModule,
     KeycloakAngularModule,
     LayoutModule,
+    ReactiveFormsModule,
     MatToolbarModule,
     MatButtonModule,
     MatSidenavModule,
@@ -70,7 +78,7 @@ function initializeKeycloak(keycloak: KeycloakService) {
     MatCardModule,
     MatCheckboxModule,
     MatInputModule,
-    MatSnackBarModule
+    MatSnackBarModule,
   ],
   providers: [{
     provide: APP_INITIALIZER,

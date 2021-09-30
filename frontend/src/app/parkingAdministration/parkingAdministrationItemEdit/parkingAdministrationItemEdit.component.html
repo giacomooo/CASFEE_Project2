@@ -1,0 +1,48 @@
+<form (submit)="onAddOrEdit(parkingForm.value)" [formGroup]="parkingForm">
+  <mat-card>
+      <mat-card-header>
+          <mat-card-title *ngIf="!parking?.id">Parkplatz zur Vermietung hinzufügen</mat-card-title>
+          <mat-card-title *ngIf="parking?.id">Parkplatz bearbeiten</mat-card-title>
+      </mat-card-header>
+      <mat-form-field class="hiddenField">
+          <input matInput placeholder="ID" formControlName="id">
+      </mat-form-field>
+      <mat-form-field style="display: none">
+        <input matInput placeholder="ID_Landlord" formControlName="ID_Landlord">
+      </mat-form-field>
+      <mat-form-field class="field300">
+        <input matInput placeholder="Strasse" formControlName="Street">
+        <mat-error *ngIf="f.Street.invalid" class="alert alert-danger">Geben Sie eine Strasse ein</mat-error>
+      </mat-form-field>
+      <mat-form-field class="field50">
+        <input matInput placeholder="Nr." formControlName="StreetNo">
+        <mat-error *ngIf="f.StreetNo.invalid" class="alert alert-danger">Nr. fehlt</mat-error>
+      </mat-form-field>
+      <mat-form-field class="field50">
+        <input matInput placeholder="Zusatz" formControlName="StreetNoSuffix">
+      </mat-form-field>
+      <br />
+      <mat-form-field  class="field100">
+        <input matInput placeholder="Postleitzahl" formControlName="ZIP">
+        <mat-error *ngIf="f.ZIP.invalid" class="alert alert-danger">PLZ fehlt</mat-error>
+      </mat-form-field>
+      <mat-form-field  class="field300">
+        <input matInput placeholder="Ort" formControlName="Location">
+        <mat-error *ngIf="f.Location.invalid" class="alert alert-danger">Geben Sie einen Ort ein</mat-error>
+      </mat-form-field>
+      <br />
+      <mat-form-field class="field150">
+        <input matInput placeholder="Preis pro Stunde" formControlName="PricePerHour">
+        <mat-error *ngIf="f.PricePerHour.invalid" class="alert alert-danger">Betrag in CHF fehlt</mat-error>
+      </mat-form-field>
+      <mat-card-actions align="start">
+        <button type="button" mat-button [disabled]="parkingForm.pristine" (click)="resetForm()">Zurücksetzen</button>
+      </mat-card-actions>
+      <mat-card-actions align="end">
+
+        <button type="submit" mat-raised-button color="primary" *ngIf="!parking?.id" [disabled]="parkingForm.invalid || parkingForm.pristine">Hinzufügen</button>
+        <button type="button" mat-button *ngIf="parking?.id" (click)="deleteParking(parking?.id)">Löschen</button>
+        <button type="submit" mat-raised-button color="primary" *ngIf="parking?.id" [disabled]="parkingForm.invalid || parkingForm.pristine">Ändern</button>
+      </mat-card-actions>
+  </mat-card>
+</form>

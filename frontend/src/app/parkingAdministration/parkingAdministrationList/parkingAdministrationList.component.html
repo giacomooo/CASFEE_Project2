@@ -1,0 +1,5 @@
+<mat-selection-list [multiple]="false">
+  <mat-list-option *ngFor="let parking of parkings">
+    <app-parkingAdministrationItem [parking]="parking"></app-parkingAdministrationItem>
+  </mat-list-option>
+</mat-selection-list>

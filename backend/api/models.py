@@ -22,7 +22,7 @@ class ParkingFilter(filters.FilterSet):
 
     class Meta:
         model = Parking
-        fields = ['ID_Landlord']
+        fields = ['id', 'ID_Landlord']
 
 
 class Reservation(models.Model):
@@ -43,7 +43,7 @@ class ReservationFilter(filters.FilterSet):
 
     class Meta:
         model = Reservation
-        fields = ['ID_Renter', 'ID_Parking__ID_Landlord']
+        fields = ['id', 'ID_Renter', 'ID_Parking__ID_Landlord']
 
     def filterHistory(self, queryset, name, value):
         try:

@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { KeycloakService } from 'keycloak-angular';
 import { KeycloakProfile } from 'keycloak-js';
-import { IParking, ParkingService } from '../services/parking.service';
+import { ParkingService } from '../services/parking.service';
 
 @Component({
   selector: 'app-parking',

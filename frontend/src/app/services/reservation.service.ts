@@ -35,7 +35,6 @@ export class ReservationService {
   public readReservations(search?: HttpParams | null): Observable<Reservation[]> {
     let readReservations = this.http.get<Reservation[]>(`${this.url}reservation/?search=${search}`, this.getHttpHeaderResponse());
     readReservations.subscribe((result) => {
-      console.log('loaded');
     })
     return readReservations;
 

@@ -1,6 +1,4 @@
 <mat-card>
-  <h3>Verwalte deine Parkplätze</h3>
-  <mat-list>
-    <mat-list-item *ngFor="let parking of parkings">{{ parking.Street }} {{ parking.StreetNo }}{{ parking.StreetNoSuffix }}<br>{{ parking.ZIP }} {{ parking.Location }}</mat-list-item>
-  </mat-list>
+  <h3>Verwalte deine Parkplätze</h3><button routerLink="/parkingAdministrationItemEdit/">Hinzufügen</button>
+  <app-parkingAdministrationList [parkings]="parkings"></app-parkingAdministrationList>
 </mat-card>

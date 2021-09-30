@@ -28,16 +28,18 @@ export class ParkingService {
   }
 
   public readParkings(params: HttpParams): Observable<Parking[]> {
-    let readParkings = this.http.get<Parking[]>(`${this.url}parking/?${params}`, this.getHttpHeaderResponse());
-    readParkings.subscribe((result) => {
-      console.log('loaded');
-    })
-    return readParkings;
+    return this.http.get<Parking[]>(`${this.url}parking/?${params}`, this.getHttpHeaderResponse());
   }
-}
 
-export interface IParking {
-  id: number;
-  is_enable: boolean;
-  street: string;
+  public createParking(parking: Parking): Observable<Parking> {
+    return this.http.post<Parking>(`${this.url}parking/`, parking, this.getHttpHeaderResponse());
+  }
+
+  public updateParking(parking: Parking): Observable<Parking> {
+    return this.http.put<Parking>(`${this.url}parking/${parking.id}/`, parking, this.getHttpHeaderResponse());
+  }
+
+  public deleteParking(id: number): Observable<Parking> {
+    return this.http.delete<Parking>(`${this.url}parking/${id}/`, this.getHttpHeaderResponse());
+  }
 }

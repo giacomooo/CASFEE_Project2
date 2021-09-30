@@ -5,5 +5,9 @@ export interface Parking {
   StreetNo: string;
   StreetNoSuffix: string;
   ZIP: number;
-  Location: String;
+  Location: string;
+  PricePerHour: number;
+}
+
+export class Parking implements Parking {
 }
