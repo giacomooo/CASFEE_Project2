@@ -1,6 +1,7 @@
 <mat-card>
   <h3>Meine Reservationen</h3>
-  <mat-checkbox>Vergangene anzeigen</mat-checkbox>
+
+  <mat-checkbox [checked]="withHistory" (change)="refresh($event.checked)">Vergangene anzeigen</mat-checkbox>
   <app-reservation-list [reservations]="reservations">
   </app-reservation-list>
 </mat-card>
