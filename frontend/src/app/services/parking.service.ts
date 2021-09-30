@@ -28,7 +28,7 @@ export class ParkingService {
   }
 
   public readParkings(params: HttpParams): Observable<Parking[]> {
-    let readParkings = this.http.get<Parking[]>(`${this.url}parking/${params}`, this.getHttpHeaderResponse());
+    let readParkings = this.http.get<Parking[]>(`${this.url}parking/?${params}`, this.getHttpHeaderResponse());
     readParkings.subscribe((result) => {
       console.log('loaded');
     })

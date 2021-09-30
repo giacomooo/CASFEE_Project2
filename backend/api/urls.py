@@ -7,6 +7,7 @@ app_name = 'api'
 
 router = routers.DefaultRouter()
 router.register(r'parking', views.ParkingViewSet)
+router.register(r'reservation', views.ReservationViewSet)
 
 urlpatterns = [
     url( r'^', include(router.urls)),
