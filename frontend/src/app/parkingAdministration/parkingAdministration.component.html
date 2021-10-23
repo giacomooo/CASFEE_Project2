@@ -1,4 +1,6 @@
 <mat-card>
-  <h3>Verwalte deine Parkplätze</h3><button routerLink="/parkingAdministrationItemEdit/">Hinzufügen</button>
+  <div class="container">
+    <h3>Verwalte deine Parkplätze</h3><button routerLink="/parkingAdministrationItemEdit/" mat-mini-fab color="primary"><mat-icon>add</mat-icon></button>
+  </div>
   <app-parkingAdministrationList [parkings]="parkings"></app-parkingAdministrationList>
 </mat-card>

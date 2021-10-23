@@ -1,8 +1,11 @@
-import { HttpClient, HttpHeaderResponse, HttpHeaders, HttpParams } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse, HttpHeaderResponse, HttpHeaders, HttpParams } from '@angular/common/http';
+import { TmplAstElement } from '@angular/compiler';
 import { Injectable } from '@angular/core';
 import { KeycloakService } from 'keycloak-angular';
-import { Observable } from 'rxjs';
+import { Observable, throwError } from 'rxjs';
+import { catchError, tap } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
+import { DeleteMessage } from '../models/DeleteMessage';
 import { Parking } from '../models/Parking';
 
 
@@ -39,7 +42,13 @@ export class ParkingService {
     return this.http.put<Parking>(`${this.url}parking/${parking.id}/`, parking, this.getHttpHeaderResponse());
   }
 
-  public deleteParking(id: number): Observable<Parking> {
-    return this.http.delete<Parking>(`${this.url}parking/${id}/`, this.getHttpHeaderResponse());
+  public deleteParking(id: number): Promise<DeleteMessage> {
+    return this.http.delete(`${this.url}parking/${id}/`, this.getHttpHeaderResponse()).toPromise()
+      .then((result) => {
+        return new DeleteMessage(true, '');
+      })
+      .catch((err) => {
+        return new DeleteMessage(false, 'Es existieren bereits Reservationen, der Parkplatz kann nicht gelöscht werden.');
+      });
   }
 }

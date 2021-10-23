@@ -15,6 +15,7 @@ import { MatListModule } from '@angular/material/list';
 import { MatCardModule } from '@angular/material/card';
 import { MatInputModule } from '@angular/material/input';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { MatDialogModule } from '@angular/material/dialog';
 import { ParkingComponent } from './parking/parking.component';
 import { ReservationComponent } from './reservation/reservation.component';
 import { AccountComponent } from './account/account.component';
@@ -28,6 +29,7 @@ import { ParkingAdministrationItemComponent } from './parkingAdministration/park
 import { ParkingAdministrationItemEditComponent } from './parkingAdministration/parkingAdministrationItemEdit/parkingAdministrationItemEdit.component';
 import { ReactiveFormsModule } from '@angular/forms';
 import { ReservationEditComponent } from './reservation/reservation-edit/reservation-edit.component';
+import { ModalComponent } from './shared/modal/modal.component';
 
 // export function keycloakFactory(authService: AuthService) {
 //   return () => authService.init();
@@ -39,13 +41,14 @@ function initializeKeycloak(keycloak: KeycloakService) {
       config: {
         url: 'https://login-staging.optimatik.ch/auth',
         realm: 'HK CAS FEE',
-        clientId: 'Parkplatzverwaltung',
+        clientId: 'PPV',
       },
       initOptions: {
         onLoad: 'check-sso',
         silentCheckSsoRedirectUri:
           window.location.origin + '/assets/silent-check-sso.html',
       },
+      bearerExcludedUrls: ['/protocol/openid-connect/token']
     });
 }
 
@@ -62,7 +65,8 @@ function initializeKeycloak(keycloak: KeycloakService) {
     ParkingAdministrationListComponent,
     ParkingAdministrationItemComponent,
     ParkingAdministrationItemEditComponent,
-    ReservationEditComponent
+    ReservationEditComponent,
+    ModalComponent
    ],
   imports: [
     BrowserModule,
@@ -81,6 +85,7 @@ function initializeKeycloak(keycloak: KeycloakService) {
     MatCheckboxModule,
     MatInputModule,
     MatSnackBarModule,
+    MatDialogModule,
   ],
   providers: [{
     provide: APP_INITIALIZER,

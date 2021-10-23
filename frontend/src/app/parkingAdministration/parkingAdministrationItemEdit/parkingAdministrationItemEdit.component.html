@@ -35,14 +35,18 @@
         <input matInput placeholder="Preis pro Stunde" formControlName="PricePerHour">
         <mat-error *ngIf="f.PricePerHour.invalid" class="alert alert-danger">Betrag in CHF fehlt</mat-error>
       </mat-form-field>
-      <mat-card-actions align="start">
-        <button type="button" mat-button [disabled]="parkingForm.pristine" (click)="resetForm()">Zurücksetzen</button>
-      </mat-card-actions>
-      <mat-card-actions align="end">
-
-        <button type="submit" mat-raised-button color="primary" *ngIf="!parking?.id" [disabled]="parkingForm.invalid || parkingForm.pristine">Hinzufügen</button>
-        <button type="button" mat-button *ngIf="parking?.id" (click)="deleteParking(parking?.id)">Löschen</button>
-        <button type="submit" mat-raised-button color="primary" *ngIf="parking?.id" [disabled]="parkingForm.invalid || parkingForm.pristine">Ändern</button>
+      <mat-card-actions>
+        <div class="container">
+          <div>
+            <button type="submit" mat-button routerLink="/parkingAdministration">Zurück</button>
+          </div>
+          <div>
+            <button type="submit" mat-raised-button color="primary" *ngIf="!parking?.id" [disabled]="parkingForm.invalid || parkingForm.pristine">Hinzufügen</button>
+            <button type="button" mat-button *ngIf="parking?.id" (click)="deleteParking(parking?.id)">Löschen</button>
+            <button type="button" mat-button [disabled]="parkingForm.pristine" (click)="resetForm()">Zurücksetzen</button>
+            <button type="submit" mat-raised-button color="primary" *ngIf="parking?.id" [disabled]="parkingForm.invalid || parkingForm.pristine">Ändern</button>
+          </div>
+        </div>
       </mat-card-actions>
   </mat-card>
 </form>

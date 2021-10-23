@@ -1,12 +1,14 @@
-import { HttpParams } from '@angular/common/http';
+import { HttpErrorResponse, HttpHeaderResponse, HttpParams } from '@angular/common/http';
 import { ThisReceiver } from '@angular/compiler';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute, Router } from '@angular/router';
 import { KeycloakService } from 'keycloak-angular';
 import { Parking } from 'src/app/models/Parking';
 import { ParkingService } from 'src/app/services/parking.service';
+import { ModalComponent } from 'src/app/shared/modal/modal.component';
 
 @Component({
   selector: 'app-parkingAdministrationItemEdit',
@@ -18,7 +20,7 @@ export class ParkingAdministrationItemEditComponent implements OnInit {
   public parking: Parking;
   public parkingForm: FormGroup;
 
-  constructor(private _parkingService: ParkingService, private _router: Router,  private _activatedRoute: ActivatedRoute, private _keycloakAngular: KeycloakService, private _formBuilder: FormBuilder, private _snackBar: MatSnackBar) {
+  constructor(public matDialog: MatDialog, private _parkingService: ParkingService, private _router: Router,  private _activatedRoute: ActivatedRoute, private _keycloakAngular: KeycloakService, private _formBuilder: FormBuilder, private _snackBar: MatSnackBar) {
     this.parking = new Parking();
     this.parkingForm = this._formBuilder.group({
       id: new FormControl(this.parking.id),
@@ -78,19 +80,25 @@ export class ParkingAdministrationItemEditComponent implements OnInit {
   }
 
   deleteParking(id?: number) {
-    if (id) {
-      this._parkingService.deleteParking(id).subscribe(result => {
-        if (result) {
-          console.warn(result);
-        }
-        else {
-          this.showError('Der Parkplatz konnte nicht gelöscht werden, es existieren bereits Reservierungen.');
-        }
-      });
-    }
-    else {
-      this.showError('Der Parkplatz konnte nicht gelöscht werden, es existieren bereits Reservierungen.');
-    }
+    const modalDialog = this.openModal();
+    modalDialog.afterClosed().subscribe((result) => {
+      if (result && id) {
+        this._parkingService.deleteParking(id)
+          .then(result => {
+            console.log(result);
+              if (result.status) {
+                this._router.navigate(['parkingAdministration']);
+              }
+              else {
+                this.showError(result.message);
+              }
+            }
+          )
+          .catch(error => {
+            this.showError('Der Parkplatz konnte nicht gelöscht werden, bitte versuchen sie es später erneut.');
+          });
+      }
+    })
   }
 
   showError(content: string) {
@@ -104,6 +112,21 @@ export class ParkingAdministrationItemEditComponent implements OnInit {
     if (this.parkingForm.controls.id) {
       this.readParking();
     }
+  }
+
+  openModal() {
+    const dialogConfig = new MatDialogConfig();
+    
+    dialogConfig.disableClose = true;
+    dialogConfig.id = "modal-component";
+    dialogConfig.height = "170px";
+    dialogConfig.width = "550px";
+    dialogConfig.data = {
+      title: 'Wollen sie den Parkplatz wirklich löschen?',
+      description: 'Dieser Vorgang kann nicht rückgängig gemacht werden.'
+    };
+    
+    return this.matDialog.open(ModalComponent, dialogConfig);
   }
 
   get f() { return this.parkingForm.controls;  }
