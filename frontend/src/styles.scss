@@ -3,6 +3,17 @@
 html, body { height: 100%; }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 
+mat-sidenav-content {
+  background-image: url("assets/parking_background.jpg");
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
+.mat-card {
+  margin: 10px;
+  background-color: rgba(255, 255, 255, 0.85);
+}
+
 .hiddenField {
   display: none !important;
 }
