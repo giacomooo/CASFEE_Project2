@@ -11,7 +11,7 @@ import { ParkingService } from 'src/app/services/parking.service';
 export class ParkingAdministrationItemComponent implements OnInit {
 
   @Input() public parking?: Parking;
-  constructor(private _parkingService: ParkingService, private _snackBar: MatSnackBar) { }
+  constructor() { }
 
   ngOnInit() {
   }

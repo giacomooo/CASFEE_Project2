@@ -29,10 +29,13 @@ import { ParkingAdministrationItemComponent } from './parkingAdministration/park
 import { ParkingAdministrationItemEditComponent } from './parkingAdministration/parkingAdministrationItemEdit/parkingAdministrationItemEdit.component';
 import { ReactiveFormsModule } from '@angular/forms';
 import { ReservationEditComponent } from './reservation/reservation-edit/reservation-edit.component';
-import { ModalComponent } from './shared/modal/modal.component';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { NgxMatDatetimePickerModule, NgxMatTimepickerModule } from '@angular-material-components/datetime-picker';
 import { NgxMatMomentModule } from '@angular-material-components/moment-adapter';
+import { SharedModule } from 'src/shared/shared.module';
+import { MatProgressBarModule } from '@angular/material/progress-bar';
+import { Globals } from 'src/app/globals';
+
 // export function keycloakFactory(authService: AuthService) {
 //   return () => authService.init();
 // }
@@ -67,8 +70,7 @@ function initializeKeycloak(keycloak: KeycloakService) {
     ParkingAdministrationListComponent,
     ParkingAdministrationItemComponent,
     ParkingAdministrationItemEditComponent,
-    ReservationEditComponent,
-    ModalComponent
+    ReservationEditComponent
    ],
   imports: [
     BrowserModule,
@@ -92,6 +94,8 @@ function initializeKeycloak(keycloak: KeycloakService) {
     NgxMatTimepickerModule,
     NgxMatDatetimePickerModule,
     NgxMatMomentModule,
+    MatProgressBarModule,
+    SharedModule
   ],
   providers: [{
     provide: APP_INITIALIZER,
@@ -99,7 +103,7 @@ function initializeKeycloak(keycloak: KeycloakService) {
     useFactory: initializeKeycloak,
     multi: true,
     deps: [KeycloakService],
-  }],
+  }, Globals],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

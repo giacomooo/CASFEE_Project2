@@ -1,9 +1,5 @@
 <form (submit)="onAddOrEdit(parkingForm.value)" [formGroup]="parkingForm">
   <mat-card>
-      <mat-card-header>
-          <mat-card-title *ngIf="!parking?.id">Parkplatz zur Vermietung hinzufügen</mat-card-title>
-          <mat-card-title *ngIf="parking?.id">Parkplatz bearbeiten</mat-card-title>
-      </mat-card-header>
       <mat-form-field class="hiddenField">
           <input matInput placeholder="ID" formControlName="id">
       </mat-form-field>
