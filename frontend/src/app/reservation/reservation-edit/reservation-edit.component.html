@@ -1,3 +1,48 @@
-<form>
+<form [formGroup]="reservationForm" (submit)="onAddOrEdit(reservationForm.value)" >
+  <mat-card>
+    <mat-card-header>
+      <mat-card-title *ngIf="!reservation?.id">Parkplatz-Reservation hinzufügen</mat-card-title>
+      <mat-card-title *ngIf="reservation?.id">Parkplatz-Reservation bearbeiten</mat-card-title>
+    </mat-card-header>
+    <mat-form-field class="hiddenField">
+      <input matInput placeholder="ID" formControlName="id" />
+    </mat-form-field>
+    <mat-form-field style="display: none">
+      <input matInput placeholder="ID_Renter" formControlName="ID_Renter" />
+    </mat-form-field>
+    <mat-form-field>
+      <input matInput [ngxMatDatetimePicker]="fromPicker" placeholder="von" formControlName="DateTimeFrom">
+      <mat-datepicker-toggle matSuffix [for]="$any(fromPicker)">
+      </mat-datepicker-toggle>
+      <ngx-mat-datetime-picker #fromPicker>
+      </ngx-mat-datetime-picker>
+    </mat-form-field>
+    <mat-form-field>
+      <input matInput [ngxMatDatetimePicker]="picker" placeholder="bis" formControlName="DateTimeTo">
+      <mat-datepicker-toggle matSuffix [for]="$any(picker)">
+      </mat-datepicker-toggle>
+      <ngx-mat-datetime-picker #picker>
+      </ngx-mat-datetime-picker>
+    </mat-form-field>
+    <mat-form-field style="display: none">
+      <input matInput placeholder="ID_Parking" formControlName="ID_Parking" />
+    </mat-form-field>
+    <mat-form-field class="hiddenField">
+      <input matInput placeholder="IsCanceled" formControlName="IsCanceled" />
+    </mat-form-field>
+    <mat-form-field>
+      <input matInput placeholder="CHF" formControlName="Amount" />
+    </mat-form-field>
+    <mat-form-field>
+      <input matInput placeholder="CHF/h" formControlName="PricePerHour" />
+    </mat-form-field>
 
+    <mat-card-actions>
+      <button type="submit" mat-flat-button routerLink="/reservation">abbrechen</button>
+      <button type="submit" mat-raised-button color="primary" *ngIf="!reservation?.id" [disabled]="reservationForm.invalid || reservationForm.pristine">hinzufügen</button>
+      <button type="button" mat-button *ngIf="reservation?.id" (click)="deleteReservation(reservation.id)">löschen</button>
+      <button type="button" mat-button [disabled]="reservationForm.pristine" (click)="resetForm()">zurücksetzen</button>
+      <button type="submit" mat-raised-button color="primary" *ngIf="reservation?.id" [disabled]="reservationForm.invalid || reservationForm.pristine">ändern</button>
+    </mat-card-actions>
+  </mat-card>
 </form>

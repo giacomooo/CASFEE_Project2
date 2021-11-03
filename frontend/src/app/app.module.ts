@@ -30,7 +30,9 @@ import { ParkingAdministrationItemEditComponent } from './parkingAdministration/
 import { ReactiveFormsModule } from '@angular/forms';
 import { ReservationEditComponent } from './reservation/reservation-edit/reservation-edit.component';
 import { ModalComponent } from './shared/modal/modal.component';
-
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { NgxMatDatetimePickerModule, NgxMatTimepickerModule } from '@angular-material-components/datetime-picker';
+import { NgxMatMomentModule } from '@angular-material-components/moment-adapter';
 // export function keycloakFactory(authService: AuthService) {
 //   return () => authService.init();
 // }
@@ -86,6 +88,10 @@ function initializeKeycloak(keycloak: KeycloakService) {
     MatInputModule,
     MatSnackBarModule,
     MatDialogModule,
+    MatDatepickerModule,
+    NgxMatTimepickerModule,
+    NgxMatDatetimePickerModule,
+    NgxMatMomentModule,
   ],
   providers: [{
     provide: APP_INITIALIZER,

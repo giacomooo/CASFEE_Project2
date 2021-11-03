@@ -1,7 +1,6 @@
-import { Component, Input, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
-import { Reservation } from 'src/app/models/Reservation';
-import { ReservationService } from 'src/app/services/reservation.service';
+import {Component, Input, OnInit} from '@angular/core';
+import {ActivatedRoute, Router, RouterModule } from '@angular/router';
+import {Reservation} from 'src/app/models/Reservation';
 
 @Component({
   selector: 'app-reservation-list',
@@ -11,9 +10,14 @@ import { ReservationService } from 'src/app/services/reservation.service';
 export class ReservationListComponent implements OnInit {
 
   @Input() public reservations?: Reservation[];
-  constructor() {
+
+  constructor(public readonly router: Router) {
   }
 
   ngOnInit(): void {
+  }
+
+  public clickEdit(reservationId: number): void {
+   this.router.navigate(['reservation', reservationId])
   }
 }

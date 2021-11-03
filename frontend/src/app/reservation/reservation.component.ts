@@ -19,7 +19,7 @@ export class ReservationComponent implements OnInit, OnDestroy {
   }
 
   async ngOnInit() {
-    this.backendCall;
+    this.backendCall();
   }
 
   public refresh(event: Boolean): void {
@@ -27,7 +27,7 @@ export class ReservationComponent implements OnInit, OnDestroy {
     this.backendCall();
   }
 
-  public async backendCall(){
+  public async backendCall() {
     const id_landlord = await this._keycloakAngular.getKeycloakInstance().subject;
     if (id_landlord && id_landlord?.length > 0) {
       const httpParams = new HttpParams().set('ID_Landlord', id_landlord).set('withHistory', this.withHistory) ;

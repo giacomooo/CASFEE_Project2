@@ -1,8 +1,12 @@
 <mat-card>
   <mat-list>
-    <mat-list-item *ngFor="let reservation of reservations"> ReservationId: {{ reservation.id }} MieterId: {{ reservation.ID_Renter }} {{reservation.PricePerHour}} Chf/h <br>
+    <mat-list-item *ngFor="let reservation of reservations">
       {{ reservation.Parking.Street }} {{ reservation.Parking.StreetNo }}{{ reservation.Parking.StreetNoSuffix }}, {{ reservation.Parking.ZIP }} {{ reservation.Parking.Location }}
-      <div *ngIf="!reservation.IsCanceled"> StornoButton</div>
+      <!-- {{ reservation.DateTimeFrom | date:'medium'}} - {{reservation.DateTimeTo | date:'shortTime'}} -->
+      {{ reservation.Amount }} CHF
+      <button mat-button *ngIf="!reservation.IsCanceled"> Storno</button>
+      <button mat-button (click)="clickEdit(reservation.id)">Edit</button>
+<!--      [routerLink]="['/parking', 'list']" [queryParams]="{ location: location, dateTimeFrom: dateTimeFrom, duration: duration }"-->
     </mat-list-item>
   </mat-list>
 </mat-card>
