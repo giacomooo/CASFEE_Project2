@@ -1,10 +1,14 @@
 import json
+import ssl
 
 from django.apps import AppConfig
 from django.conf import settings
 from six.moves import urllib
 from cryptography import x509
 from cryptography.hazmat import backends
+
+# Don't verify ssl Certificates
+ssl._create_default_https_context = ssl._create_unverified_context
 
 class ApiConfig(AppConfig):
     default_auto_field = 'django.db.models.BigAutoField'
