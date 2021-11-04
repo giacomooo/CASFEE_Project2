@@ -18,10 +18,10 @@
       </ngx-mat-datetime-picker>
     </mat-form-field>
     <mat-form-field>
-      <input matInput [ngxMatDatetimePicker]="picker" placeholder="bis" formControlName="DateTimeTo">
-      <mat-datepicker-toggle matSuffix [for]="$any(picker)">
+      <input matInput [ngxMatDatetimePicker]="toPicker" placeholder="bis" formControlName="DateTimeTo">
+      <mat-datepicker-toggle matSuffix [for]="$any(toPicker)">
       </mat-datepicker-toggle>
-      <ngx-mat-datetime-picker #picker>
+      <ngx-mat-datetime-picker #toPicker>
       </ngx-mat-datetime-picker>
     </mat-form-field>
     <mat-form-field style="display: none">

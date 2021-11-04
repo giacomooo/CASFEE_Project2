@@ -16,7 +16,7 @@ import { ReservationService } from 'src/app/services/reservation.service';
 })
 export class ReservationEditComponent implements OnInit {
   @ViewChild('fromPicker') fromPicker: any;
-  @ViewChild('picker') picker: any;
+  @ViewChild('toPicker') picker: any;
   public reservation: Reservation;
   public reservationForm: FormGroup;
   public isServerPending: Boolean = false;
