@@ -5,6 +5,7 @@ import { map, shareReplay } from 'rxjs/operators';
 import { KeycloakService } from 'keycloak-angular';
 import { KeycloakProfile } from 'keycloak-js';
 import { NavigationEnd, Router } from '@angular/router';
+import { Globals } from '../globals';
 
 @Component({
   selector: 'app-nav',
@@ -22,23 +23,34 @@ export class NavComponent implements OnInit {
       shareReplay()
     );
 
-  constructor(private readonly keycloak: KeycloakService, private breakpointObserver: BreakpointObserver, public router: Router) {
-    console.log(router.url);
-    
+  constructor(private readonly keycloak: KeycloakService, private breakpointObserver: BreakpointObserver, public router: Router, public globals: Globals) {
+
     router.events.forEach(event => {
       if (event instanceof NavigationEnd) {
-        switch (event.url) {
-          case "/account": {
-            this.appTitle = `${this.userProfile?.firstName}  ${this.userProfile?.lastName}`;
-            break;
-          }
-          default: {
-            this.appTitle = "Parkplatzverwaltung";
-            break;
-          }
-        }
         console.log(event.url);
-        
+        console.log(event.url.startsWith(`/parkingAdministration`));
+        if (event.url.startsWith(`/account`)) {
+          this.appTitle = `${this.userProfile?.firstName}  ${this.userProfile?.lastName}`;
+        }
+        else if (event.url.startsWith(`/reservation`)){
+          this.appTitle = `Meine Reservationen`;
+        }
+        else if (event.url.startsWith(`/parkingAdministrationItemEdit?`)){
+          this.appTitle = `Meinen Parkplatz verwalten`;
+        }
+        else if (event.url.startsWith(`/parkingAdministrationItemEdit`)){
+          this.appTitle = `Meinen Parkplatz hinzufügen`;
+        }
+        else if (event.url.startsWith(`/parkingAdministration`)){
+          this.appTitle = `Meine Parkplätze verwalten`;
+        }
+        else if (event.url.startsWith(`/parking`)){
+          this.appTitle = `Parkplatz finden`;
+        }
+        else {
+          this.appTitle = `Parkplatzverwaltung`;
+        }
+
       }
     });
   }

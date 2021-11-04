@@ -1,4 +1,12 @@
 .container {
-    display: flex;
-    justify-content: space-between;
+  display: flex;
+  justify-content: space-between;
+}
+
+.parkings {
+  flex-grow: 3;
+}
+
+.addButton {
+  margin-left: 16px;
 }

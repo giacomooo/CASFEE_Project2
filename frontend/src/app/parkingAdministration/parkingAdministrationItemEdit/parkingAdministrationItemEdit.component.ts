@@ -6,9 +6,10 @@ import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute, Router } from '@angular/router';
 import { KeycloakService } from 'keycloak-angular';
+import { Globals } from 'src/app/globals';
 import { Parking } from 'src/app/models/Parking';
 import { ParkingService } from 'src/app/services/parking.service';
-import { ModalComponent } from 'src/app/shared/modal/modal.component';
+import { ModalComponent } from 'src/shared/modal/modal.component';
 
 @Component({
   selector: 'app-parkingAdministrationItemEdit',
@@ -20,7 +21,7 @@ export class ParkingAdministrationItemEditComponent implements OnInit {
   public parking: Parking;
   public parkingForm: FormGroup;
 
-  constructor(public matDialog: MatDialog, private _parkingService: ParkingService, private _router: Router,  private _activatedRoute: ActivatedRoute, private _keycloakAngular: KeycloakService, private _formBuilder: FormBuilder, private _snackBar: MatSnackBar) {
+  constructor(public matDialog: MatDialog, private _parkingService: ParkingService, private _router: Router,  private _activatedRoute: ActivatedRoute, private _keycloakAngular: KeycloakService, private _formBuilder: FormBuilder, private _snackBar: MatSnackBar, public globals: Globals) {
     this.parking = new Parking();
     this.parkingForm = this._formBuilder.group({
       id: new FormControl(this.parking.id),
@@ -39,13 +40,18 @@ export class ParkingAdministrationItemEditComponent implements OnInit {
   }
 
   readParking() {
+    this.globals.isLoading = true;
     this._activatedRoute.queryParams.subscribe(params => {
       if (params.id) {
         const httpParams = new HttpParams().set('id', params.id);
         this._parkingService.readParkings(httpParams).subscribe(result => {
           this.parking = result[0];
           this.parkingForm.reset(this.parking);
+          this.globals.isLoading = false;
         });
+      }
+      else{
+        this.globals.isLoading = false;
       }
     })
   }
@@ -116,7 +122,7 @@ export class ParkingAdministrationItemEditComponent implements OnInit {
 
   openModal() {
     const dialogConfig = new MatDialogConfig();
-    
+
     dialogConfig.disableClose = true;
     dialogConfig.id = "modal-component";
     dialogConfig.height = "170px";
@@ -125,7 +131,7 @@ export class ParkingAdministrationItemEditComponent implements OnInit {
       title: 'Wollen sie den Parkplatz wirklich löschen?',
       description: 'Dieser Vorgang kann nicht rückgängig gemacht werden.'
     };
-    
+
     return this.matDialog.open(ModalComponent, dialogConfig);
   }
 
