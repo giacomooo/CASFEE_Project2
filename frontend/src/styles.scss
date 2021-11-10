@@ -9,15 +9,17 @@ $custom-typography: mat-typography-config(
 $my-app-primary: mat-palette($mat-blue, 900);
 $my-app-accent:  mat-palette($mat-grey, 50);
 $my-app-warn:    mat-palette($mat-deep-orange);
-$my-app-theme: mat-dark-theme($my-app-primary, $my-app-accent, $my-app-warn);
+$my-app-theme: mat-light-theme($my-app-primary, $my-app-accent, $my-app-warn);
 @include angular-material-theme($my-app-theme);
 
 
 html, body { height: 100%; }
 body {
   margin: 0;
-  background-image: url("assets/parking_background.jpg");
-  background-repeat: no-repeat;
+  // background: url("assets/parking_bg_1920.jpg") no-repeat center center fixed;
+  background-image: -webkit-image-set(url("assets/parking_bg_1920.jpg") 1x, url("assets/parking_bg_1920.jpg") 2x);
+  background-image: image-set(url("assets/parking_bg_1920.jpg") 1x, url("assets/parking_bg_1920.jpg") 2x);
+  background-position: center;
   background-size: cover;
 }
 

@@ -43,7 +43,7 @@ export class NavComponent implements OnInit {
           this.appTitle = `Meine Parkplätze verwalten`;
         }
         else if (event.url.startsWith(`/parking`)){
-          this.appTitle = `Parkplatz finden`;
+          this.appTitle = `Finde deinen Parkplatz`;
         }
         else {
           this.appTitle = `Parkplatzverwaltung`;
