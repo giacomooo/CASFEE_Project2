@@ -17,22 +17,23 @@ export class ReservationService {
     this.url = environment.backendUrl;
   }
 
-  private getHttpHeaders() {
-    return new HttpHeaders({
-      'Content-Type': 'application/json',
-      Authorization: 'Bearer ' + this.keycloakAngular.getToken(),
-    });
-  }
+  // private getHttpHeaders() {
+  //   return new HttpHeaders({
+  //     'Content-Type': 'application/json',
+  //     Authorization: 'Bearer ' + this.keycloakAngular.getToken(),
+  //   });
+  // }
 
-  private getHttpHeaderResponse() {
-    return new HttpHeaderResponse({headers: this.getHttpHeaders()});
-  }
+  // private getHttpHeaderResponse() {
+  //   return new HttpHeaderResponse({headers: this.getHttpHeaders()});
+  // }
 
   public readReservations(search?: HttpParams | null): Observable<Reservation[]> {
 
     console.warn("readRes:", search);
 
-     let readReservations = this.http.get<Reservation[]>(`${this.url}reservation/?search=${search}`, this.getHttpHeaderResponse());
+     //let readReservations = this.http.get<Reservation[]>(`${this.url}reservation/?search=${search}`, this.getHttpHeaderResponse());
+     let readReservations = this.http.get<Reservation[]>(`${this.url}reservation/?search=${search}`);
  //   let readReservations = this.readReservations();
     readReservations.subscribe((result) => {
       console.warn("service read", result);
@@ -80,8 +81,7 @@ export class ReservationService {
   public addReservation(reservation: Reservation): Observable<Reservation> {
     let readReservations = this.http.post<Reservation>(
       `${this.url}reservation/`,
-      reservation,
-      this.getHttpHeaderResponse()
+      reservation//, this.getHttpHeaderResponse()
     );
     readReservations.subscribe((result) => {
       console.log('added');
@@ -92,8 +92,7 @@ export class ReservationService {
   public modifyReservation(reservation: Reservation): Observable<Reservation> {
     let readReservations = this.http.put<Reservation>(
       `${this.url}reservation/`,
-      reservation,
-      this.getHttpHeaderResponse()
+      reservation//, this.getHttpHeaderResponse()
     );
     readReservations.subscribe((result) => {
       console.log('updated');
