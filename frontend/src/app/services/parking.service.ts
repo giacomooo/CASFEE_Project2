@@ -19,31 +19,35 @@ export class ParkingService {
     this.url = environment.backendUrl;
   }
 
-  private getHttpHeaders(){
-    return new HttpHeaders({
-      'Content-Type':  'application/json',
-      'Authorization': 'Bearer ' + this.keycloakAngular.getToken(),
-    })
-  }
+  // private getHttpHeaders(){
+  //   return new HttpHeaders({
+  //     'Content-Type':  'application/json',
+  //     'Authorization': 'Bearer ' + this.keycloakAngular.getToken(),
+  //   })
+  // }
 
-  private getHttpHeaderResponse(){
-    return new HttpHeaderResponse({headers: this.getHttpHeaders()});
-  }
+  // private getHttpHeaderResponse(){
+  //   return new HttpHeaderResponse({headers: this.getHttpHeaders()});
+  // }
 
   public readParkings(params: HttpParams): Observable<Parking[]> {
-    return this.http.get<Parking[]>(`${this.url}parking/?${params}`, this.getHttpHeaderResponse());
+    //return this.http.get<Parking[]>(`${this.url}parking/?${params}`, this.getHttpHeaderResponse());
+    return this.http.get<Parking[]>(`${this.url}parking/?${params}`);
   }
 
   public createParking(parking: Parking): Observable<Parking> {
-    return this.http.post<Parking>(`${this.url}parking/`, parking, this.getHttpHeaderResponse());
+    //return this.http.post<Parking>(`${this.url}parking/`, parking, this.getHttpHeaderResponse());
+    return this.http.post<Parking>(`${this.url}parking/`, parking);
   }
 
   public updateParking(parking: Parking): Observable<Parking> {
-    return this.http.put<Parking>(`${this.url}parking/${parking.id}/`, parking, this.getHttpHeaderResponse());
+    //return this.http.put<Parking>(`${this.url}parking/${parking.id}/`, parking, this.getHttpHeaderResponse());
+    return this.http.put<Parking>(`${this.url}parking/${parking.id}/`, parking);
   }
 
   public deleteParking(id: number): Promise<DeleteMessage> {
-    return this.http.delete(`${this.url}parking/${id}/`, this.getHttpHeaderResponse()).toPromise()
+    //return this.http.delete(`${this.url}parking/${id}/`, this.getHttpHeaderResponse()).toPromise()
+    return this.http.delete(`${this.url}parking/${id}/`).toPromise()
       .then((result) => {
         return new DeleteMessage(true, '');
       })

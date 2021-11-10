@@ -12,6 +12,7 @@ export class ReservationListComponent implements OnInit {
   @Input() public reservations?: Reservation[];
 
   constructor(public readonly router: Router) {
+    // do nothing
   }
 
   ngOnInit(): void {
