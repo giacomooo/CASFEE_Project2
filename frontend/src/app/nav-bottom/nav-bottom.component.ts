@@ -1,18 +1,18 @@
-import { Component, OnInit } from '@angular/core';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
-import { Observable } from 'rxjs';
-import { map, shareReplay } from 'rxjs/operators';
+import { Component, OnInit } from '@angular/core';
+import { NavigationEnd, Router } from '@angular/router';
 import { KeycloakService } from 'keycloak-angular';
 import { KeycloakProfile } from 'keycloak-js';
-import { NavigationEnd, Router } from '@angular/router';
+import { Observable } from 'rxjs';
+import { map, shareReplay } from 'rxjs/operators';
 import { Globals } from '../globals';
 
 @Component({
-  selector: 'app-nav',
-  templateUrl: './nav.component.html',
-  styleUrls: ['./nav.component.scss']
+  selector: 'app-nav-bottom',
+  templateUrl: './nav-bottom.component.html',
+  styleUrls: ['./nav-bottom.component.scss']
 })
-export class NavComponent implements OnInit {
+export class NavBottomComponent implements OnInit {
   public userProfile?: KeycloakProfile;
   public isLoggedIn: Boolean = false;
   public appTitle: String = "Parkplatzverwaltung";
@@ -60,4 +60,5 @@ export class NavComponent implements OnInit {
       this.userProfile = await this.keycloak.loadUserProfile();
     }
   }
+
 }

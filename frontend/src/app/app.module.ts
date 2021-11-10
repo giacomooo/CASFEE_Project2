@@ -35,6 +35,7 @@ import { NgxMatMomentModule } from '@angular-material-components/moment-adapter'
 import { SharedModule } from 'src/shared/shared.module';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { Globals } from 'src/app/globals';
+import { NavBottomComponent } from './nav-bottom/nav-bottom.component';
 
 // export function keycloakFactory(authService: AuthService) {
 //   return () => authService.init();
@@ -70,7 +71,8 @@ function initializeKeycloak(keycloak: KeycloakService) {
     ParkingAdministrationListComponent,
     ParkingAdministrationItemComponent,
     ParkingAdministrationItemEditComponent,
-    ReservationEditComponent
+    ReservationEditComponent,
+    NavBottomComponent
    ],
   imports: [
     BrowserModule,

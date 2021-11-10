@@ -28,6 +28,7 @@
     "keycloak-angular": "^8.3.0",
     "keycloak-js": "^14.0.0",
     "material": "^0.4.3",
+    "material-bottom-nav": "^1.2.0",
     "moment": "^2.29.1",
     "rxjs": "^6.6.7",
     "tslib": "^2.3.0",

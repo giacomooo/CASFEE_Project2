@@ -1,0 +1,11 @@
+@import '~material-bottom-nav';
+
+.bottom-nav {
+  @include bottom-nav(
+    $background-color: #0d47a1,
+    $active-color: #FFFFFF,
+    $inactive-color: #b1afaf,
+  );
+
+  border-top: 0px;
+}
