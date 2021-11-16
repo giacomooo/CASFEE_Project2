@@ -38,11 +38,11 @@
     </mat-form-field>
 
     <mat-card-actions>
-      <button type="submit" mat-flat-button routerLink="/reservation">abbrechen</button>
+      <button type="button" mat-flat-button routerLink="/reservation/">abbrechen</button>
       <button type="submit" mat-raised-button color="primary" *ngIf="!reservation?.id" [disabled]="reservationForm.invalid || reservationForm.pristine">hinzufügen</button>
       <button type="button" mat-button *ngIf="reservation?.id" (click)="deleteReservation(reservation.id)">löschen</button>
-      <button type="button" mat-button [disabled]="reservationForm.pristine" (click)="resetForm()">zurücksetzen</button>
-      <button type="submit" mat-raised-button color="primary" *ngIf="reservation?.id" [disabled]="reservationForm.invalid || reservationForm.pristine">ändern</button>
+      <button type="button" mat-button [disabled]="reservationForm.pristine" (click)="readReservations()">zurücksetzen</button>
+      <button type="submit" mat-raised-button color="primary" *ngIf="reservation?.id" [disabled]="reservationForm.invalid || reservationForm.pristine">speichern</button>
     </mat-card-actions>
   </mat-card>
 </form>

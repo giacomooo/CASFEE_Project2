@@ -4,7 +4,7 @@ export interface Reservation {
   id: number;
   ID_Parking: number;
   Parking: Parking;
-  ID_Renter: number;
+  ID_Renter: string;
   DateTimeFrom: Date;
   DateTimeTo: Date;
   PricePerHour: number;

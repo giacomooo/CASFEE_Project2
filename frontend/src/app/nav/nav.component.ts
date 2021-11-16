@@ -27,8 +27,6 @@ export class NavComponent implements OnInit {
 
     router.events.forEach(event => {
       if (event instanceof NavigationEnd) {
-        console.log(event.url);
-        console.log(event.url.startsWith(`/parkingAdministration`));
         if (event.url.startsWith(`/account`)) {
           this.appTitle = `${this.userProfile?.firstName}  ${this.userProfile?.lastName}`;
         }
@@ -56,10 +54,12 @@ export class NavComponent implements OnInit {
   }
 
   public async ngOnInit() {
+    this.globals.isLoading = true;
     this.isLoggedIn = await this.keycloak.isLoggedIn();
 
     if (this.isLoggedIn) {
       this.userProfile = await this.keycloak.loadUserProfile();
     }
+    this.globals.isLoading = false;
   }
 }

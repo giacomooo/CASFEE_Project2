@@ -29,18 +29,18 @@ export class ReservationComponent implements OnInit, OnDestroy {
   }
 
   public async backendCall() {
-    this.globals.isLoading = true;
+    // this.globals.isLoading = true;
     const id_landlord = await this._keycloakAngular.getKeycloakInstance().subject;
     if (id_landlord && id_landlord?.length > 0) {
       const httpParams = new HttpParams().set('ID_Landlord', id_landlord).set('withHistory', this.withHistory) ;
 
       this._reservationService.readReservations(httpParams).subscribe(result => {
         this.reservations = result;
-        this.globals.isLoading = false;
+        // this.globals.isLoading = false;
       });
     }
     else {
-      this.globals.isLoading = false;
+      // this.globals.isLoading = false;
       this._snackBar.open('Die Reservationen konnten nicht geladen werden.', 'Schliessen');
     }
   }
