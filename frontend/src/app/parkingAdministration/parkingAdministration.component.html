@@ -1,6 +1,7 @@
-<mat-card>
-  <div class="container">
-    <app-parkingAdministrationList [parkings]="parkings" class="parkings"></app-parkingAdministrationList>
-    <button routerLink="/parkingAdministrationItemEdit/" mat-mini-fab color="primary" class="addButton"><mat-icon>add</mat-icon></button>
-  </div>
-</mat-card>
+<div class="buttonbox">
+  <button routerLink="/parkingAdministrationItemEdit/" mat-mini-fab color="primary" class="addButton"><mat-icon>add</mat-icon></button>
+</div>
+
+<div class="container">
+  <app-parkingAdministrationList [parkings]="parkings" class="parkings"></app-parkingAdministrationList>
+</div>

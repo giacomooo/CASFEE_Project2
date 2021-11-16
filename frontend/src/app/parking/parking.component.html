@@ -1,20 +1,28 @@
-<mat-card>
+<div class="buttonbox"></div>
+
+<div>
   <form class="search-form">
-    <mat-form-field appearance="fill">
-      <input type="input" matInput [value]="location" placeholder="Ort">
-    </mat-form-field>
-    <mat-form-field *ngIf="alternativeDateTime">
-      <input matInput type="datetime-local" [value]="dateTimeFrom" placeholder="Datum/Zeit">
-    </mat-form-field>
-    <mat-form-field *ngIf="alternativeDateTime">
-      <input matInput type="number" [value]="duration" placeholder="Dauer">
-    </mat-form-field>
-    <div class="buttons" *ngIf="!alternativeDateTime">
-      <button mat-raised-button type="button" (click)="alternativeDateTime = !alternativeDateTime">Datum/Zeit</button>
-      <button mat-raised-button color="primary" [routerLink]="['/parking', 'list']" [queryParams]="{ location: location }" type="submit">ab sofort <mat-icon>arrow_right_alt</mat-icon></button>
-    </div>
-    <div class="buttons" *ngIf="alternativeDateTime">
-      <button mat-raised-button color="primary" [routerLink]="['/parking', 'list']" [queryParams]="{ location: location, dateTimeFrom: dateTimeFrom, duration: duration }" type="submit">suchen <mat-icon>arrow_right_alt</mat-icon></button>
-    </div>
+    <mat-card>
+      <mat-form-field appearance="fill">
+        <input type="input" matInput [value]="location" placeholder="Ort">
+      </mat-form-field>
+      <mat-form-field *ngIf="alternativeDateTime">
+        <input matInput type="datetime-local" [value]="dateTimeFrom" placeholder="Datum/Zeit">
+      </mat-form-field>
+      <mat-form-field *ngIf="alternativeDateTime">
+        <input matInput type="number" [value]="duration" placeholder="Dauer">
+      </mat-form-field>
+    </mat-card>
   </form>
-</mat-card>
+</div>
+<div class="buttons" *ngIf="!alternativeDateTime">
+  <button mat-raised-button type="button" (click)="alternativeDateTime = !alternativeDateTime">Datum/Zeit</button>
+  <button mat-raised-button color="primary" [routerLink]="['/parking', 'list']" [queryParams]="{ location: location }"
+    type="submit">ab sofort <mat-icon>arrow_right_alt</mat-icon></button>
+</div>
+<div class="buttons" *ngIf="alternativeDateTime">
+  <button mat-raised-button color="primary" [routerLink]="['/parking', 'list']"
+    [queryParams]="{ location: location, dateTimeFrom: dateTimeFrom, duration: duration }" type="submit">suchen
+    <mat-icon>arrow_right_alt</mat-icon>
+  </button>
+</div>

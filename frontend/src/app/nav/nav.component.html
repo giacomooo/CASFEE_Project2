@@ -1,26 +1,15 @@
-<mat-sidenav-container class="sidenav-container">
-  <mat-sidenav #drawer class="sidenav" fixedInViewport [attr.role]="(isHandset$ | async) ? 'dialog' : 'navigation'"
-    [mode]="(isHandset$ | async) ? 'over' : 'side'" [opened]="(isHandset$ | async) === false">
-    <!--<mat-toolbar>Menu</mat-toolbar>-->
-    <mat-nav-list>
-      <a mat-list-item routerLink="/parking" routerLinkActive="active">Parkplatz finden</a>
-      <a mat-list-item routerLink="/reservation" routerLinkActive="active" *ngIf="!isLoggedIn">Anmelden</a>
-      <a mat-list-item routerLink="/reservation" routerLinkActive="active" *ngIf="isLoggedIn">Reservationen</a>
-      <a mat-list-item routerLink="/account" routerLinkActive="active" *ngIf="isLoggedIn">{{ this.userProfile?.firstName
-        }} {{ this.userProfile?.lastName }}</a>
-    </mat-nav-list>
-  </mat-sidenav>
-  <mat-sidenav-content>
-    <mat-toolbar color="primary">
-      <button type="button" aria-label="Toggle sidenav" mat-icon-button (click)="drawer.toggle()"
-        *ngIf="isHandset$ | async">
-        <mat-icon aria-label="Side nav toggle icon">menu</mat-icon>
-      </button>
-      <span>{{ appTitle }}</span>
-    </mat-toolbar>
-    <div class="progress-bar" style="height: 3px;">
-      <mat-progress-bar *ngIf="globals?.isLoading" mode="indeterminate"></mat-progress-bar>
-    </div>
+<mat-toolbar color="accent">
+  <mat-toolbar-row>
+    <span class="mat-toolbar-title">{{ appTitle }}</span>
+  </mat-toolbar-row>
+</mat-toolbar>
+
+<div class="progress-bar" style="height: 3px;">
+  <mat-progress-bar *ngIf="globals?.isLoading" mode="indeterminate"></mat-progress-bar>
+</div>
+
+<div class="center">
+  <div class="content">
     <router-outlet></router-outlet>
-  </mat-sidenav-content>
-</mat-sidenav-container>
+  </div>
+</div>

@@ -1,0 +1,18 @@
+<nav class="bottom-nav">
+  <a class="bottom-nav__destination" routerLink="/parking" routerLinkActive="bottom-nav__destination--active">
+    <mat-icon>local_parking</mat-icon>
+    <span class="bottom-nav__label">Parkplatz finden</span>
+  </a>
+  <a class="bottom-nav__destination" routerLink="/reservation" routerLinkActive="bottom-nav__destination--active" *ngIf="isLoggedIn">
+    <mat-icon>receipt_long</mat-icon>
+    <span class="bottom-nav__label">Reservationen</span>
+  </a>
+  <a class="bottom-nav__destination" routerLink="/account" routerLinkActive="bottom-nav__destination--active" *ngIf="isLoggedIn">
+    <mat-icon>person</mat-icon>
+    <span class="bottom-nav__label">{{ this.userProfile?.firstName }} {{ this.userProfile?.lastName }}</span>
+  </a>
+  <a class="bottom-nav__destination" routerLink="/account" routerLinkActive="bottom-nav__destination--active" *ngIf="!isLoggedIn">
+    <mat-icon>login</mat-icon>
+    <span class="bottom-nav__label">Anmelden</span>
+  </a>
+</nav>

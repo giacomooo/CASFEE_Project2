@@ -17,6 +17,7 @@ export class ReservationComponent implements OnInit, OnDestroy {
   public withHistory: boolean = false;
 
   constructor(private readonly _reservationService: ReservationService, protected _keycloakAngular: KeycloakService, private _snackBar: MatSnackBar, public globals: Globals) {
+    // do nothing
   }
 
   async ngOnInit() {
@@ -46,5 +47,6 @@ export class ReservationComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
+    // do nothing
   }
 }
