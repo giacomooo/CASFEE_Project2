@@ -17,16 +17,16 @@ export class ReservationService {
     this.url = environment.backendUrl;
   }
 
-  // private getHttpHeaders() {
-  //   return new HttpHeaders({
-  //     'Content-Type': 'application/json',
-  //     Authorization: 'Bearer ' + this.keycloakAngular.getToken(),
-  //   });
-  // }
+  private getHttpHeaders() {
+    return new HttpHeaders({
+      'Content-Type': 'application/json',
+      Authorization: 'Bearer ' + this.keycloakAngular.getToken(),
+    });
+  }
 
-  // private getHttpHeaderResponse() {
-  //   return new HttpHeaderResponse({headers: this.getHttpHeaders()});
-  // }
+  private getHttpHeaderResponse() {
+    return new HttpHeaderResponse({headers: this.getHttpHeaders()});
+  }
 
   public readReservations(search?: HttpParams): Observable<Reservation[]> {
      return this.http.get<Reservation[]>(`${this.url}reservation/?${search}`, this.getHttpHeaderResponse());
@@ -43,7 +43,7 @@ export class ReservationService {
   public deleteReservation(id: number): Promise<DeleteMessage> {
     return this.http.delete<Reservation>(`${this.url}reservation/${id}`, this.getHttpHeaderResponse()).toPromise()
     .then((result) => {
-      return new DeleteMessage(true, '');
+      return new DeleteMessage(true, 'Die Reservation wurde gelöscht.');
     })
     .catch((err) => {
       return new DeleteMessage(false, 'Die Reservation konnte nicht gelöscht werden.')
