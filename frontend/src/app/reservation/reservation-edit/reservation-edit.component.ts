@@ -8,7 +8,7 @@ import { KeycloakService } from 'keycloak-angular';
 import { Globals } from 'src/app/globals';
 import { Reservation } from 'src/app/models/Reservation';
 import { ReservationService } from 'src/app/services/reservation.service';
-import { ModalComponent } from 'src/shared/modal/modal.component';
+import { ModalComponent } from 'src/app/shared/modal/modal.component';
 
 @Component({
   selector: 'app-reservation-edit',

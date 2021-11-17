@@ -32,7 +32,7 @@ import { ReservationEditComponent } from './reservation/reservation-edit/reserva
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { NgxMatDatetimePickerModule, NgxMatTimepickerModule } from '@angular-material-components/datetime-picker';
 import { NgxMatMomentModule } from '@angular-material-components/moment-adapter';
-import { SharedModule } from 'src/shared/shared.module';
+import { SharedModule } from 'src/app/shared/shared.module';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { Globals } from 'src/app/globals';
 import { NavBottomComponent } from './nav-bottom/nav-bottom.component';
@@ -72,7 +72,7 @@ function initializeKeycloak(keycloak: KeycloakService) {
     ParkingAdministrationItemComponent,
     ParkingAdministrationItemEditComponent,
     ReservationEditComponent,
-    NavBottomComponent
+    NavBottomComponent,
    ],
   imports: [
     BrowserModule,

@@ -9,7 +9,7 @@ import { KeycloakService } from 'keycloak-angular';
 import { Globals } from 'src/app/globals';
 import { Parking } from 'src/app/models/Parking';
 import { ParkingService } from 'src/app/services/parking.service';
-import { ModalComponent } from 'src/shared/modal/modal.component';
+import { ModalComponent } from 'src/app/shared/modal/modal.component';
 
 @Component({
   selector: 'app-parkingAdministrationItemEdit',
@@ -111,7 +111,7 @@ export class ParkingAdministrationItemEditComponent implements OnInit {
     this._snackBar.open(content, 'Schliessen', { duration: 5000 });
   }
 
-  resetForm() {
+  resetForm = (): void => {
     this.parkingForm.reset();
     this.parkingForm.markAsUntouched();
 

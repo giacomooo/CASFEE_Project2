@@ -1,0 +1,10 @@
+<div class="container">
+    <div>
+        <a mat-raised-button *ngIf="backLink" [routerLink]="[backLink]"><mat-icon>arrow_back</mat-icon></a>
+    </div>
+    <div class="buttonsright">
+        <button type="button" mat-raised-button *ngIf="form && resetFunction" [disabled]="form.pristine" (click)="resetFunction()">Zurücksetzen</button>
+        <button type="submit" mat-raised-button color="primary" *ngIf="form && !object?.id" [disabled]="form.invalid || form.pristine">Hinzufügen</button>
+        <button type="submit" mat-raised-button color="primary" *ngIf="form && object?.id" [disabled]="form.invalid || form.pristine">Ändern</button>
+    </div>
+</div>

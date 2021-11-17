@@ -9,9 +9,12 @@ import { KeycloakService } from 'keycloak-angular';
 })
 export class AccountComponent implements OnInit {
 
-  constructor(private router: Router, private readonly keycloak: KeycloakService) { }
+  constructor(private router: Router, private readonly keycloak: KeycloakService) {
+    // do nothing.
+  }
 
   ngOnInit(): void {
+    // do nothing.
   }
 
   logout() {
