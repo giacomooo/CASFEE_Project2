@@ -1,6 +1,6 @@
-<div class="buttonbox">
+<app-shared-button-bar>
   <button mat-mini-fab color="ancent" type="button" mat-button *ngIf="parking?.id" (click)="deleteParking(parking?.id)" class="deleteButton"><mat-icon>delete</mat-icon></button>
-</div>
+</app-shared-button-bar>
 
 <form (submit)="onAddOrEdit(parkingForm.value)" [formGroup]="parkingForm">
   <mat-card>
@@ -36,14 +36,6 @@
         <mat-error *ngIf="f.PricePerHour.invalid" class="alert alert-danger">Betrag in CHF fehlt</mat-error>
       </mat-form-field>
   </mat-card>
-  <div class="container">
-    <div>
-      <button type="submit" mat-raised-button routerLink="/parkingAdministration"><mat-icon>arrow_back</mat-icon></button>
-    </div>
-    <div class="buttonsright">
-      <button type="submit" mat-raised-button *ngIf="!parking?.id" [disabled]="parkingForm.invalid || parkingForm.pristine">Hinzufügen</button>
-      <button type="button" mat-raised-button [disabled]="parkingForm.pristine" (click)="resetForm()">Zurücksetzen</button>
-      <button type="submit" mat-raised-button color="primary" *ngIf="parking?.id" [disabled]="parkingForm.invalid || parkingForm.pristine">Ändern</button>
-    </div>
-  </div>
+
+  <app-shared-button-bar-edit [backLink]="'/parkingAdministration'" [form]="parkingForm" [object]="parking" [resetFunction]="resetForm"></app-shared-button-bar-edit>
 </form>

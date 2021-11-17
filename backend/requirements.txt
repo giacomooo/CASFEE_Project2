@@ -7,3 +7,5 @@ Markdown==3.3.4
 six==1.14.0
 requests==2.26.0
 cryptography==3.4.7
+psycopg2==2.9.2
+pylint==2.11.1
