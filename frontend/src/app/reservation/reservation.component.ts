@@ -12,7 +12,7 @@ import { ReservationService } from '../services/reservation.service';
   styleUrls: ['./reservation.component.scss']
 })
 
-export class ReservationComponent implements OnInit, OnDestroy {
+export class ReservationComponent implements OnInit {
   public reservations?: Reservation[];
   public withHistory: boolean = false;
 
@@ -44,9 +44,5 @@ export class ReservationComponent implements OnInit, OnDestroy {
       // this.globals.isLoading = false;
       this._snackBar.open('Die Reservationen konnten nicht geladen werden.', 'Schliessen');
     }
-  }
-
-  ngOnDestroy(): void {
-    // do nothing
   }
 }

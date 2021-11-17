@@ -18,7 +18,7 @@
       </ngx-mat-datetime-picker>
     </mat-form-field>
     <mat-form-field>
-      <input matInput [ngxMatDatetimePicker]="toPicker" placeholder="bis" formControlName="DateTimeTo">
+      <input matInput [ngxMatDatetimePicker]="toPicker" placeholder="bis" formControlName="DateTimeTo" >
       <mat-datepicker-toggle matSuffix [for]="$any(toPicker)">
       </mat-datepicker-toggle>
       <ngx-mat-datetime-picker #toPicker>
@@ -30,10 +30,10 @@
     <mat-form-field class="hiddenField">
       <input matInput placeholder="IsCanceled" formControlName="IsCanceled" />
     </mat-form-field>
-    <mat-form-field>
-      <input matInput placeholder="CHF" formControlName="Amount" />
-    </mat-form-field>
-    <mat-form-field>
+      <mat-form-field>
+        <input matInput placeholder="Betrag" formControlName="Amount" [value]="reservation.Amount | currency: 'CHF' "  />
+      </mat-form-field>
+      <mat-form-field>
       <input matInput placeholder="CHF/h" formControlName="PricePerHour" />
     </mat-form-field>
 

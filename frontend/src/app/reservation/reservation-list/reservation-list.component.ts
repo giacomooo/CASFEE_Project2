@@ -7,15 +7,11 @@ import {Reservation} from 'src/app/models/Reservation';
   templateUrl: './reservation-list.component.html',
   styleUrls: ['./reservation-list.component.scss']
 })
-export class ReservationListComponent implements OnInit {
+export class ReservationListComponent {
 
   @Input() public reservations?: Reservation[];
 
   constructor(public readonly router: Router) {
-    // do nothing
-  }
-
-  ngOnInit(): void {
   }
 
   public clickEdit(reservationId: number): void {

@@ -1,5 +1,9 @@
 import { HttpParams } from '@angular/common/http';
-import { Component, Input, OnInit, ViewChild } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  ViewChild,
+} from '@angular/core';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
@@ -42,16 +46,32 @@ export class ReservationEditComponent implements OnInit {
       DateTimeTo: new FormControl(this.reservation.DateTimeTo),
       ID_Parking: new FormControl(this.reservation.ID_Parking),
       IsCanceled: new FormControl(this.reservation.IsCanceled),
-      Amount: new FormControl(this.reservation.Amount),
-      PricePerHour: new FormControl(this.reservation.PricePerHour),
+      Amount: new FormControl({value: this.reservation.Amount, disabled: true}),
+      PricePerHour: new FormControl({value: this.reservation.PricePerHour, disabled: true}),
     });
+    this.onValueChanges();
   }
 
-  ngOnInit(): void {
+  public ngOnInit(): void {
     this.readReservations();
   }
 
-  readReservations(): void {
+  private onValueChanges(): void {
+    this.reservationForm.controls['DateTimeFrom'].valueChanges.subscribe(
+      (dateTimeFrom) => {
+        this.reservation.Amount = this.calculateDiff(dateTimeFrom, this.reservation.DateTimeTo);
+      }
+    );
+
+    this.reservationForm.controls['DateTimeTo'].valueChanges.subscribe(
+      (dateTimeTo) => {
+        this.reservation.Amount = this.calculateDiff(this.reservation.DateTimeFrom, dateTimeTo);
+      }
+    );
+
+  }
+
+  public readReservations(): void {
     // this.globals.isLoading = true;
     const id = this._activatedRoute.snapshot.params['id'];
 
@@ -130,11 +150,24 @@ export class ReservationEditComponent implements OnInit {
     // }
   }
 
-  showError(content: string) {
+  public showError(content: string) {
     this._snackBar.open(content, 'Schliessen', { duration: 5000 });
   }
 
-  openModal() {
+  public calculateDiff(from: Date, to: Date): number {
+    const _from = new Date(from);
+    const _to = new Date(to);
+
+    const minutes = Math.floor(
+      (Date.UTC(_to.getFullYear(), _to.getMonth(), _to.getDate(), _to.getHours(),_to.getMinutes()) -
+        Date.UTC(_from.getFullYear(), _from.getMonth(), _from.getDate(), _from.getHours(), _from.getMinutes())) /
+        (1000 * 60 )
+    );
+    const pricePerMinute = this.reservation.PricePerHour / 60;
+    return pricePerMinute * minutes;
+  }
+
+  public openModal() {
     const dialogConfig = new MatDialogConfig();
 
     dialogConfig.disableClose = true;
