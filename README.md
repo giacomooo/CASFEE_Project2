@@ -1,7 +1,7 @@
 # CASFEE_Project2
 CASFEE_Project2
 
-## Fireframes
+## Wireframes
 Die Wireframes wurden mit Figma erstellt. Nachfolgend der Link:
 https://www.figma.com/file/qvJaNcNgBfPqFlfTFyGoXh/Parkplatzverwaltung?node-id=101%3A1873
 
