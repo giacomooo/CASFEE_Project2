@@ -163,7 +163,6 @@ export class ReservationEditComponent implements OnInit {
   public calculateDiff(from: Date, to: Date): number {
     const _from = new Date(from);
     const _to = new Date(to);
-    // console.log(_from, _to);
 
     const minutes = Math.floor(
       (Date.UTC(_to.getFullYear(), _to.getMonth(), _to.getDate(), _to.getHours(),_to.getMinutes()) -
