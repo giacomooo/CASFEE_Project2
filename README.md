@@ -1,9 +1,16 @@
 # CASFEE_Project2
 CASFEE_Project2
 
+## Github Repo
+https://github.com/giacomooo/CASFEE_Project2
+
 ## Wireframes
 Die Wireframes wurden mit Figma erstellt. Nachfolgend der Link:
 https://www.figma.com/file/qvJaNcNgBfPqFlfTFyGoXh/Parkplatzverwaltung?node-id=101%3A1873
+
+## Postman Collection
+https://galactic-capsule-711286.postman.co/workspace/ee9366be-72c8-4814-b1b8-b3e40de4dab0/request/2587017-89cc58af-0a32-4c3d-955e-01e9996f80e6
+
 
 ## Frontend
 
@@ -34,3 +41,19 @@ Das Backend basiert auf Python / Django. Die Persistierung ist über eine Postgr
 > Server: tai.db.elephantsql.com  
 > User & DB: cvxpvwab  
 > Passwort: h0ZpU_iEYFZk9PaaeVEVE6_BVCYuOQxF
+
+## Linting
+
+### Python/Django
+#### Execute
+> pylint api --load-plugins pylint_django --django-settings-module=parkplatzverwaltung.settings
+> pylint parkplatzverwaltung --load-plugins pylint_django --django-settings-module=parkplatzverwaltung.settings
+
+#### Install
+> pip install pylint
+> pylint --generate-rcfile | out-file -encoding utf8 .pylintrc
+> pylint --rcfile=.pylintrc
+
+> pip install pylint-django
+> pylint --load-plugins pylint_django --load-plugins pylint_django.checkers.migrations
+

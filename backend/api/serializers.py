@@ -5,7 +5,7 @@ class ParkingSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.Parking
         fields = '__all__'
-    
+
 class ReservationSerializer(serializers.ModelSerializer):
     Parking = ParkingSerializer(source='ID_Parking', read_only=True)
 

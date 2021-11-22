@@ -3,6 +3,7 @@ from rest_framework import routers
 
 from . import views
 
+# pylint: disable=invalid-name
 app_name = 'api'
 
 router = routers.DefaultRouter()

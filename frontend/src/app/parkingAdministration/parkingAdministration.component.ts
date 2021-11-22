@@ -7,7 +7,7 @@ import { Parking } from '../models/Parking';
 import { ParkingService } from '../services/parking.service';
 
 @Component({
-  selector: 'app-parkingAdministration',
+  selector: 'app-parking-administration',
   templateUrl: './parkingAdministration.component.html',
   styleUrls: ['./parkingAdministration.component.scss']
 })
