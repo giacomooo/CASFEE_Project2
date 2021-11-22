@@ -9,6 +9,7 @@ import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute, Params, Router } from '@angular/router';
 import { KeycloakService } from 'keycloak-angular';
+import * as moment from 'moment';
 import { Globals } from 'src/app/globals';
 import { Reservation } from 'src/app/models/Reservation';
 import { ReservationService } from 'src/app/services/reservation.service';
@@ -59,16 +60,20 @@ export class ReservationEditComponent implements OnInit {
   private onValueChanges(): void {
     this.reservationForm.controls['DateTimeFrom'].valueChanges.subscribe(
       (dateTimeFrom) => {
-        this.reservation.Amount = this.calculateDiff(dateTimeFrom, this.reservation.DateTimeTo);
+        this.reservation.Amount = this.currencyRound (this.calculateDiff(dateTimeFrom, this.reservation.DateTimeTo));
       }
     );
 
     this.reservationForm.controls['DateTimeTo'].valueChanges.subscribe(
       (dateTimeTo) => {
-        this.reservation.Amount = this.calculateDiff(this.reservation.DateTimeFrom, dateTimeTo);
+        this.reservation.Amount = this.currencyRound(this.calculateDiff(this.reservation.DateTimeFrom, dateTimeTo));
       }
     );
 
+  }
+
+  private currencyRound(unRounded: number, precision: number = 0.05): number {
+    return Math.floor(unRounded / precision)*precision;
   }
 
   public readReservations(): void {
@@ -92,9 +97,10 @@ export class ReservationEditComponent implements OnInit {
   public onAddOrEdit(reservation: Reservation): void {
     this.isServerPending = true;
 
+    reservation.DateTimeFrom = new Date(moment(reservation.DateTimeFrom).toDate());
     if (reservation.id) {
       this._reservationService
-        .updateReservation(this.reservationForm.value)
+        .updateReservation(this.reservation)
         .subscribe((result) => {
           if (result) {
             this._router.navigate(['reservation']);
@@ -157,6 +163,7 @@ export class ReservationEditComponent implements OnInit {
   public calculateDiff(from: Date, to: Date): number {
     const _from = new Date(from);
     const _to = new Date(to);
+    // console.log(_from, _to);
 
     const minutes = Math.floor(
       (Date.UTC(_to.getFullYear(), _to.getMonth(), _to.getDate(), _to.getHours(),_to.getMinutes()) -
