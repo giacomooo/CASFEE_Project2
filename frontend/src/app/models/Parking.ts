@@ -1,4 +1,4 @@
-export interface Parking {
+export interface ParkingInterface {
   id: number;
   ID_Landlord: string;
   Street: string;
@@ -9,5 +9,5 @@ export interface Parking {
   PricePerHour: number;
 }
 
-export class Parking implements Parking {
+export class Parking implements ParkingInterface {
 }
