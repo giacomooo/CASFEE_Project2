@@ -9,28 +9,26 @@ import { ParkingService } from '../services/parking.service';
 @Component({
   selector: 'app-parking-administration',
   templateUrl: './parkingAdministration.component.html',
-  styleUrls: ['./parkingAdministration.component.scss']
+  styleUrls: ['./parkingAdministration.component.scss'],
 })
 export class ParkingAdministrationComponent implements OnInit {
   public parkings?: Parking[];
 
-  constructor(private _parkingService: ParkingService, protected _keycloakAngular: KeycloakService, private _snackBar: MatSnackBar, private globals: Globals) { }
+  constructor(private parkingService: ParkingService, protected _keycloakAngular: KeycloakService, private _snackBar: MatSnackBar, private globals: Globals) { }
 
   async ngOnInit() {
     this.globals.isLoading = true;
-    const id_landlord = await this._keycloakAngular.getKeycloakInstance().subject;
-    if (id_landlord && id_landlord?.length > 0) {
-      const httpParams = new HttpParams().set('ID_Landlord', id_landlord);
+    const idLandlord = await this._keycloakAngular.getKeycloakInstance().subject;
+    if (idLandlord && idLandlord?.length > 0) {
+      const httpParams = new HttpParams().set('ID_Landlord', idLandlord);
 
-      this._parkingService.readParkings(httpParams).subscribe(result => {
+      this.parkingService.readParkings(httpParams).subscribe((result) => {
         this.parkings = result;
         this.globals.isLoading = false;
       });
-    }
-    else {
+    } else {
       this.globals.isLoading = false;
       this._snackBar.open('Die Parkplätze konnten nicht geladen werden.', 'Schliessen');
     }
   }
-
 }

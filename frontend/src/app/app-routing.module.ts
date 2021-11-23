@@ -10,19 +10,19 @@ import { ReservationComponent } from './reservation/reservation.component';
 import { AppAuthGuard } from './services/auth.guard';
 
 const routes: Routes = [
-  { path: 'parking', component: ParkingComponent},
-  { path: 'parking/list', component: ParkingListComponent},
-  { path: 'reservation', component: ReservationComponent, canActivate: [AppAuthGuard]},
-  { path: 'reservation/:id', component: ReservationEditComponent, canActivate: [AppAuthGuard]},
-  { path: 'account', component: AccountComponent, canActivate: [AppAuthGuard]},
-  { path: 'parkingAdministration', component: ParkingAdministrationComponent, canActivate: [AppAuthGuard]},
-  { path: 'parkingAdministrationItemEdit', component: ParkingAdministrationItemEditComponent, canActivate: [AppAuthGuard]},
+  { path: 'parking', component: ParkingComponent },
+  { path: 'parking/list', component: ParkingListComponent },
+  { path: 'reservation', component: ReservationComponent, canActivate: [AppAuthGuard] },
+  { path: 'reservation/:id', component: ReservationEditComponent, canActivate: [AppAuthGuard] },
+  { path: 'account', component: AccountComponent, canActivate: [AppAuthGuard] },
+  { path: 'parkingAdministration', component: ParkingAdministrationComponent, canActivate: [AppAuthGuard] },
+  { path: 'parkingAdministrationItemEdit', component: ParkingAdministrationItemEditComponent, canActivate: [AppAuthGuard] },
   { path: '', redirectTo: '/parking', pathMatch: 'full' },
 ];
 
 @NgModule({
   imports: [RouterModule.forRoot(routes)],
   providers: [AppAuthGuard],
-  exports: [RouterModule]
+  exports: [RouterModule],
 })
 export class AppRoutingModule { }

@@ -1,5 +1,4 @@
-import { HttpErrorResponse, HttpHeaderResponse, HttpParams } from '@angular/common/http';
-import { ThisReceiver } from '@angular/compiler';
+import { HttpParams } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
@@ -14,14 +13,17 @@ import { ModalComponent } from 'src/app/shared/modal/modal.component';
 @Component({
   selector: 'app-parkingAdministrationItemEdit',
   templateUrl: './parkingAdministrationItemEdit.component.html',
-  styleUrls: ['./parkingAdministrationItemEdit.component.scss']
+  styleUrls: ['./parkingAdministrationItemEdit.component.scss'],
 })
 export class ParkingAdministrationItemEditComponent implements OnInit {
-  public submitted: Boolean = false;
+  public submitted = false;
   public parking: Parking;
   public parkingForm: FormGroup;
 
-  constructor(public matDialog: MatDialog, private _parkingService: ParkingService, private _router: Router,  private _activatedRoute: ActivatedRoute, private _keycloakAngular: KeycloakService, private _formBuilder: FormBuilder, private _snackBar: MatSnackBar, public globals: Globals) {
+  constructor(
+    public matDialog: MatDialog, private _parkingService: ParkingService, private _router: Router,
+    private _activatedRoute: ActivatedRoute, private _keycloakAngular: KeycloakService, private _formBuilder: FormBuilder, private _snackBar: MatSnackBar, public globals: Globals
+    ) {
     this.parking = new Parking();
     this.parkingForm = this._formBuilder.group({
       id: new FormControl(this.parking.id),
@@ -32,7 +34,7 @@ export class ParkingAdministrationItemEditComponent implements OnInit {
       ZIP: new FormControl(this.parking.ZIP, Validators.required),
       Location: new FormControl(this.parking.Location, Validators.required),
       PricePerHour: new FormControl(this.parking.PricePerHour, Validators.required),
-    })
+    });
   }
 
   ngOnInit() {
@@ -41,46 +43,43 @@ export class ParkingAdministrationItemEditComponent implements OnInit {
 
   readParking() {
     this.globals.isLoading = true;
-    this._activatedRoute.queryParams.subscribe(params => {
+    this._activatedRoute.queryParams.subscribe((params) => {
       if (params.id) {
         const httpParams = new HttpParams().set('id', params.id);
-        this._parkingService.readParkings(httpParams).subscribe(result => {
+        this._parkingService.readParkings(httpParams).subscribe((result) => {
           this.parking = result[0];
           this.parkingForm.reset(this.parking);
           this.globals.isLoading = false;
         });
-      }
-      else{
+      } else {
         this.globals.isLoading = false;
       }
-    })
+    });
   }
 
   onAddOrEdit(parking: Parking) {
     this.submitted = true;
 
     if (parking.id) {
-      this._parkingService.updateParking(this.parkingForm.value).subscribe(result => {
+      this._parkingService.updateParking(this.parkingForm.value).subscribe((result) => {
         if (result) {
           this._router.navigate(['parkingAdministration']);
-        }
-        else {
+        } else {
           this.showError('Der Parkplatz konnte nicht aktualisiert werden.');
         }
-      })
+      });
     }
     else {
-      const ID_Landlord = this._keycloakAngular.getKeycloakInstance().subject;
-      if (ID_Landlord) {
-        parking.ID_Landlord = ID_Landlord;
-        this._parkingService.createParking(this.parkingForm.value).subscribe(result => {
+      const idLandlord = this._keycloakAngular.getKeycloakInstance().subject;
+      if (idLandlord) {
+        this.parking.ID_Landlord = idLandlord;
+        this._parkingService.createParking(this.parkingForm.value).subscribe((result) => {
           if (result) {
             this._router.navigate(['parkingAdministration']);
-          }
-          else {
+          } else {
             this.showError('Der Parkplatz konnte nicht hinzugefügt werden.');
           }
-        })
+        });
       }
     }
   }
@@ -90,21 +89,18 @@ export class ParkingAdministrationItemEditComponent implements OnInit {
     modalDialog.afterClosed().subscribe((result) => {
       if (result && id) {
         this._parkingService.deleteParking(id)
-          .then(result => {
-            console.log(result);
-              if (result.status) {
-                this._router.navigate(['parkingAdministration']);
-              }
-              else {
-                this.showError(result.message);
-              }
+          .then((res) => {
+            if (res.status) {
+              this._router.navigate(['parkingAdministration']);
+            } else {
+              this.showError(result.message);
             }
-          )
-          .catch(error => {
+          })
+          .catch(() => {
             this.showError('Der Parkplatz konnte nicht gelöscht werden, bitte versuchen sie es später erneut.');
           });
       }
-    })
+    });
   }
 
   showError(content: string) {
@@ -118,22 +114,22 @@ export class ParkingAdministrationItemEditComponent implements OnInit {
     if (this.parkingForm.controls.id) {
       this.readParking();
     }
-  }
+  };
 
   openModal() {
     const dialogConfig = new MatDialogConfig();
 
     dialogConfig.disableClose = true;
-    dialogConfig.id = "modal-component";
-    dialogConfig.height = "170px";
-    dialogConfig.width = "550px";
+    dialogConfig.id = 'modal-component';
+    dialogConfig.height = '170px';
+    dialogConfig.width = '550px';
     dialogConfig.data = {
       title: 'Wollen sie den Parkplatz wirklich löschen?',
-      description: 'Dieser Vorgang kann nicht rückgängig gemacht werden.'
+      description: 'Dieser Vorgang kann nicht rückgängig gemacht werden.',
     };
 
     return this.matDialog.open(ModalComponent, dialogConfig);
   }
 
-  get f() { return this.parkingForm.controls;  }
+  get f() { return this.parkingForm.controls; }
 }

@@ -1,13 +1,10 @@
-import { Injectable } from "@angular/core";
-import { ActivatedRouteSnapshot, Router, RouterStateSnapshot } from "@angular/router";
-import { KeycloakAuthGuard, KeycloakService } from "keycloak-angular";
+import { Injectable } from '@angular/core';
+import { ActivatedRouteSnapshot, Router, RouterStateSnapshot } from '@angular/router';
+import { KeycloakAuthGuard, KeycloakService } from 'keycloak-angular';
 
 @Injectable()
 export class AppAuthGuard extends KeycloakAuthGuard {
-  constructor(
-    protected router: Router,
-    protected keycloakAngular: KeycloakService
-  ) {
+  constructor(protected router: Router, protected keycloakAngular: KeycloakService) {
     super(router, keycloakAngular);
   }
 
@@ -24,18 +21,18 @@ export class AppAuthGuard extends KeycloakAuthGuard {
         permission = true;
       } else {
         if (!this.roles || this.roles.length === 0) {
-          permission = false
+          permission = false;
         }
         if (requiredRoles.every((role) => this.roles.indexOf(role) > -1)) {
           permission = true;
         } else {
           permission = false;
-        };
+        }
       }
       if (!permission) {
         this.router.navigate(['/']);
       }
-      resolve(permission)
+      resolve(permission);
     });
   }
 }
