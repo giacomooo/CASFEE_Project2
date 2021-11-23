@@ -8,6 +8,7 @@ from cryptography import x509
 from cryptography.hazmat import backends
 
 # Don't verify ssl Certificates
+# pylint: disable=protected-access
 ssl._create_default_https_context = ssl._create_unverified_context
 
 class ApiConfig(AppConfig):
@@ -20,8 +21,9 @@ class ApiConfig(AppConfig):
         #return None
         try: # (A) Load keys from url...
             url = settings.KEYCLOAK['HOST']+"/auth/realms/" + settings.KEYCLOAK['REALM_NAME']+"/protocol/openid-connect/certs"
+            # pylint: disable=consider-using-with
             response = urllib.request.urlopen(url)
-            # Response-Format: 
+            # Response-Format:
             # {
             #     "keys": [
             #         {
@@ -40,14 +42,14 @@ class ApiConfig(AppConfig):
             #     ]
             # }
         except Exception as ex:
-            #"message": f"Request on '{dj_settings.KEYCLOAK_PUBLIC_KEY_URL}' failed! Check if url is reachable...", \ 
+            #"message": f"Request on '{dj_settings.KEYCLOAK_PUBLIC_KEY_URL}' failed! Check if url is reachable...", \
             message = {    "error": "request.urlopen()",
-            "message": f"Request on '{url}' failed! Check if url is reachable...", 
+            "message": f"Request on '{url}' failed! Check if url is reachable...",
                 "exception":{   "type":str(ex.__class__.__name__),
-                                "message":str(ex), 
+                                "message":str(ex),
                             }
-            } 
-            raise Exception(message)
+            }
+            raise Exception(message) from ex
 
         try: # (B) Extract Public Key as Certificate out of response
             json_response = json.loads(response.read().decode('utf-8'))
@@ -55,13 +57,15 @@ class ApiConfig(AppConfig):
             cert = x509.load_pem_x509_certificate(cert.encode('utf-8'), backends.default_backend())
             pki = cert.public_key()
         except Exception as ex:
-            message = {    "error": "extracting pki",
-            "message": f"Error during extracting pki out of json-response of Keycloak! Debug section...",
-                "exception":{   "type":str(ex.__class__.__name__),
-                                "message":str(ex),
-                            }
-            } 
-            raise Exception(message)
+            message = {
+                "error": "extracting pki",
+                "message": "Error during extracting pki out of json-response of Keycloak! Debug section...",
+                "exception":{
+                    "type":str(ex.__class__.__name__),
+                    "message":str(ex),
+                }
+            }
+            raise Exception(message) from ex
 
         # (C) Write result back to settings...
         settings.JWT_AUTH['JWT_PUBLIC_KEY'] = pki

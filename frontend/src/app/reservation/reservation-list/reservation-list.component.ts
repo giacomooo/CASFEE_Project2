@@ -1,5 +1,5 @@
-import {Component, Input, OnInit} from '@angular/core';
-import {ActivatedRoute, Router, RouterModule } from '@angular/router';
+import {Component, Input} from '@angular/core';
+import { Router } from '@angular/router';
 import {Reservation} from 'src/app/models/Reservation';
 
 @Component({

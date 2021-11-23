@@ -1,6 +1,5 @@
-from django.shortcuts import render
 from django_filters import rest_framework
-from rest_framework import viewsets, filters, permissions
+from rest_framework import viewsets, filters
 
 from . import serializers, models
 
