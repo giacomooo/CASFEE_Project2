@@ -7,7 +7,7 @@
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
-    "lint": "ng lint"
+    "lint": "eslint . --ext .ts"
   },
   "private": true,
   "dependencies": {
@@ -26,7 +26,6 @@
     "@angular/router": "~12.2.0",
     "@material-ui/pickers": "^3.3.10",
     "@material/checkbox": "^13.0.0",
-    "angular-eslint": "0.0.1-alpha.0",
     "keycloak-angular": "^8.3.0",
     "keycloak-js": "^14.0.0",
     "material": "^0.4.3",
@@ -52,7 +51,9 @@
     "eslint": "^8.2.0",
     "eslint-config-airbnb": "^19.0.0",
     "eslint-config-airbnb-base": "^15.0.0",
+    "eslint-config-prettier": "^8.3.0",
     "eslint-plugin-import": "^2.25.3",
+    "eslint-plugin-prettier": "^4.0.0",
     "jasmine-core": "~3.8.0",
     "karma": "~6.3.0",
     "karma-chrome-launcher": "~3.1.0",

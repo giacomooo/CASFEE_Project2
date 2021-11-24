@@ -1,6 +1,7 @@
-import { HttpParams } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import {
+  FormBuilder, FormControl, FormGroup, Validators,
+} from '@angular/forms';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -21,9 +22,15 @@ export class ParkingAdministrationItemEditComponent implements OnInit {
   public parkingForm: FormGroup;
 
   constructor(
-    public matDialog: MatDialog, private _parkingService: ParkingService, private _router: Router,
-    private _activatedRoute: ActivatedRoute, private _keycloakAngular: KeycloakService, private _formBuilder: FormBuilder, private _snackBar: MatSnackBar, public globals: Globals
-    ) {
+    public matDialog: MatDialog,
+    private _parkingService: ParkingService,
+    private _router: Router,
+    private _activatedRoute: ActivatedRoute,
+    private _keycloakAngular: KeycloakService,
+    private _formBuilder: FormBuilder,
+    private _snackBar: MatSnackBar,
+    public globals: Globals,
+  ) {
     this.parking = new Parking();
     this.parkingForm = this._formBuilder.group({
       id: new FormControl(this.parking.id),
@@ -45,9 +52,8 @@ export class ParkingAdministrationItemEditComponent implements OnInit {
     this.globals.isLoading = true;
     this._activatedRoute.queryParams.subscribe((params) => {
       if (params.id) {
-        const httpParams = new HttpParams().set('id', params.id);
-        this._parkingService.readParkings(httpParams).subscribe((result) => {
-          this.parking = result[0];
+        this._parkingService.readParking(params.id).subscribe((result) => {
+          this.parking = result;
           this.parkingForm.reset(this.parking);
           this.globals.isLoading = false;
         });
@@ -68,8 +74,7 @@ export class ParkingAdministrationItemEditComponent implements OnInit {
           this.showError('Der Parkplatz konnte nicht aktualisiert werden.');
         }
       });
-    }
-    else {
+    } else {
       const idLandlord = this._keycloakAngular.getKeycloakInstance().subject;
       if (idLandlord) {
         this.parking.ID_Landlord = idLandlord;

@@ -1,4 +1,4 @@
-import { Parking } from "./Parking";
+import { Parking } from './Parking';
 
 export interface Reservation {
   id: number;

@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { ActivatedRouteSnapshot, Router, RouterStateSnapshot } from '@angular/router';
+import { ActivatedRouteSnapshot, Router } from '@angular/router';
 import { KeycloakAuthGuard, KeycloakService } from 'keycloak-angular';
 
 @Injectable()
@@ -8,12 +8,13 @@ export class AppAuthGuard extends KeycloakAuthGuard {
     super(router, keycloakAngular);
   }
 
-  isAccessAllowed(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Promise<boolean> {
+  isAccessAllowed(route: ActivatedRouteSnapshot): Promise<boolean> {
     return new Promise((resolve, reject) => {
       let permission;
       if (!this.authenticated) {
+        // eslint-disable-next-line no-console
         this.keycloakAngular.login().catch((e) => console.error(e));
-        return reject(false);
+        reject();
       }
 
       const requiredRoles: string[] = route.data.roles;

@@ -10,45 +10,33 @@ import { Globals } from '../globals';
 @Component({
   selector: 'app-nav',
   templateUrl: './nav.component.html',
-  styleUrls: ['./nav.component.scss']
+  styleUrls: ['./nav.component.scss'],
 })
 export class NavComponent implements OnInit {
   public userProfile?: KeycloakProfile;
-  public isLoggedIn: Boolean = false;
-  public appTitle: String = "Parkplatzverwaltung";
+  public isLoggedIn = false;
+  public appTitle = 'Parkplatzverwaltung';
 
-  isHandset$: Observable<boolean> = this.breakpointObserver.observe(Breakpoints.Handset)
-    .pipe(
-      map(result => result.matches),
-      shareReplay()
-    );
+  isHandset$: Observable<boolean> = this.breakpointObserver.observe(Breakpoints.Handset).pipe(map((result) => result.matches), shareReplay());
 
   constructor(private readonly keycloak: KeycloakService, private breakpointObserver: BreakpointObserver, public router: Router, public globals: Globals) {
-
-    router.events.forEach(event => {
+    router.events.forEach((event) => {
       if (event instanceof NavigationEnd) {
-        if (event.url.startsWith(`/account`)) {
+        if (event.url.startsWith('/account')) {
           this.appTitle = `${this.userProfile?.firstName}  ${this.userProfile?.lastName}`;
+        } else if (event.url.startsWith('/reservation')) {
+          this.appTitle = 'Meine Reservationen';
+        } else if (event.url.startsWith('/parkingAdministrationItemEdit?')) {
+          this.appTitle = 'Meinen Parkplatz verwalten';
+        } else if (event.url.startsWith('/parkingAdministrationItemEdit')) {
+          this.appTitle = 'Meinen Parkplatz hinzufügen';
+        } else if (event.url.startsWith('/parkingAdministration')) {
+          this.appTitle = 'Meine Parkplätze verwalten';
+        } else if (event.url.startsWith('/parking')) {
+          this.appTitle = 'Finde deinen Parkplatz';
+        } else {
+          this.appTitle = 'Parkplatzverwaltung';
         }
-        else if (event.url.startsWith(`/reservation`)){
-          this.appTitle = `Meine Reservationen`;
-        }
-        else if (event.url.startsWith(`/parkingAdministrationItemEdit?`)){
-          this.appTitle = `Meinen Parkplatz verwalten`;
-        }
-        else if (event.url.startsWith(`/parkingAdministrationItemEdit`)){
-          this.appTitle = `Meinen Parkplatz hinzufügen`;
-        }
-        else if (event.url.startsWith(`/parkingAdministration`)){
-          this.appTitle = `Meine Parkplätze verwalten`;
-        }
-        else if (event.url.startsWith(`/parking`)){
-          this.appTitle = `Finde deinen Parkplatz`;
-        }
-        else {
-          this.appTitle = `Parkplatzverwaltung`;
-        }
-
       }
     });
   }

@@ -5,12 +5,12 @@ import { KeycloakProfile } from 'keycloak-js';
 @Component({
   selector: 'app-nav-bottom',
   templateUrl: './nav-bottom.component.html',
-  styleUrls: ['./nav-bottom.component.scss']
+  styleUrls: ['./nav-bottom.component.scss'],
 })
 export class NavBottomComponent implements OnInit {
   public userProfile?: KeycloakProfile;
-  public isLoggedIn: Boolean = false;
-  public appTitle: String = "Parkplatzverwaltung";
+  public isLoggedIn = false;
+  public appTitle = 'Parkplatzverwaltung';
 
   constructor(private readonly keycloak: KeycloakService) {
 
@@ -23,5 +23,4 @@ export class NavBottomComponent implements OnInit {
       this.userProfile = await this.keycloak.loadUserProfile();
     }
   }
-
 }
