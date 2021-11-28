@@ -10,12 +10,21 @@
 // }
 
 export class Parking {
+  constructor(ZIP?: number, Location?: string, PricePerHour?: number, Street?: string, StreetNo?: number, StreetNoSuffix?: string) {
+    this.ZIP = ZIP;
+    this.Location = Location;
+    this.PricePerHour = PricePerHour;
+    this.Street = Street;
+    this.StreetNo = StreetNo;
+    this.StreetNoSuffix = StreetNoSuffix;
+  }
+
   id?: number | undefined;
   ID_Landlord?: string | undefined;
-  Street?: string | undefined;
-  StreetNo?: string | undefined;
+  ZIP: number | undefined;
+  Location: string | undefined;
+  PricePerHour: number | undefined;
+  Street: string | undefined;
+  StreetNo?: number | undefined;
   StreetNoSuffix?: string | undefined;
-  ZIP?: number | undefined;
-  Location?: string | undefined;
-  PricePerHour?: number | undefined;
 }
