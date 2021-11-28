@@ -7,7 +7,7 @@ class ReservationSerializer(serializers.ModelSerializer):
         model = models.Reservation
         fields = '__all__'
 
-class ParkingwithReservationsSerializer(serializers.ModelSerializer):    
+class ParkingwithReservationsSerializer(serializers.ModelSerializer):
     #Reservations = ReservationSerializer(many=True, queryset=models.Reservation.objects.filter(DateTimeTo__gt=datetime.now()))
     Reservations = serializers.SerializerMethodField('getExistingReservations')
 
@@ -20,7 +20,7 @@ class ParkingwithReservationsSerializer(serializers.ModelSerializer):
         model = models.Parking
         fields = '__all__'
 
-class ParkingSerializer(serializers.ModelSerializer): 
+class ParkingSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.Parking
         fields = '__all__'

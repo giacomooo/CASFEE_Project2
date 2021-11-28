@@ -1,23 +1,42 @@
-import { not } from "@angular/compiler/src/output/output_ast";
-import { Parking } from "src/app/models/Parking";
+import { Parking } from 'src/app/models/Parking';
 
-// describe('Login Tests', () => {
-//   beforeEach(() => {
-//     cy.visit('http://localhost:4200');
-//   });
+describe('Login Tests', () => {
+  beforeEach(() => {
+    cy.visit('http://localhost:4200');
+  });
 
-//   it('Login with credentials', () => {
-//     cy.get('.action-login').click();
-//     cy.get('#username').type('hans.keller@ost.ch', { force: true });
-//     cy.get('#password').type('Weiterbildung2021%', { force: true });
-//     cy.get('#kc-login').click();
-//     cy.get('.action-settings span').should('have.text', 'Hans Keller');
-//   });
-// });
+  it('Logout if logged in', () => {
+    if (cy.get('.bottom-nav').find('.action-settings').length > 0) {
+      cy.get('.action-settings').click();
+      cy.get('mat-nav-list').last().click();
+    }
+  });
+
+  it('Login with credentials', () => {
+    cy.get('.action-login').click();
+    cy.get('#username').type('hans.keller@ost.ch', { force: true });
+    cy.get('#password').type('Weiterbildung2021%', { force: true });
+    cy.get('#kc-login').click();
+    cy.get('.action-settings span').should('have.text', 'Hans Keller');
+  });
+
+  it('Clear old unsuccessful testings', () => {
+    cy.get('.action-settings').click();
+    cy.get('mat-nav-list').first().click();
+    cy.get('.mat-line').first().click();
+    cy.get('[formcontrolname="Location"]').invoke('val').should('not.be.empty');
+
+    const parking = cy.get('[formcontrolname="Location"]').invoke('val').contains('[AAAAA_Cypress]');
+    if (parking) {
+      cy.get('.deleteButton').click();
+      cy.get('#modal-action-button').click();
+    }
+  });
+});
 
 describe('Parking Administration Tests', () => {
-  const newParking = new Parking(6441, 'Seelisberg', 8.50, 'AAAAA Rütli', 5, 'a');
-  const updatedParking = new Parking(6449, 'Seelisberg Rütli', 99, 'AAAAA Rütli edited', 51, 'ax');
+  const newParking = new Parking(6441, '[AAAAA_Cypress] Seelisberg', 8.50, '[AAAAA_Cypress] Rütli', 5, 'a');
+  const updatedParking = new Parking(6449, '[AAAAA_Cypress] Seelisberg Rütli', 99, '[AAAAA_Cypress] Rütli edited', 51, 'ax');
 
   beforeEach(() => {
     cy.visit('http://localhost:4200');
