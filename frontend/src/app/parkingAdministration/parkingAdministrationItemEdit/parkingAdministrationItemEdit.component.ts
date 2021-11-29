@@ -77,8 +77,9 @@ export class ParkingAdministrationItemEditComponent implements OnInit {
     } else {
       const idLandlord = this._keycloakAngular.getKeycloakInstance().subject;
       if (idLandlord) {
+        this.parking = this.parkingForm.value;
         this.parking.ID_Landlord = idLandlord;
-        this._parkingService.createParking(this.parkingForm.value).subscribe((result) => {
+        this._parkingService.createParking(this.parking).subscribe((result) => {
           if (result) {
             this._router.navigate(['parkingAdministration']);
           } else {

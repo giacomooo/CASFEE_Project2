@@ -20,7 +20,9 @@ export class ParkingAdministrationComponent implements OnInit {
     this.globals.isLoading = true;
     const idLandlord = await this._keycloakAngular.getKeycloakInstance().subject;
     if (idLandlord && idLandlord?.length > 0) {
-      const httpParams = new HttpParams().set('ID_Landlord', idLandlord);
+      let httpParams = new HttpParams();
+      httpParams = httpParams.set('ID_Landlord', idLandlord);
+      httpParams = httpParams.set('ordering', 'Street, StreetNo, StreetNoSuffix');
 
       this.parkingService.readParkings(httpParams).subscribe((result) => {
         this.parkings = result;
