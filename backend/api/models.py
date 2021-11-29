@@ -30,7 +30,7 @@ class Reservation(models.Model):
         db_table = 'PPV_Reservation'
 
     ID_Renter = models.UUIDField(null=False)
-    ID_Parking = models.ForeignKey(Parking, on_delete=models.DO_NOTHING, null=False, db_column='ID_Parking', related_name="Parking")
+    ID_Parking = models.ForeignKey(Parking, on_delete=models.DO_NOTHING, null=False, db_column='ID_Parking', related_name="Reservations")
     DateTimeFrom = models.DateTimeField(null=False)
     DateTimeTo = models.DateTimeField(null=False)
     IsCanceled = models.BooleanField(null=False, default=False)

@@ -57,3 +57,6 @@ Das Backend basiert auf Python / Django. Die Persistierung ist über eine Postgr
 > pip install pylint-django
 > pylint --load-plugins pylint_django --load-plugins pylint_django.checkers.migrations
 
+## Integrations Tests
+#### Execute
+> npx cypress run

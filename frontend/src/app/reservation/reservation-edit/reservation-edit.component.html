@@ -16,6 +16,7 @@
       </mat-datepicker-toggle>
       <ngx-mat-datetime-picker #fromPicker>
       </ngx-mat-datetime-picker>
+      <mat-error *ngIf="f.DateTimeFrom.errors?.dateInPast" class="alert alert-danger">{{f.DateTimeFrom.errors?.dateInPast.value}}</mat-error>
     </mat-form-field>
     <mat-form-field>
       <input matInput [ngxMatDatetimePicker]="toPicker" placeholder="bis" formControlName="DateTimeTo" [value]="this.reservation.DateTimeTo">
@@ -23,6 +24,7 @@
       </mat-datepicker-toggle>
       <ngx-mat-datetime-picker #toPicker>
       </ngx-mat-datetime-picker>
+      <mat-error *ngIf="f.DateTimeTo.errors?.dateInPast" class="alert alert-danger">{{f.DateTimeTo.errors?.dateInPast.value}}</mat-error>
     </mat-form-field>
     <mat-form-field style="display: none">
       <input matInput placeholder="ID_Parking" formControlName="ID_Parking" />

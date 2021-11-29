@@ -1,3 +1,4 @@
+from datetime import datetime
 from django_filters import rest_framework
 from rest_framework import viewsets, filters
 from rest_framework.decorators import action
@@ -19,14 +20,16 @@ class ParkingViewSet(viewsets.ModelViewSet):
         location = self.request.query_params.get('location')
         fromDT = self.request.query_params.get('from')
         toDT = self.request.query_params.get('to')
-        # timezone.now().date()
 
-        if toDT:
-            objs = models.Parking.objects.all()
-        else:
-            objs = models.Parking.objects.all()
+        # get all Parkings with the correct location
+        parkings = models.Parking.objects.filter(Location=location)
 
-        serializer = serializers.ParkingSerializer(objs, many=True)
+        # if fromDT:
+        #     parkings.filter(Reservations__DateTimeFrom__gt=)
+        # else:
+        #     objs = models.Parking.objects.filter(Location=location).filter()
+
+        serializer = serializers.ParkingwithReservationsSerializer(parkings, many=True)
         return Response(serializer.data)
 
 
@@ -34,6 +37,6 @@ class ReservationViewSet(viewsets.ModelViewSet):
     pagination_class = None
     filter_backends = [rest_framework.DjangoFilterBackend, filters.OrderingFilter, filters.SearchFilter]
     filterset_class = models.ReservationFilter
-    serializer_class = serializers.ReservationSerializer
+    serializer_class = serializers.ReservationwithParkingSerializer
     queryset = models.Reservation.objects.all()
     http_method_names = ['get', 'post', 'put', 'patch', 'delete']
