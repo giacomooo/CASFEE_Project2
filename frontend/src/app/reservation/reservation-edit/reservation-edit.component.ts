@@ -4,7 +4,7 @@ import {
   OnInit,
   ViewChild,
 } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute, Params, Router } from '@angular/router';
@@ -13,6 +13,8 @@ import * as moment from 'moment';
 import { Globals } from 'src/app/globals';
 import { Reservation } from 'src/app/models/Reservation';
 import { ReservationService } from 'src/app/services/reservation.service';
+import { dateBeforeValidator } from 'src/app/shared/common-validators/dateBefore-validators.directive';
+import { dateInPastValidator } from 'src/app/shared/common-validators/dateRange-validators.directive';
 import { ModalComponent } from 'src/app/shared/modal/modal.component';
 
 @Component({
@@ -43,13 +45,14 @@ export class ReservationEditComponent implements OnInit {
     this.reservationForm = this._formBuilder.group({
       id: new FormControl(this.reservation.id),
       ID_Renter: new FormControl(this.reservation.ID_Renter),
-      DateTimeFrom: new FormControl(this.reservation.DateTimeFrom),
-      DateTimeTo: new FormControl(this.reservation.DateTimeTo),
+      DateTimeFrom: new FormControl(this.reservation.DateTimeFrom, [Validators.required, dateInPastValidator]),
+      DateTimeTo: new FormControl(this.reservation.DateTimeTo, [Validators.required]),
       ID_Parking: new FormControl(this.reservation.ID_Parking),
       IsCanceled: new FormControl(this.reservation.IsCanceled),
       Amount: new FormControl({value: this.reservation.Amount, disabled: true}),
       PricePerHour: new FormControl({value: this.reservation.PricePerHour, disabled: true}),
     });
+    this.reservationForm.addValidators(dateBeforeValidator('DateTimeFrom','DateTimeTo'));
     this.onValueChanges();
   }
 
