@@ -1,9 +1,8 @@
-import { Parking } from './Parking';
+import { Parking, ParkingInterface } from './Parking';
 
 export interface Reservation {
   id: number;
-  ID_Parking: number;
-  Parking: Parking;
+  ID_Parking: ParkingInterface; // todo: ID_Parking umbenennen auf Backend
   ID_Renter: string;
   DateTimeFrom: Date;
   DateTimeTo: Date;

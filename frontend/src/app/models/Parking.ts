@@ -1,13 +1,13 @@
-// export interface ParkingInterface {
-//   id: number;
-//   ID_Landlord: string;
-//   Street: string;
-//   StreetNo: string;
-//   StreetNoSuffix: string;
-//   ZIP: number;
-//   Location: string;
-//   PricePerHour: number;
-// }
+export interface ParkingInterface {
+  id: number;
+  ID_Landlord: string;
+  Street: string;
+  StreetNo: string;
+  StreetNoSuffix: string;
+  ZIP: number;
+  Location: string;
+  PricePerHour: number;
+}
 
 export class Parking {
   constructor(ZIP?: number, Location?: string, PricePerHour?: number, Street?: string, StreetNo?: number, StreetNoSuffix?: string) {
