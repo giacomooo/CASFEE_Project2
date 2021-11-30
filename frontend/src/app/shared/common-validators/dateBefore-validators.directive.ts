@@ -1,26 +1,26 @@
-import {  AbstractControl, FormGroup, ValidatorFn } from "@angular/forms";
+import { AbstractControl, ValidatorFn } from '@angular/forms';
 
-export function dateBeforeValidator (dateTimeFrom: string, secondDate: string): ValidatorFn {
+export function dateBeforeValidator(
+  dateTimeFromFieldName: string,
+  dateTimeToFieldName: string
+): ValidatorFn {
+  return (form: AbstractControl): { [key: string]: boolean } | null => {
+    const dateTimeFromControl = form.get(dateTimeFromFieldName);
 
-  return (form: AbstractControl ): { [key: string]: boolean } | null => {
+    if (!dateTimeFromControl) return null;
 
-    const firstDateValue = form.get(dateTimeFrom)?.value;
-    const secondDateValue = form.get(secondDate)?.value;
+    const firstDateValue = new Date(dateTimeFromControl?.value);
+    const secondDateValue = new Date(form.get(dateTimeToFieldName)?.value);
 
-    if (!firstDateValue) return null;
+    dateTimeFromControl?.setErrors(null);
 
-    console.log("2tut", firstDateValue, secondDateValue);
-     console.log(new Date (secondDateValue));
+    if (!firstDateValue || !secondDateValue) return null;
 
-    if (!firstDateValue || !secondDateValue){
-      return { missing: true };
+    if (secondDateValue < firstDateValue) {
+      const msg = {value: "Bitte korrekten Zeitraum wählen."};
+      const err = { dateBeforeValidator: msg  };
+      dateTimeFromControl?.setErrors(err);
     }
-
-    const firstDate = new Date(firstDateValue);
-
-    const err = { dateBeforeValidator: true};
-    form.get(dateTimeFrom)?.setErrors(err);
-
     return null;
   };
 }

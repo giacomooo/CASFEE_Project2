@@ -14,7 +14,7 @@ import { Globals } from 'src/app/globals';
 import { Reservation } from 'src/app/models/Reservation';
 import { ReservationService } from 'src/app/services/reservation.service';
 import { dateBeforeValidator } from 'src/app/shared/common-validators/dateBefore-validators.directive';
-import { dateInPastValidator } from 'src/app/shared/common-validators/dateRange-validators.directive';
+import { dateInPastValidator } from 'src/app/shared/common-validators/dateInPast-validators.directive';
 import { ModalComponent } from 'src/app/shared/modal/modal.component';
 
 @Component({
@@ -46,7 +46,7 @@ export class ReservationEditComponent implements OnInit {
       id: new FormControl(this.reservation.id),
       ID_Renter: new FormControl(this.reservation.ID_Renter),
       DateTimeFrom: new FormControl(this.reservation.DateTimeFrom, [Validators.required, dateInPastValidator]),
-      DateTimeTo: new FormControl(this.reservation.DateTimeTo, [Validators.required]),
+      DateTimeTo: new FormControl(this.reservation.DateTimeTo, [Validators.required, dateInPastValidator]),
       ID_Parking: new FormControl(this.reservation.ID_Parking),
       IsCanceled: new FormControl(this.reservation.IsCanceled),
       Amount: new FormControl({value: this.reservation.Amount, disabled: true}),
@@ -154,9 +154,6 @@ export class ReservationEditComponent implements OnInit {
   public resetForm(): void {
     this.reservationForm.reset();
     this.reservationForm.markAsUntouched();
-    // if(this.reservationForm.controls.id){
-    // kann das überhaupt noch sein?
-    // }
   }
 
   public showError(content: string) {
