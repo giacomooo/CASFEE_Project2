@@ -1,6 +1,8 @@
 import { HttpParams } from '@angular/common/http';
 import {
+  AfterContentInit,
   Component,
+  Input,
   OnInit,
   ViewChild,
 } from '@angular/core';
@@ -11,6 +13,7 @@ import { ActivatedRoute, Params, Router } from '@angular/router';
 import { KeycloakService } from 'keycloak-angular';
 import * as moment from 'moment';
 import { Globals } from 'src/app/globals';
+import { Parking } from 'src/app/models/Parking';
 import { Reservation } from 'src/app/models/Reservation';
 import { ReservationService } from 'src/app/services/reservation.service';
 import { dateBeforeValidator } from 'src/app/shared/common-validators/dateBefore-validators.directive';
@@ -22,14 +25,13 @@ import { ModalComponent } from 'src/app/shared/modal/modal.component';
   templateUrl: './reservation-edit.component.html',
   styleUrls: ['./reservation-edit.component.scss'],
 })
-export class ReservationEditComponent implements OnInit {
+export class ReservationEditComponent implements AfterContentInit {
+  @Input() public parking: Parking | undefined;
   @ViewChild('fromPicker') fromPicker: any;
   @ViewChild('toPicker') picker: any;
   public reservation: Reservation;
   public reservationForm: FormGroup;
   public isServerPending: Boolean = false;
-
-  public id: number = 0;
 
   constructor(
     private _activatedRoute: ActivatedRoute,
@@ -42,12 +44,13 @@ export class ReservationEditComponent implements OnInit {
     public matDialog: MatDialog
   ) {
     this.reservation = new Reservation();
+    this.reservation.ID_Parking = new Parking();
     this.reservationForm = this._formBuilder.group({
       id: new FormControl(this.reservation.id),
       ID_Renter: new FormControl(this.reservation.ID_Renter),
       DateTimeFrom: new FormControl(this.reservation.DateTimeFrom, [Validators.required, dateInPastValidator]),
       DateTimeTo: new FormControl(this.reservation.DateTimeTo, [Validators.required, dateInPastValidator]),
-      ID_Parking: new FormControl(this.reservation.ID_Parking),
+      ID_Parking: new FormControl(this.reservation.ID_Parking?.id),
       IsCanceled: new FormControl(this.reservation.IsCanceled),
       Amount: new FormControl({value: this.reservation.Amount, disabled: true}),
       PricePerHour: new FormControl({value: this.reservation.PricePerHour, disabled: true}),
@@ -56,7 +59,11 @@ export class ReservationEditComponent implements OnInit {
     this.onValueChanges();
   }
 
-  public ngOnInit(): void {
+  ngAfterContentInit(): void {
+    if (this.parking){
+      this.initNewReservation(this.parking);
+      return;
+    }
     this.readReservations();
   }
 
@@ -77,6 +84,22 @@ export class ReservationEditComponent implements OnInit {
 
   private currencyRound(unRounded: number, precision: number = 0.05): number {
     return (Math.round(unRounded / precision))*precision;
+  }
+
+  private initNewReservation(parking: Parking): void {
+
+    this.reservation.id = 0;
+    this.reservation.ID_Parking = parking;
+    this.reservation.ID_Renter = this._keycloakAngular.getKeycloakInstance().subject ?? '';
+    this.reservation.DateTimeFrom = new Date();
+    this.reservation.DateTimeFrom.setTime(this.reservation.DateTimeFrom.getTime() + (5 * 60 * 1000) /* plus 5 Minuten */ )
+
+    this.reservation.DateTimeTo = new Date();
+    this.reservation.DateTimeTo.setTime(this.reservation.DateTimeFrom.getTime() + (1 * 60 * 60 * 1000) /* plus eine Stunde */)
+    this.reservation.PricePerHour = parking.PricePerHour ?? 1.0 ;
+    this.reservation.IsCanceled = false;
+    this.reservation.Amount = this.currencyRound(this.calculateDiff(this.reservation.DateTimeFrom, this.reservation.DateTimeTo));
+    this.reservationForm.reset(this.reservation);
   }
 
   public readReservations(): void {
@@ -116,7 +139,7 @@ export class ReservationEditComponent implements OnInit {
       if (ID_Renter) {
         reservation.ID_Renter = ID_Renter;
         this._reservationService
-          .createReservation(this.reservationForm.value)
+          .createReservation(this.reservation)
           .subscribe((result) => {
             if (result) {
               this._router.navigate(['reservation']);

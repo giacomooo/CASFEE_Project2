@@ -4,5 +4,5 @@
         <mat-icon *ngIf="parkItem.isPending">remove</mat-icon>
         <mat-icon *ngIf="!parkItem.isPending">add</mat-icon>
       </button>
-    <app-reservation-edit *ngIf="parkItem.isPending"></app-reservation-edit>
+    <app-reservation-edit *ngIf="parkItem.isPending" [parking]="parkItem.parking"></app-reservation-edit>
     </mat-card>
