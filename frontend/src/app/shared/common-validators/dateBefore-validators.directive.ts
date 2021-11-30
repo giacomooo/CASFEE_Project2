@@ -6,17 +6,13 @@ export function dateBeforeValidator(
 ): ValidatorFn {
   return (form: AbstractControl): { [key: string]: boolean } | null => {
     const dateTimeFromControl = form.get(dateTimeFromFieldName);
+    const dateTimeToControl = form.get(dateTimeToFieldName);
 
-    if (!dateTimeFromControl) return null;
-
-    const firstDateValue = new Date(dateTimeFromControl?.value);
-    const secondDateValue = new Date(form.get(dateTimeToFieldName)?.value);
+    if (!dateTimeFromControl || !dateTimeToControl || dateTimeToControl.pristine || dateTimeFromControl.pristine ) return null;
 
     dateTimeFromControl?.setErrors(null);
 
-    if (!firstDateValue || !secondDateValue) return null;
-
-    if (secondDateValue < firstDateValue) {
+    if (new Date(form.get(dateTimeToFieldName)?.value) < new Date(dateTimeFromControl?.value)) {
       const msg = {value: "Bitte korrekten Zeitraum wählen."};
       const err = { dateBeforeValidator: msg  };
       dateTimeFromControl?.setErrors(err);
