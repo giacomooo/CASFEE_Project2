@@ -28,3 +28,8 @@ export class Parking {
   StreetNo?: number | undefined;
   StreetNoSuffix?: string | undefined;
 }
+
+export class ParkListItem {
+  parking?: Parking;
+  isPending: boolean = false;
+}
