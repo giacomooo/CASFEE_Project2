@@ -76,7 +76,7 @@ export class ReservationEditComponent implements OnInit {
   }
 
   private currencyRound(unRounded: number, precision: number = 0.05): number {
-    return Math.floor(unRounded / precision)*precision;
+    return (Math.round(unRounded / precision))*precision;
   }
 
   public readReservations(): void {
