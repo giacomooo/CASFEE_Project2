@@ -35,6 +35,7 @@ import { ParkingAdministrationItemComponent } from './parkingAdministration/park
 import { ParkingAdministrationItemEditComponent } from './parkingAdministration/parkingAdministrationItemEdit/parkingAdministrationItemEdit.component';
 import { ReservationEditComponent } from './reservation/reservation-edit/reservation-edit.component';
 import { NavBottomComponent } from './nav-bottom/nav-bottom.component';
+import { ReservationAddComponent } from './reservation/reservation-add/reservation-add.component';
 
 // export function keycloakFactory(authService: AuthService) {
 //   return () => authService.init();
@@ -69,6 +70,7 @@ function initializeKeycloak(keycloak: KeycloakService) {
     ParkingAdministrationItemComponent,
     ParkingAdministrationItemEditComponent,
     ReservationEditComponent,
+    ReservationAddComponent,
     NavBottomComponent,
   ],
   imports: [

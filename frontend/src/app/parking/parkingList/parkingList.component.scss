@@ -1,0 +1,12 @@
+mat-card {
+  padding: 2px;
+}
+
+mat-list-item {
+  display: flex;
+  flex-direction: column;
+}
+
+  mat-list-option.mat-list-item-with-avatar.reservationAddInside {
+    height: auto;
+}

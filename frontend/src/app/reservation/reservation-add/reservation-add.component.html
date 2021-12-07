@@ -1,0 +1,35 @@
+<form [formGroup]="reservationForm" (submit)="onAddOrEdit(reservationForm.value)" >
+  <mat-card>
+    <mat-form-field class="hiddenField">
+      <input matInput placeholder="ID" formControlName="id" />
+    </mat-form-field>
+    <mat-form-field style="display: none">
+      <input matInput placeholder="ID_Renter" formControlName="ID_Renter" />
+    </mat-form-field>
+    <mat-form-field>
+      <input matInput [ngxMatDatetimePicker]="fromPicker" placeholder="von" formControlName="DateTimeFrom">
+      <mat-datepicker-toggle matSuffix [for]="$any(fromPicker)">
+      </mat-datepicker-toggle>
+      <ngx-mat-datetime-picker #fromPicker>
+      </ngx-mat-datetime-picker>
+      <mat-error *ngIf="f.DateTimeFrom.errors?.dateInPast" class="alert alert-danger">{{f.DateTimeFrom.errors?.dateInPast.value}}</mat-error>
+      <mat-error *ngIf="f.DateTimeFrom.errors?.dateBeforeValidator" class="alert alert-danger"> {{f.DateTimeFrom.errors?.dateBeforeValidator.value}}</mat-error>
+    </mat-form-field>
+    <mat-form-field>
+      <input matInput [ngxMatDatetimePicker]="toPicker" placeholder="bis" formControlName="DateTimeTo" [value]="this.reservation.DateTimeTo">
+      <mat-datepicker-toggle matSuffix [for]="$any(toPicker)">
+      </mat-datepicker-toggle>
+      <ngx-mat-datetime-picker #toPicker>
+      </ngx-mat-datetime-picker>
+      <mat-error *ngIf="f.DateTimeTo.errors?.dateInPast" class="alert alert-danger">{{f.DateTimeTo.errors?.dateInPast.value}}</mat-error>
+    </mat-form-field>
+    <mat-form-field style="display: none">
+      <input matInput placeholder="ID_Parking" formControlName="ID_Parking" />
+    </mat-form-field>
+    <mat-card-actions>
+      <button type="button" mat-flat-button routerLink="/reservation/">abbrechen</button>
+      <button type="submit" mat-raised-button color="primary" *ngIf="!reservation?.id" [disabled]="reservationForm.invalid">hinzufügen</button>
+    </mat-card-actions>
+  </mat-card>
+</form>
+
