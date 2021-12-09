@@ -1,4 +1,4 @@
-<form [formGroup]="reservationForm" (submit)="onAddOrEdit(reservationForm.value)" >
+<form [formGroup]="reservationForm" (submit)="onAdd(reservationForm.value)" >
   <mat-card>
     <mat-form-field class="hiddenField">
       <input matInput placeholder="ID" formControlName="id" />
@@ -27,8 +27,7 @@
       <input matInput placeholder="ID_Parking" formControlName="ID_Parking" />
     </mat-form-field>
     <mat-card-actions>
-      <button type="button" mat-flat-button routerLink="/reservation/">abbrechen</button>
-      <button type="submit" mat-raised-button color="primary" *ngIf="!reservation?.id" [disabled]="reservationForm.invalid">hinzufügen</button>
+      <button type="submit" mat-raised-button color="primary" *ngIf="!reservation?.id" [disabled]="reservationForm.invalid">{{this.buttonCaption$ | async}}</button>
     </mat-card-actions>
   </mat-card>
 </form>

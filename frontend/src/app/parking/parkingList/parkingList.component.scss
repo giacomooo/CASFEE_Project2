@@ -7,6 +7,7 @@ mat-list-item {
   flex-direction: column;
 }
 
-  mat-list-option.mat-list-item-with-avatar.reservationAddInside {
-    height: auto;
+mat-list-option.mat-list-item-with-avatar.reservationAddInside {
+  height: auto;
+  cursor: default;
 }
