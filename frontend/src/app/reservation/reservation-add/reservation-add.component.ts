@@ -127,8 +127,10 @@ export class ReservationAddComponent implements AfterContentInit {
 
     reservation.DateTimeFrom = new Date(moment(reservation.DateTimeFrom).toDate());
       const ID_Renter = this._keycloakAngular.getKeycloakInstance().subject;
+
       if (ID_Renter) {
         reservation.ID_Renter = ID_Renter;
+
         this._reservationService
           .createReservation(this.reservation)
           .subscribe((result) => {
