@@ -8,7 +8,7 @@ export function dateBeforeValidator(
     const dateTimeFromControl = form.get(dateTimeFromFieldName);
     const dateTimeToControl = form.get(dateTimeToFieldName);
 
-    if (!dateTimeFromControl || !dateTimeToControl || (dateTimeToControl.pristine && dateTimeFromControl.pristine) ) return null;
+    if (!dateTimeFromControl || !dateTimeToControl || (dateTimeToControl.pristine && dateTimeFromControl.pristine)) return null;
 
     dateTimeFromControl?.setErrors(null);
 

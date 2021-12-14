@@ -105,7 +105,7 @@ export class ReservationAddComponent implements AfterContentInit {
   }
 
   public readReservations(): void {
-    // this.globals.isLoading = true;
+    this.globals.isLoading = true;
     const id = this._activatedRoute.snapshot.params['id'];
 
     if (id) {
@@ -115,10 +115,10 @@ export class ReservationAddComponent implements AfterContentInit {
         .subscribe((result) => {
           this.reservation = result[0];
           this.reservationForm.reset(this.reservation);
-          // this.globals.isLoading = false;
+          this.globals.isLoading = false;
         });
     } else {
-      // this.globals.isLoading = false;
+      this.globals.isLoading = false;
     }
   }
 
@@ -170,7 +170,6 @@ export class ReservationAddComponent implements AfterContentInit {
     const amount = this.getAmountByDateRange(from,to);
     const minTotal = this.getMinutesByDateRange(from, to);
     const hours = Math.floor(minTotal / 60);
-    console.log(minTotal);
     const min = (minTotal - (hours * 60));
     let result = `${min}min für ${amount.toFixed(2)} CHF ->`;
 

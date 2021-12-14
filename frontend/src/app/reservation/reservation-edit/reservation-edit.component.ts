@@ -70,6 +70,7 @@ export class ReservationEditComponent implements AfterContentInit {
   private onValueChanges(): void {
     this.reservationForm.controls['DateTimeFrom'].valueChanges.subscribe(
       (dateTimeFrom) => {
+        this.reservation.DateTimeFrom = dateTimeFrom;
         this.reservation.Amount = this.currencyRound (this.calculateDiff(dateTimeFrom, this.reservation.DateTimeTo));
       }
     );
@@ -77,6 +78,7 @@ export class ReservationEditComponent implements AfterContentInit {
     this.reservationForm.controls['DateTimeTo'].valueChanges.subscribe(
       (dateTimeTo) => {
         this.reservation.Amount = this.currencyRound(this.calculateDiff(this.reservation.DateTimeFrom, dateTimeTo));
+        this.reservation.DateTimeTo = dateTimeTo;
       }
     );
 
@@ -88,7 +90,6 @@ export class ReservationEditComponent implements AfterContentInit {
 
   private initNewReservation(parking: Parking): void {
 
-    this.reservation.id = 0;
     this.reservation.ID_Parking = parking;
     this.reservation.ID_Renter = this._keycloakAngular.getKeycloakInstance().subject ?? '';
     this.reservation.DateTimeFrom = new Date();
@@ -103,7 +104,7 @@ export class ReservationEditComponent implements AfterContentInit {
   }
 
   public readReservations(): void {
-    // this.globals.isLoading = true;
+    this.globals.isLoading = true;
     const id = this._activatedRoute.snapshot.params['id'];
 
     if (id) {
@@ -113,42 +114,28 @@ export class ReservationEditComponent implements AfterContentInit {
         .subscribe((result) => {
           this.reservation = result[0];
           this.reservationForm.reset(this.reservation);
-          // this.globals.isLoading = false;
+          this.globals.isLoading = false;
         });
     } else {
-      // this.globals.isLoading = false;
+      this.globals.isLoading = false;
     }
   }
 
-  public onAddOrEdit(reservation: Reservation): void {
+  public onEdit(reservation: Reservation): void {
     this.isServerPending = true;
 
-    reservation.DateTimeFrom = new Date(moment(reservation.DateTimeFrom).toDate());
-    if (reservation.id) {
-      this._reservationService
-        .updateReservation(this.reservation)
-        .subscribe((result) => {
-          if (result) {
-            this._router.navigate(['reservation']);
-          } else {
-            this.showError('Die Reservation konnte nicht gespeichert werden.');
-          }
-        });
-    } else {
-      const ID_Renter = this._keycloakAngular.getKeycloakInstance().subject;
-      if (ID_Renter) {
-        reservation.ID_Renter = ID_Renter;
-        this._reservationService
-          .createReservation(this.reservation)
-          .subscribe((result) => {
-            if (result) {
-              this._router.navigate(['reservation']);
-            } else {
-              this.showError('Die Resevation konnte nicht hinzugefügt werden.');
-            }
-          });
+    this.reservation.DateTimeFrom = new Date(moment(reservation.DateTimeFrom).toDate());
+    this.reservation.DateTimeTo = new Date(moment(reservation.DateTimeTo).toDate());
+    this._reservationService
+      .updateReservation(this.reservation)
+      .subscribe((result) => {
+        if (result) {
+          this._router.navigate(['reservation']);
+        } else {
+          this.showError('Die Reservation konnte nicht gespeichert werden.');
+        }
       }
-    }
+    );
   }
 
   public deleteReservation(id: number): void {

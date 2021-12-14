@@ -1,4 +1,4 @@
-<form [formGroup]="reservationForm" (submit)="onAddOrEdit(reservationForm.value)" >
+<form [formGroup]="reservationForm" (submit)="onEdit(reservationForm.value)" >
   <mat-card>
     <mat-card-header>
       <mat-card-title *ngIf="!reservation?.id">Parkplatz-Reservation hinzufügen</mat-card-title>
