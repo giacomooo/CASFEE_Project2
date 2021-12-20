@@ -3,13 +3,12 @@ import {
   AfterContentInit,
   Component,
   Input,
-  OnInit,
   ViewChild,
 } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { ActivatedRoute, Params, Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { KeycloakService } from 'keycloak-angular';
 import * as moment from 'moment';
 import { Globals } from 'src/app/globals';
@@ -44,23 +43,23 @@ export class ReservationEditComponent implements AfterContentInit {
     public matDialog: MatDialog
   ) {
     this.reservation = new Reservation();
-    this.reservation.ID_Parking = new Parking();
+    this.reservation.Parking = new Parking();
     this.reservationForm = this._formBuilder.group({
       id: new FormControl(this.reservation.id),
       ID_Renter: new FormControl(this.reservation.ID_Renter),
       DateTimeFrom: new FormControl(this.reservation.DateTimeFrom, [Validators.required, dateInPastValidator]),
       DateTimeTo: new FormControl(this.reservation.DateTimeTo, [Validators.required, dateInPastValidator]),
-      ID_Parking: new FormControl(this.reservation.ID_Parking?.id),
+      ID_Parking: new FormControl(this.reservation.Parking?.id),
       IsCanceled: new FormControl(this.reservation.IsCanceled),
-      Amount: new FormControl({value: this.reservation.Amount, disabled: true}),
-      PricePerHour: new FormControl({value: this.reservation.PricePerHour, disabled: true}),
+      Amount: new FormControl({value: this.reservation.Amount, disabled: true }),
+      PricePerHour: new FormControl({value: this.reservation.PricePerHour, disabled: true }),
     });
-    this.reservationForm.addValidators(dateBeforeValidator('DateTimeFrom','DateTimeTo'));
+    this.reservationForm.addValidators(dateBeforeValidator('DateTimeFrom', 'DateTimeTo'));
     this.onValueChanges();
   }
 
   ngAfterContentInit(): void {
-    if (this.parking){
+    if (this.parking) {
       this.initNewReservation(this.parking);
       return;
     }
@@ -89,8 +88,8 @@ export class ReservationEditComponent implements AfterContentInit {
   }
 
   private initNewReservation(parking: Parking): void {
-
-    this.reservation.ID_Parking = parking;
+    this.reservation.Parking = new Parking();
+    this.reservation.ID_Parking = parking.id ?? 0;
     this.reservation.ID_Renter = this._keycloakAngular.getKeycloakInstance().subject ?? '';
     this.reservation.DateTimeFrom = new Date();
     this.reservation.DateTimeFrom.setTime(this.reservation.DateTimeFrom.getTime() + (5 * 60 * 1000) /* plus 5 Minuten */ )
@@ -134,8 +133,7 @@ export class ReservationEditComponent implements AfterContentInit {
         } else {
           this.showError('Die Reservation konnte nicht gespeichert werden.');
         }
-      }
-    );
+      });
   }
 
   public deleteReservation(id: number): void {
@@ -144,15 +142,14 @@ export class ReservationEditComponent implements AfterContentInit {
       if (result && id) {
         this._reservationService
           .deleteReservation(id)
-          .then((result) => {
-            console.log('delete', result);
-            if (result.status) {
+          .then((msg) => {
+            if (msg.status) {
               this._router.navigate(['reservation']);
             } else {
-              this.showError(result.message);
+              this.showError(msg.message);
             }
           })
-          .catch((error) => {
+          .catch(() => {
             this.showError(
               'Die Reservation konnte nicht gelöscht werden, bitte versuchen sie es später erneut.'
             );
@@ -176,8 +173,8 @@ export class ReservationEditComponent implements AfterContentInit {
 
     const minutes = Math.floor(
       (Date.UTC(_to.getFullYear(), _to.getMonth(), _to.getDate(), _to.getHours(),_to.getMinutes()) -
-        Date.UTC(_from.getFullYear(), _from.getMonth(), _from.getDate(), _from.getHours(), _from.getMinutes())) /
-        (1000 * 60 )
+        Date.UTC(_from.getFullYear(), _from.getMonth(), _from.getDate(), _from.getHours(), _from.getMinutes()))
+        / (1000 * 60),
     );
     const pricePerMinute = this.reservation.PricePerHour / 60;
     return pricePerMinute * minutes;

@@ -1,6 +1,6 @@
-import {Component, Input} from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { Router } from '@angular/router';
-import {Reservation} from 'src/app/models/Reservation';
+import { Reservation } from 'src/app/models/Reservation';
 
 @Component({
   selector: 'app-reservation-list',
@@ -14,6 +14,6 @@ export class ReservationListComponent {
   }
 
   public clickEdit(reservationId: number): void {
-   this.router.navigate(['reservation', reservationId]);
+    this.router.navigate(['reservation', reservationId]);
   }
 }
