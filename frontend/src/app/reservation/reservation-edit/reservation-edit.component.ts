@@ -91,11 +91,11 @@ export class ReservationEditComponent implements AfterContentInit {
     this.reservation.ID_Parking = parking.id ?? 0;
     this.reservation.ID_Renter = this._keycloakAngular.getKeycloakInstance().subject ?? '';
     this.reservation.DateTimeFrom = new Date();
-    this.reservation.DateTimeFrom.setTime(this.reservation.DateTimeFrom.getTime() + (5 * 60 * 1000) /* plus 5 Minuten */ )
+    this.reservation.DateTimeFrom.setTime(this.reservation.DateTimeFrom.getTime() + (5 * 60 * 1000) /* plus 5 Minuten */);
 
     this.reservation.DateTimeTo = new Date();
-    this.reservation.DateTimeTo.setTime(this.reservation.DateTimeFrom.getTime() + (1 * 60 * 60 * 1000) /* plus eine Stunde */)
-    this.reservation.PricePerHour = parking.PricePerHour ?? 1.0 ;
+    this.reservation.DateTimeTo.setTime(this.reservation.DateTimeFrom.getTime() + (1 * 60 * 60 * 1000) /* plus eine Stunde */);
+    this.reservation.PricePerHour = parking.PricePerHour ?? 1.0;
     this.reservation.IsCanceled = false;
     this.reservation.Amount = this.currencyRound(this.calculateDiff(this.reservation.DateTimeFrom, this.reservation.DateTimeTo));
     this.reservationForm.reset(this.reservation);
@@ -103,7 +103,7 @@ export class ReservationEditComponent implements AfterContentInit {
 
   public readReservations(): void {
     this.globals.isLoading = true;
-    const id = this._activatedRoute.snapshot.params['id'];
+    const { id } = this._activatedRoute.snapshot.params;
 
     if (id) {
       const httpParams = new HttpParams().set('id', id);

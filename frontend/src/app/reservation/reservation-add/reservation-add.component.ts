@@ -108,7 +108,7 @@ export class ReservationAddComponent implements AfterContentInit {
 
   public readReservations(): void {
     this.globals.isLoading = true;
-    const id = this._activatedRoute.snapshot.params['id'];
+    const { id } = this._activatedRoute.snapshot.params;
 
     if (id) {
       const httpParams = new HttpParams().set('id', id);
