@@ -1,5 +1,3 @@
-import { NgxMatDateAdapter, NGX_MAT_DATE_FORMATS } from '@angular-material-components/datetime-picker';
-import { NGX_MAT_MOMENT_DATE_ADAPTER_OPTIONS } from '@angular-material-components/moment-adapter';
 import { HttpParams } from '@angular/common/http';
 import {
   AfterContentInit,
@@ -7,8 +5,9 @@ import {
   Input,
   ViewChild,
 } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
-import { MAT_DATE_LOCALE } from '@angular/material/core';
+import {
+  FormBuilder, FormControl, FormGroup, Validators,
+} from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -26,14 +25,6 @@ import { dateInPastValidator } from 'src/app/shared/common-validators/dateInPast
   selector: 'app-reservation-add',
   templateUrl: './reservation-add.component.html',
   styleUrls: ['./reservation-add.component.scss'],
-  providers: [
-    {
-      provide: NgxMatDateAdapter,
-      useClass: CustomNgxDatetimeAdapter,
-      deps: [MAT_DATE_LOCALE, NGX_MAT_MOMENT_DATE_ADAPTER_OPTIONS]
-    },
-    { provide: NGX_MAT_DATE_FORMATS, useValue: CUSTOM_DATE_FORMATS }
-  ],
 })
 
 export class ReservationAddComponent implements AfterContentInit {
@@ -42,7 +33,7 @@ export class ReservationAddComponent implements AfterContentInit {
   @ViewChild('toPicker') picker: any;
   public reservation: Reservation;
   public reservationForm: FormGroup;
-  public isServerPending: Boolean = false;
+  public isServerPending = false;
   public buttonCaption$: BehaviorSubject<string> = new BehaviorSubject<string>('wait and see ->');
 
   constructor(
@@ -80,14 +71,14 @@ export class ReservationAddComponent implements AfterContentInit {
   }
 
   private onValueChanges(): void {
-    this.reservationForm.controls['DateTimeFrom'].valueChanges.subscribe(
+    this.reservationForm.controls.DateTimeFrom.valueChanges.subscribe(
       (dateTimeFrom) => {
         this.reservation.Amount = this.getAmountByDateRange(dateTimeFrom, this.reservation.DateTimeTo);
         this.buttonCaption$.next(this.getButtonCaption(dateTimeFrom, this.reservation.DateTimeTo));
-      }
+      },
     );
 
-    this.reservationForm.controls['DateTimeTo'].valueChanges.subscribe(
+    this.reservationForm.controls.DateTimeTo.valueChanges.subscribe(
       (dateTimeTo) => {
         this.reservation.Amount = this.getAmountByDateRange(this.reservation.DateTimeFrom, dateTimeTo);
         this.buttonCaption$.next(this.getButtonCaption(this.reservation.DateTimeFrom, dateTimeTo));
@@ -95,8 +86,8 @@ export class ReservationAddComponent implements AfterContentInit {
     );
   }
 
-  private currencyRound(unRounded: number, precision: number = 0.05): number {
-    return (Math.round(unRounded / precision))*precision;
+  private currencyRound(unRounded: number, precision = 0.05): number {
+    return (Math.round(unRounded / precision)) * precision;
   }
 
   private initNewReservation(parking: Parking): void {
@@ -105,10 +96,10 @@ export class ReservationAddComponent implements AfterContentInit {
     this.reservation.Parking = new Parking();
     this.reservation.ID_Renter = this._keycloakAngular.getKeycloakInstance().subject ?? '';
     this.reservation.DateTimeFrom = new Date();
-    this.reservation.DateTimeFrom.setTime(this.reservation.DateTimeFrom.getTime() + (5 * 60 * 1000) /* plus 5 Minuten */ )
+    this.reservation.DateTimeFrom.setTime(this.reservation.DateTimeFrom.getTime() + (5 * 60 * 1000) /* plus 5 Minuten */);
 
     this.reservation.DateTimeTo = new Date();
-    this.reservation.DateTimeTo.setTime(this.reservation.DateTimeFrom.getTime() + (1 * 60 * 60 * 1000) /* plus eine Stunde */)
+    this.reservation.DateTimeTo.setTime(this.reservation.DateTimeFrom.getTime() + (1 * 60 * 60 * 1000) /* plus eine Stunde */);
     this.reservation.PricePerHour = parking.PricePerHour ?? 1.0;
     this.reservation.IsCanceled = false;
     this.reservation.Amount = this.getAmountByDateRange(this.reservation.DateTimeFrom, this.reservation.DateTimeTo);

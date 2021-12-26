@@ -30,7 +30,7 @@ export class ReservationEditComponent implements AfterContentInit {
   @ViewChild('toPicker') picker: any;
   public reservation: Reservation;
   public reservationForm: FormGroup;
-  public isServerPending: Boolean = false;
+  public isServerPending = false;
 
   constructor(
     private _activatedRoute: ActivatedRoute,
@@ -51,8 +51,8 @@ export class ReservationEditComponent implements AfterContentInit {
       DateTimeTo: new FormControl(this.reservation.DateTimeTo, [Validators.required, dateInPastValidator]),
       ID_Parking: new FormControl(this.reservation.Parking?.id),
       IsCanceled: new FormControl(this.reservation.IsCanceled),
-      Amount: new FormControl({value: this.reservation.Amount, disabled: true }),
-      PricePerHour: new FormControl({value: this.reservation.PricePerHour, disabled: true }),
+      Amount: new FormControl({ value: this.reservation.Amount, disabled: true }),
+      PricePerHour: new FormControl({ value: this.reservation.PricePerHour, disabled: true }),
     });
     this.reservationForm.addValidators(dateBeforeValidator('DateTimeFrom', 'DateTimeTo'));
     this.onValueChanges();
@@ -67,20 +67,19 @@ export class ReservationEditComponent implements AfterContentInit {
   }
 
   private onValueChanges(): void {
-    this.reservationForm.controls['DateTimeFrom'].valueChanges.subscribe(
+    this.reservationForm.controls.DateTimeFrom.valueChanges.subscribe(
       (dateTimeFrom) => {
         this.reservation.DateTimeFrom = dateTimeFrom;
-        this.reservation.Amount = this.currencyRound (this.calculateDiff(dateTimeFrom, this.reservation.DateTimeTo));
+        this.reservation.Amount = this.currencyRound(this.calculateDiff(dateTimeFrom, this.reservation.DateTimeTo));
       }
     );
 
-    this.reservationForm.controls['DateTimeTo'].valueChanges.subscribe(
+    this.reservationForm.controls.DateTimeTo.valueChanges.subscribe(
       (dateTimeTo) => {
         this.reservation.Amount = this.currencyRound(this.calculateDiff(this.reservation.DateTimeFrom, dateTimeTo));
         this.reservation.DateTimeTo = dateTimeTo;
-      }
+      },
     );
-
   }
 
   private currencyRound(unRounded: number, precision: number = 0.05): number {
@@ -172,8 +171,8 @@ export class ReservationEditComponent implements AfterContentInit {
     const _to = new Date(to);
 
     const minutes = Math.floor(
-      (Date.UTC(_to.getFullYear(), _to.getMonth(), _to.getDate(), _to.getHours(),_to.getMinutes()) -
-        Date.UTC(_from.getFullYear(), _from.getMonth(), _from.getDate(), _from.getHours(), _from.getMinutes()))
+      (Date.UTC(_to.getFullYear(), _to.getMonth(), _to.getDate(), _to.getHours(), _to.getMinutes())
+        - Date.UTC(_from.getFullYear(), _from.getMonth(), _from.getDate(), _from.getHours(), _from.getMinutes()))
         / (1000 * 60),
     );
     const pricePerMinute = this.reservation.PricePerHour / 60;
