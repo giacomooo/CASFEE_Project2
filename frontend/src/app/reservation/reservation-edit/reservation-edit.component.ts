@@ -157,12 +157,16 @@ export class ReservationEditComponent implements AfterContentInit {
     });
   }
 
-  public resetForm(): void {
+  resetForm = (): void => {
     this.reservationForm.reset();
     this.reservationForm.markAsUntouched();
-  }
 
-  public showError(content: string) {
+    if (this.reservationForm.controls.id) {
+      this.readReservations();
+    }
+  };
+
+  public showError(content: string): void {
     this._snackBar.open(content, 'Schliessen', { duration: 5000 });
   }
 

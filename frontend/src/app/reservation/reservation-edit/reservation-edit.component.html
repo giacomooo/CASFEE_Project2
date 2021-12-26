@@ -1,7 +1,10 @@
+<app-shared-button-bar>
+  <button mat-mini-fab color="ancent" type="button" mat-button *ngIf="reservation?.id" (click)="deleteReservation(reservation.id)" class="deleteButton"><mat-icon>delete</mat-icon></button>
+</app-shared-button-bar>
+
 <form [formGroup]="reservationForm" (submit)="onEdit(reservationForm.value)" >
   <mat-card>
     <mat-card-header>
-      <mat-card-title *ngIf="!reservation?.id">Parkplatz-Reservation hinzufügen</mat-card-title>
       <mat-card-title *ngIf="reservation?.id">Parkplatz-Reservation bearbeiten</mat-card-title>
     </mat-card-header>
     <mat-form-field class="hiddenField">
@@ -40,11 +43,7 @@
       <input matInput placeholder="CHF/h" formControlName="PricePerHour" />
     </mat-form-field>
 
-    <mat-card-actions>
-      <button type="button" mat-flat-button routerLink="/reservation/">abbrechen</button>
-      <button type="submit" mat-raised-button color="primary" *ngIf="!reservation?.id" [disabled]="reservationForm.invalid">hinzufügen</button>
-      <button type="button" mat-button *ngIf="reservation?.id" (click)="deleteReservation(reservation.id)">löschen</button>
-      <button type="submit" mat-raised-button color="primary" *ngIf="reservation?.id" [disabled]="reservationForm.invalid || reservationForm.pristine">speichern</button>
-    </mat-card-actions>
   </mat-card>
+    <app-shared-button-bar-edit [backLink]="'/reservation'" [form]="reservationForm" [object]="reservation" [resetFunction]="resetForm"></app-shared-button-bar-edit>
+
 </form>
