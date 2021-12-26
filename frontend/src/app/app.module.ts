@@ -21,6 +21,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
+import { NativeDateModule } from '@angular/material/core';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { NavComponent } from './nav/nav.component';
@@ -97,6 +98,8 @@ function initializeKeycloak(keycloak: KeycloakService) {
     NgxMatMomentModule,
     MatProgressBarModule,
     SharedModule,
+    MatDatepickerModule,
+    NativeDateModule,
   ],
   providers: [{
     provide: APP_INITIALIZER,

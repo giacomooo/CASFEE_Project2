@@ -1,3 +1,5 @@
+import { NgxMatDateAdapter, NGX_MAT_DATE_FORMATS } from '@angular-material-components/datetime-picker';
+import { NGX_MAT_MOMENT_DATE_ADAPTER_OPTIONS } from '@angular-material-components/moment-adapter';
 import { HttpParams } from '@angular/common/http';
 import {
   AfterContentInit,
@@ -6,9 +8,10 @@ import {
   ViewChild,
 } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { MAT_DATE_LOCALE } from '@angular/material/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { ActivatedRoute, Params, Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { KeycloakService } from 'keycloak-angular';
 import * as moment from 'moment';
 import { BehaviorSubject } from 'rxjs';
@@ -23,7 +26,16 @@ import { dateInPastValidator } from 'src/app/shared/common-validators/dateInPast
   selector: 'app-reservation-add',
   templateUrl: './reservation-add.component.html',
   styleUrls: ['./reservation-add.component.scss'],
+  providers: [
+    {
+      provide: NgxMatDateAdapter,
+      useClass: CustomNgxDatetimeAdapter,
+      deps: [MAT_DATE_LOCALE, NGX_MAT_MOMENT_DATE_ADAPTER_OPTIONS]
+    },
+    { provide: NGX_MAT_DATE_FORMATS, useValue: CUSTOM_DATE_FORMATS }
+  ],
 })
+
 export class ReservationAddComponent implements AfterContentInit {
   @Input() public parking: Parking | undefined;
   @ViewChild('fromPicker') fromPicker: any;
@@ -31,7 +43,7 @@ export class ReservationAddComponent implements AfterContentInit {
   public reservation: Reservation;
   public reservationForm: FormGroup;
   public isServerPending: Boolean = false;
-  public buttonCaption$: BehaviorSubject<string> =  new BehaviorSubject<string>('wait and see ->');
+  public buttonCaption$: BehaviorSubject<string> = new BehaviorSubject<string>('wait and see ->');
 
   constructor(
     private _activatedRoute: ActivatedRoute,
@@ -41,7 +53,7 @@ export class ReservationAddComponent implements AfterContentInit {
     private _router: Router,
     public globals: Globals,
     private _keycloakAngular: KeycloakService,
-    public matDialog: MatDialog
+    public matDialog: MatDialog,
   ) {
     this.reservation = new Reservation();
     this.reservation.Parking = new Parking();
@@ -49,18 +61,18 @@ export class ReservationAddComponent implements AfterContentInit {
       id: new FormControl(this.reservation.id),
       ID_Renter: new FormControl(this.reservation.ID_Renter),
       DateTimeFrom: new FormControl(this.reservation.DateTimeFrom, [Validators.required, dateInPastValidator]),
-      DateTimeTo: new FormControl(this.reservation.DateTimeTo, [Validators.required, dateInPastValidator,]),
+      DateTimeTo: new FormControl(this.reservation.DateTimeTo, [Validators.required, dateInPastValidator]),
       ID_Parking: new FormControl(this.reservation.Parking?.id),
       IsCanceled: new FormControl(this.reservation.IsCanceled),
-      Amount: new FormControl({value: this.reservation.Amount, disabled: true}),
-      PricePerHour: new FormControl({value: this.reservation.PricePerHour, disabled: true}),
+      Amount: new FormControl({ value: this.reservation.Amount, disabled: true }),
+      PricePerHour: new FormControl({ value: this.reservation.PricePerHour, disabled: true }),
     });
-    this.reservationForm.addValidators(dateBeforeValidator('DateTimeFrom','DateTimeTo'));
+    this.reservationForm.addValidators(dateBeforeValidator('DateTimeFrom', 'DateTimeTo'));
     this.onValueChanges();
   }
 
   ngAfterContentInit(): void {
-    if (this.parking){
+    if (this.parking) {
       this.initNewReservation(this.parking);
       return;
     }
@@ -71,17 +83,16 @@ export class ReservationAddComponent implements AfterContentInit {
     this.reservationForm.controls['DateTimeFrom'].valueChanges.subscribe(
       (dateTimeFrom) => {
         this.reservation.Amount = this.getAmountByDateRange(dateTimeFrom, this.reservation.DateTimeTo);
-        this.buttonCaption$.next (this.getButtonCaption(dateTimeFrom, this.reservation.DateTimeTo));
+        this.buttonCaption$.next(this.getButtonCaption(dateTimeFrom, this.reservation.DateTimeTo));
       }
     );
 
     this.reservationForm.controls['DateTimeTo'].valueChanges.subscribe(
       (dateTimeTo) => {
         this.reservation.Amount = this.getAmountByDateRange(this.reservation.DateTimeFrom, dateTimeTo);
-        this.buttonCaption$.next (this.getButtonCaption(this.reservation.DateTimeFrom, dateTimeTo));
-      }
+        this.buttonCaption$.next(this.getButtonCaption(this.reservation.DateTimeFrom, dateTimeTo));
+      },
     );
-
   }
 
   private currencyRound(unRounded: number, precision: number = 0.05): number {
@@ -89,7 +100,6 @@ export class ReservationAddComponent implements AfterContentInit {
   }
 
   private initNewReservation(parking: Parking): void {
-
     this.reservation.id = 0;
     this.reservation.ID_Parking = parking.id ?? 0;
     this.reservation.Parking = new Parking();
@@ -127,33 +137,31 @@ export class ReservationAddComponent implements AfterContentInit {
     this.isServerPending = true;
 
     reservation.DateTimeFrom = new Date(moment(reservation.DateTimeFrom).toDate());
-      const ID_Renter = this._keycloakAngular.getKeycloakInstance().subject;
+    const ID_Renter = this._keycloakAngular.getKeycloakInstance().subject;
 
-      if (ID_Renter) {
-        reservation.ID_Renter = ID_Renter;
+    if (ID_Renter) {
+      reservation.ID_Renter = ID_Renter;
 
-        this._reservationService
-          .createReservation(this.reservation)
-          .subscribe((result) => {
-            if (result) {
-              this._router.navigate(['reservation']);
-            } else {
-              this.showError('Die Resevation konnte nicht hinzugefügt werden.');
-            }
-          });
-      }
+      this._reservationService
+        .createReservation(this.reservation)
+        .subscribe((result) => {
+          if (result) {
+            this._router.navigate(['reservation']);
+          } else {
+            this.showError('Die Resevation konnte nicht hinzugefügt werden.');
+          }
+        });
+    }
   }
 
-
-  public showError(content: string) {
+  public showError(content: string): void {
     this._snackBar.open(content, 'Schliessen', { duration: 5000 });
   }
 
-
   public getAmountByDateRange(from: Date, to: Date): number {
     const minutes = this.getMinutesByDateRange(from, to);
-      const pricePerMinute = this.reservation.PricePerHour / 60;
-      return this.currencyRound(pricePerMinute * minutes);
+    const pricePerMinute = this.reservation.PricePerHour / 60;
+    return this.currencyRound(pricePerMinute * minutes);
   }
 
   public getMinutesByDateRange(_from: Date, _to: Date): number {
@@ -167,7 +175,6 @@ export class ReservationAddComponent implements AfterContentInit {
   }
 
   public getButtonCaption(from: Date, to: Date): string {
-
     const amount = this.getAmountByDateRange(from,to);
     const minTotal = this.getMinutesByDateRange(from, to);
     const hours = Math.floor(minTotal / 60);

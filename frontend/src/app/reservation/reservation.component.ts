@@ -37,9 +37,9 @@ export class ReservationComponent implements OnInit {
 
   public async backendCall(): Promise<void> {
     // this.globals.isLoading = true;
-    const id_landlord = await this._keycloakAngular.getKeycloakInstance().subject;
-    if (id_landlord && id_landlord?.length > 0) {
-      const httpParams = new HttpParams().set('ID_Landlord', id_landlord).set('withHistory', this.withHistory);
+    const idLandlord = await this._keycloakAngular.getKeycloakInstance().subject;
+    if (idLandlord && idLandlord?.length > 0) {
+      const httpParams = new HttpParams().set('ID_Landlord', idLandlord).set('withHistory', this.withHistory);
 
       this._reservationService.readReservations(httpParams).subscribe((reservations) => {
         // this.globals.isLoading = false;
