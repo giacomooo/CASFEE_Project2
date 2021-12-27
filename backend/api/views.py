@@ -21,8 +21,10 @@ class ParkingViewSet(viewsets.ModelViewSet):
         fromDT = self.request.query_params.get('from')
         toDT = self.request.query_params.get('to')
 
+        reservations = models.Reservation.objects.filter(ID_Parking__Location=location)
+        reservations.filter(DateTimeTo__gt=fromDT)
         # get all Parkings with the correct location
-        parkings = models.Parking.objects.filter(Location=location)
+        parkings = models.Parking.objects.filter(Location=location).filter(Reservations__StartDateTime_gt=fromDT)
 
         # if fromDT:
         #     parkings.filter(Reservations__DateTimeFrom__gt=)

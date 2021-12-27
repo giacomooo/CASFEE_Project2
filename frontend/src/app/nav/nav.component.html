@@ -5,7 +5,7 @@
 </mat-toolbar>
 
 <div class="progress-bar" style="height: 3px;">
-  <mat-progress-bar *ngIf="globals?.isLoading" mode="indeterminate"></mat-progress-bar>
+  <mat-progress-bar *ngIf="globals?.loading | async" mode="indeterminate"></mat-progress-bar>
 </div>
 
 <div class="center">

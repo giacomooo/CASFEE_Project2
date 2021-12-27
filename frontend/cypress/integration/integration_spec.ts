@@ -88,7 +88,7 @@ describe('Parking Administration Tests', () => {
   });
 });
 
-// describe('Parking Administration Tests', () => {
+// describe('Parking Tests', () => {
 //   it('loads examples', () => {
 //     expect(true).to.equal(true);
 //   });
