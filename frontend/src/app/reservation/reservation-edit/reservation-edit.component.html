@@ -4,9 +4,6 @@
 
 <form [formGroup]="reservationForm" (submit)="onEdit(reservationForm.value)" >
   <mat-card>
-    <mat-card-header>
-      <mat-card-title *ngIf="reservation?.id">Parkplatz-Reservation bearbeiten</mat-card-title>
-    </mat-card-header>
     <mat-form-field class="hiddenField">
       <input matInput placeholder="ID" formControlName="id" />
     </mat-form-field>
@@ -42,8 +39,7 @@
       <mat-form-field>
       <input matInput placeholder="CHF/h" formControlName="PricePerHour" />
     </mat-form-field>
-
   </mat-card>
-    <app-shared-button-bar-edit [backLink]="'/reservation'" [form]="reservationForm" [object]="reservation" [resetFunction]="resetForm"></app-shared-button-bar-edit>
 
+  <app-shared-button-bar-edit [backLink]="'/reservation'" [form]="reservationForm" [object]="reservation" [resetFunction]="resetForm"></app-shared-button-bar-edit>
 </form>

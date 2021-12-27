@@ -16,7 +16,7 @@ import * as moment from 'moment';
 import { BehaviorSubject } from 'rxjs';
 import { Globals } from 'src/app/globals';
 import { Parking } from 'src/app/models/Parking';
-import { Reservation } from 'src/app/models/Reservation';
+import { CreateReservation, Reservation } from 'src/app/models/Reservation';
 import { ReservationService } from 'src/app/services/reservation.service';
 import { dateBeforeValidator } from 'src/app/shared/common-validators/dateBefore-validators.directive';
 import { dateInPastValidator } from 'src/app/shared/common-validators/dateInPast-validators.directive';
@@ -133,8 +133,20 @@ export class ReservationAddComponent implements AfterContentInit {
     if (ID_Renter) {
       reservation.ID_Renter = ID_Renter;
 
+      const createReservation: CreateReservation = {
+        id: this.reservation.id,
+        ID_Parking: this.reservation.Parking ?? new Parking(),
+        ID_Renter: this.reservation.ID_Renter,
+        DateTimeFrom: this.reservation.DateTimeFrom,
+        DateTimeTo: this.reservation.DateTimeTo,
+        PricePerHour: this.reservation.PricePerHour,
+        Amount: this.reservation.Amount,
+        IsCanceled: this.reservation.IsCanceled,
+      };
+      createReservation.ID_Parking.id = this.reservation.ID_Parking;
+
       this._reservationService
-        .createReservation(this.reservation)
+        .createReservation(createReservation)
         .subscribe((result) => {
           if (result) {
             this._router.navigate(['reservation']);

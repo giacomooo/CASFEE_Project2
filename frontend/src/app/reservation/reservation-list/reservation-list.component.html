@@ -1,6 +1,18 @@
-    <mat-card *ngFor="let reservation of reservations">
-      {{ reservation.Parking?.Street }} {{ reservation.Parking?.StreetNo }}{{ reservation.Parking?.StreetNoSuffix }}, {{ reservation.Parking?.ZIP }} {{ reservation.Parking?.Location }} <br>
-      {{ reservation.DateTimeFrom | date:'medium'}} - {{reservation.DateTimeTo | date:'shortTime'}}
-      CHF {{ reservation.Amount }}
-      <button mat-button (click)="clickEdit(reservation.id)">Edit</button>
-    </mat-card>
+<mat-list>
+  <mat-card *ngFor="let reservation of reservations">
+    <mat-list-item>
+      <img mat-list-icon src="/assets/parking_logo.png" />
+      {{ reservation.Parking?.Street }} {{ reservation.Parking?.StreetNo
+      }}{{ reservation.Parking?.StreetNoSuffix }},
+      {{ reservation.Parking?.ZIP }} {{ reservation.Parking?.Location }} <br />
+      {{ reservation.DateTimeFrom | date: "dd.MM.YYYY HH:mm" }} -
+      {{ reservation.DateTimeTo | date: "dd.MM.YYYY HH:mm" }} CHF
+      {{ reservation.Amount }}
+    </mat-list-item>
+    <mat-card-actions align="end">
+      <button mat-raised-button (click)="clickEdit(reservation.id)">
+        Anpassen
+      </button>
+    </mat-card-actions>
+  </mat-card>
+</mat-list>
