@@ -34,6 +34,14 @@ class ParkingViewSet(viewsets.ModelViewSet):
 
         serializer = serializers.ParkingwithReservationsSerializer(parkings, many=True)
         return Response(serializer.data)
+    
+
+    @action(methods=['get'], detail=True)
+    def reservation(self, request, pk=None):
+        parkings = models.Parking.objects.filter(id=pk)
+
+        serializer = serializers.ParkingwithReservationsSerializer(parkings, many=True)
+        return Response(serializer.data)
 
 
 class ReservationViewSet(viewsets.ModelViewSet):

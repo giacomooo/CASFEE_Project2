@@ -37,6 +37,7 @@ import { ParkingAdministrationItemEditComponent } from './parkingAdministration/
 import { ReservationEditComponent } from './reservation/reservation-edit/reservation-edit.component';
 import { NavBottomComponent } from './nav-bottom/nav-bottom.component';
 import { ReservationAddComponent } from './reservation/reservation-add/reservation-add.component';
+import { CustomNgxDateTimeModule } from './shared/dateTime-picker/dateTimeFormat';
 
 // export function keycloakFactory(authService: AuthService) {
 //   return () => authService.init();
@@ -100,6 +101,7 @@ function initializeKeycloak(keycloak: KeycloakService) {
     SharedModule,
     MatDatepickerModule,
     NativeDateModule,
+    CustomNgxDateTimeModule,
   ],
   providers: [{
     provide: APP_INITIALIZER,

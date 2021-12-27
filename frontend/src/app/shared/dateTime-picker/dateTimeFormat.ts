@@ -9,11 +9,11 @@ const CUSTOM_DATE_FORMATS: NgxMatDateFormats = {
     dateInput: 'l, LTS',
   },
   display: {
-    dateInput: 'DD.MM.YYYY HH:mm:ss',
+    dateInput: 'DD.MM.YYYY HH:mm',
     monthYearLabel: 'MMM YYYY',
     dateA11yLabel: 'LL',
     monthYearA11yLabel: 'MMMM YYYY',
-  }
+  },
 };
 
 @NgModule({
