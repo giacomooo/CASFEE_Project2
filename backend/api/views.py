@@ -1,7 +1,8 @@
 from datetime import datetime
 from django_filters import rest_framework
-from rest_framework import viewsets, filters
+from rest_framework import viewsets, filters, status
 from rest_framework.decorators import action
+from rest_framework.generics import get_object_or_404
 from rest_framework.response import Response
 
 from . import serializers, models
@@ -42,3 +43,18 @@ class ReservationViewSet(viewsets.ModelViewSet):
     serializer_class = serializers.ReservationwithParkingSerializer
     queryset = models.Reservation.objects.all()
     http_method_names = ['get', 'post', 'put', 'patch', 'delete']
+
+    def get_serializer_class(self):
+         if self.request.method in ['GET']:
+             return serializers.ReservationSerializer
+         return serializers.ReservationwithParkingSerializer
+
+    def create(self, request):
+        request.data['ID_Parking'] = request.data['ID_Parking']['id']
+        serializer = serializers.ReservationSerializer(data=request.data)
+
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        else:
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

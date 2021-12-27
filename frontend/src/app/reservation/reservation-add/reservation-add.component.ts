@@ -5,32 +5,36 @@ import {
   Input,
   ViewChild,
 } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
-import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
+import {
+  FormBuilder, FormControl, FormGroup, Validators,
+} from '@angular/forms';
+import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute, Router } from '@angular/router';
 import { KeycloakService } from 'keycloak-angular';
 import * as moment from 'moment';
+import { BehaviorSubject } from 'rxjs';
 import { Globals } from 'src/app/globals';
 import { Parking } from 'src/app/models/Parking';
 import { Reservation } from 'src/app/models/Reservation';
 import { ReservationService } from 'src/app/services/reservation.service';
 import { dateBeforeValidator } from 'src/app/shared/common-validators/dateBefore-validators.directive';
 import { dateInPastValidator } from 'src/app/shared/common-validators/dateInPast-validators.directive';
-import { ModalComponent } from 'src/app/shared/modal/modal.component';
 
 @Component({
-  selector: 'app-reservation-edit',
-  templateUrl: './reservation-edit.component.html',
-  styleUrls: ['./reservation-edit.component.scss'],
+  selector: 'app-reservation-add',
+  templateUrl: './reservation-add.component.html',
+  styleUrls: ['./reservation-add.component.scss'],
 })
-export class ReservationEditComponent implements AfterContentInit {
+
+export class ReservationAddComponent implements AfterContentInit {
   @Input() public parking: Parking | undefined;
   @ViewChild('fromPicker') fromPicker: any;
   @ViewChild('toPicker') picker: any;
   public reservation: Reservation;
   public reservationForm: FormGroup;
   public isServerPending = false;
+  public buttonCaption$: BehaviorSubject<string> = new BehaviorSubject<string>('wait and see ->');
 
   constructor(
     private _activatedRoute: ActivatedRoute,
@@ -40,7 +44,7 @@ export class ReservationEditComponent implements AfterContentInit {
     private _router: Router,
     public globals: Globals,
     private _keycloakAngular: KeycloakService,
-    public matDialog: MatDialog
+    public matDialog: MatDialog,
   ) {
     this.reservation = new Reservation();
     this.reservation.Parking = new Parking();
@@ -69,26 +73,27 @@ export class ReservationEditComponent implements AfterContentInit {
   private onValueChanges(): void {
     this.reservationForm.controls.DateTimeFrom.valueChanges.subscribe(
       (dateTimeFrom) => {
-        this.reservation.DateTimeFrom = dateTimeFrom;
-        this.reservation.Amount = this.currencyRound(this.calculateDiff(dateTimeFrom, this.reservation.DateTimeTo));
-      }
+        this.reservation.Amount = this.getAmountByDateRange(dateTimeFrom, this.reservation.DateTimeTo);
+        this.buttonCaption$.next(this.getButtonCaption(dateTimeFrom, this.reservation.DateTimeTo));
+      },
     );
 
     this.reservationForm.controls.DateTimeTo.valueChanges.subscribe(
       (dateTimeTo) => {
-        this.reservation.Amount = this.currencyRound(this.calculateDiff(this.reservation.DateTimeFrom, dateTimeTo));
-        this.reservation.DateTimeTo = dateTimeTo;
+        this.reservation.Amount = this.getAmountByDateRange(this.reservation.DateTimeFrom, dateTimeTo);
+        this.buttonCaption$.next(this.getButtonCaption(this.reservation.DateTimeFrom, dateTimeTo));
       },
     );
   }
 
-  private currencyRound(unRounded: number, precision: number = 0.05): number {
-    return (Math.round(unRounded / precision))*precision;
+  private currencyRound(unRounded: number, precision = 0.05): number {
+    return (Math.round(unRounded / precision)) * precision;
   }
 
   private initNewReservation(parking: Parking): void {
-    this.reservation.Parking = new Parking();
+    this.reservation.id = 0;
     this.reservation.ID_Parking = parking.id ?? 0;
+    this.reservation.Parking = new Parking();
     this.reservation.ID_Renter = this._keycloakAngular.getKeycloakInstance().subject ?? '';
     this.reservation.DateTimeFrom = new Date();
     this.reservation.DateTimeFrom.setTime(this.reservation.DateTimeFrom.getTime() + (5 * 60 * 1000) /* plus 5 Minuten */);
@@ -97,7 +102,7 @@ export class ReservationEditComponent implements AfterContentInit {
     this.reservation.DateTimeTo.setTime(this.reservation.DateTimeFrom.getTime() + (1 * 60 * 60 * 1000) /* plus eine Stunde */);
     this.reservation.PricePerHour = parking.PricePerHour ?? 1.0;
     this.reservation.IsCanceled = false;
-    this.reservation.Amount = this.currencyRound(this.calculateDiff(this.reservation.DateTimeFrom, this.reservation.DateTimeTo));
+    this.reservation.Amount = this.getAmountByDateRange(this.reservation.DateTimeFrom, this.reservation.DateTimeTo);
     this.reservationForm.reset(this.reservation);
   }
 
@@ -119,83 +124,59 @@ export class ReservationEditComponent implements AfterContentInit {
     }
   }
 
-  public onEdit(reservation: Reservation): void {
+  public onAdd(reservation: Reservation): void {
     this.isServerPending = true;
 
-    this.reservation.DateTimeFrom = new Date(moment(reservation.DateTimeFrom).toDate());
-    this.reservation.DateTimeTo = new Date(moment(reservation.DateTimeTo).toDate());
-    this._reservationService
-      .updateReservation(this.reservation)
-      .subscribe((result) => {
-        if (result) {
-          this._router.navigate(['reservation']);
-        } else {
-          this.showError('Die Reservation konnte nicht gespeichert werden.');
-        }
-      });
-  }
+    reservation.DateTimeFrom = new Date(moment(reservation.DateTimeFrom).toDate());
+    const ID_Renter = this._keycloakAngular.getKeycloakInstance().subject;
 
-  public deleteReservation(id: number): void {
-    const modalDialog = this.openModal();
-    modalDialog.afterClosed().subscribe((result) => {
-      if (result && id) {
-        this._reservationService
-          .deleteReservation(id)
-          .then((msg) => {
-            if (msg.status) {
-              this._router.navigate(['reservation']);
-            } else {
-              this.showError(msg.message);
-            }
-          })
-          .catch(() => {
-            this.showError(
-              'Die Reservation konnte nicht gelöscht werden, bitte versuchen sie es später erneut.'
-            );
-          });
-      }
-    });
-  }
+    if (ID_Renter) {
+      reservation.ID_Renter = ID_Renter;
 
-  resetForm = (): void => {
-    this.reservationForm.reset();
-    this.reservationForm.markAsUntouched();
-
-    if (this.reservationForm.controls.id) {
-      this.readReservations();
+      this._reservationService
+        .createReservation(this.reservation)
+        .subscribe((result) => {
+          if (result) {
+            this._router.navigate(['reservation']);
+          } else {
+            this.showError('Die Resevation konnte nicht hinzugefügt werden.');
+          }
+        });
     }
-  };
+  }
 
   public showError(content: string): void {
     this._snackBar.open(content, 'Schliessen', { duration: 5000 });
   }
 
-  public calculateDiff(from: Date, to: Date): number {
-    const _from = new Date(from);
-    const _to = new Date(to);
-
-    const minutes = Math.floor(
-      (Date.UTC(_to.getFullYear(), _to.getMonth(), _to.getDate(), _to.getHours(), _to.getMinutes())
-        - Date.UTC(_from.getFullYear(), _from.getMonth(), _from.getDate(), _from.getHours(), _from.getMinutes()))
-        / (1000 * 60),
-    );
+  public getAmountByDateRange(from: Date, to: Date): number {
+    const minutes = this.getMinutesByDateRange(from, to);
     const pricePerMinute = this.reservation.PricePerHour / 60;
-    return pricePerMinute * minutes;
+    return this.currencyRound(pricePerMinute * minutes);
   }
 
-  public openModal() {
-    const dialogConfig = new MatDialogConfig();
+  public getMinutesByDateRange(_from: Date, _to: Date): number {
+    const from = new Date(_from);
+    const to = new Date(_to);
+    return Math.floor(
+      (Date.UTC(to.getFullYear(),to.getMonth(), to.getDate(), to.getHours(),to.getMinutes()) -
+      Date.UTC(from.getFullYear(), from.getMonth(), from.getDate(), from.getHours(), from.getMinutes())) /
+      (1000 * 60 )
+    );
+  }
 
-    dialogConfig.disableClose = true;
-    dialogConfig.id = 'modal-component';
-    dialogConfig.height = '170px';
-    dialogConfig.width = '550px';
-    dialogConfig.data = {
-      title: 'Wollen sie die Reservation wirklich löschen?',
-      description: 'Dieser Vorgang kann nicht rückgängig gemacht werden.',
-    };
+  public getButtonCaption(from: Date, to: Date): string {
+    const amount = this.getAmountByDateRange(from,to);
+    const minTotal = this.getMinutesByDateRange(from, to);
+    const hours = Math.floor(minTotal / 60);
+    const min = (minTotal - (hours * 60));
+    let result = `${min}min für ${amount.toFixed(2)} CHF ->`;
 
-    return this.matDialog.open(ModalComponent, dialogConfig);
+    if (hours > 0) {
+      return `${hours}h ${result}`;
+    }
+
+    return result;
   }
 
   get f() {

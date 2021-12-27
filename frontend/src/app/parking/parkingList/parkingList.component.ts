@@ -1,5 +1,4 @@
 import { HttpParams } from '@angular/common/http';
-import { NONE_TYPE } from '@angular/compiler';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { ParkListItem } from 'src/app/models/Parking';

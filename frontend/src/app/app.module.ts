@@ -21,6 +21,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
+import { NativeDateModule } from '@angular/material/core';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { NavComponent } from './nav/nav.component';
@@ -35,6 +36,7 @@ import { ParkingAdministrationItemComponent } from './parkingAdministration/park
 import { ParkingAdministrationItemEditComponent } from './parkingAdministration/parkingAdministrationItemEdit/parkingAdministrationItemEdit.component';
 import { ReservationEditComponent } from './reservation/reservation-edit/reservation-edit.component';
 import { NavBottomComponent } from './nav-bottom/nav-bottom.component';
+import { ReservationAddComponent } from './reservation/reservation-add/reservation-add.component';
 
 // export function keycloakFactory(authService: AuthService) {
 //   return () => authService.init();
@@ -69,6 +71,7 @@ function initializeKeycloak(keycloak: KeycloakService) {
     ParkingAdministrationItemComponent,
     ParkingAdministrationItemEditComponent,
     ReservationEditComponent,
+    ReservationAddComponent,
     NavBottomComponent,
   ],
   imports: [
@@ -95,6 +98,8 @@ function initializeKeycloak(keycloak: KeycloakService) {
     NgxMatMomentModule,
     MatProgressBarModule,
     SharedModule,
+    MatDatepickerModule,
+    NativeDateModule,
   ],
   providers: [{
     provide: APP_INITIALIZER,

@@ -3,9 +3,13 @@ import { BehaviorSubject } from 'rxjs';
 
 @Injectable()
 export class Globals {
-  loading = new BehaviorSubject(false);
-
-  set isLoading(value: boolean) {
-    this.loading.next(value);
+  set isLoading(arg: boolean) {
+    setTimeout(() => {
+      this.loading.next(arg);
+    });
   }
+  get isLoading() {
+    return this.loading.value;
+  }
+  loading: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
 }
