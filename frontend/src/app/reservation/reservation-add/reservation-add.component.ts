@@ -134,7 +134,7 @@ export class ReservationAddComponent implements AfterContentInit {
 
       const createReservation: CreateReservation = {
         id: this.reservation.id,
-        ID_Parking: this.reservation.Parking ?? new Parking(),
+        ID_Parking: this.reservation.ID_Parking ?? new Parking(),
         ID_Renter: this.reservation.ID_Renter,
         DateTimeFrom: this.reservation.DateTimeFrom,
         DateTimeTo: this.reservation.DateTimeTo,
@@ -142,7 +142,7 @@ export class ReservationAddComponent implements AfterContentInit {
         Amount: this.reservation.Amount,
         IsCanceled: this.reservation.IsCanceled,
       };
-      createReservation.ID_Parking.id = this.reservation.ID_Parking;
+      createReservation.ID_Parking.id = this.reservation.ID_Parking.id;
 
       this._reservationService
         .createReservation(createReservation)
