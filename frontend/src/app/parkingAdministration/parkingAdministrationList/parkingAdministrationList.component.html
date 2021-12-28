@@ -1,6 +1,6 @@
 <mat-card *ngFor="let parking of parkings">
   <mat-selection-list [multiple]="false">
-    <mat-list-option>
+    <mat-list-option class="parking-mat-list-option">
       <app-parkingAdministrationItem [parking]="parking"></app-parkingAdministrationItem>
     </mat-list-option>
   </mat-selection-list>

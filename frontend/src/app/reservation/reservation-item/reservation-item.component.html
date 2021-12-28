@@ -1,0 +1,19 @@
+<mat-list-item routerLink="/reservation/{{ reservation?.id }}" class="reservation-mat-list-item">
+    <div class="mat-list-item-card">
+        <div class="reservation-list-item-image">
+            <div mat-card-avatar class="card-title-image"></div>
+        </div>
+        <div class="reservation-list-item-content">
+            <div class="mat-list-item-row">
+                <p class="mat-title">{{ reservation?.DateTimeFrom | date: 'EEE, dd MMMM y hh:mm':'de-ch' }}</p>
+                <p class="mat-title">{{ reservation?.DateTimeTo | date: 'hh:mm':'de-ch' }}</p>
+            </div>
+            <div class="mat-list-item-row">
+                <p class="mat-subheading-1">{{ reservation?.ID_Parking?.Street }} {{ reservation?.ID_Parking?.StreetNo }}{{
+                    reservation?.ID_Parking?.StreetNoSuffix }}, {{ reservation?.ID_Parking?.ZIP }} {{
+                    reservation?.ID_Parking?.Location }}</p>
+                <p class="mat-subheading-1">CHF {{ reservation?.Amount }}</p>
+            </div>
+        </div>
+    </div>
+</mat-list-item>

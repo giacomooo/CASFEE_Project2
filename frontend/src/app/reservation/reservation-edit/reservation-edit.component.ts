@@ -40,10 +40,10 @@ export class ReservationEditComponent implements AfterContentInit {
     private _router: Router,
     public globals: Globals,
     private _keycloakAngular: KeycloakService,
-    public matDialog: MatDialog
+    public matDialog: MatDialog,
   ) {
     this.reservation = new Reservation();
-    this.reservation.Parking = new Parking();
+    this.reservation.ID_Parking = new Parking();
     this.reservationForm = this._formBuilder.group({
       id: new FormControl(this.reservation.id),
       ID_Renter: new FormControl(this.reservation.ID_Renter),
@@ -87,8 +87,7 @@ export class ReservationEditComponent implements AfterContentInit {
   }
 
   private initNewReservation(parking: Parking): void {
-    this.reservation.Parking = new Parking();
-    this.reservation.ID_Parking = parking.id ?? 0;
+    this.reservation.ID_Parking.id = parking.id ?? 0;
     this.reservation.ID_Renter = this._keycloakAngular.getKeycloakInstance().subject ?? '';
     this.reservation.DateTimeFrom = new Date();
     this.reservation.DateTimeFrom.setTime(this.reservation.DateTimeFrom.getTime() + (5 * 60 * 1000) /* plus 5 Minuten */);

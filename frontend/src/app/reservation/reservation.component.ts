@@ -1,9 +1,9 @@
-import { HttpClient, HttpParams } from '@angular/common/http';
-import { Component, Input, OnDestroy, OnInit } from '@angular/core';
+import { HttpParams } from '@angular/common/http';
+import { Component, OnInit } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { ActivatedRoute, Router } from '@angular/router';
 import { KeycloakService } from 'keycloak-angular';
 import { Globals } from '../globals';
-import { Parking } from '../models/Parking';
 import { Reservation } from '../models/Reservation';
 import { ParkingService } from '../services/parking.service';
 import { ReservationService } from '../services/reservation.service';
@@ -22,7 +22,8 @@ export class ReservationComponent implements OnInit {
     private readonly _parkingService: ParkingService,
     protected _keycloakAngular: KeycloakService,
     private _snackBar: MatSnackBar,
-    public globals: Globals) {
+    public globals: Globals,
+    private _activatedRoute: ActivatedRoute) {
     // do nothing
   }
 
@@ -36,20 +37,27 @@ export class ReservationComponent implements OnInit {
   }
 
   public async backendCall(): Promise<void> {
-    // this.globals.isLoading = true;
-    const idLandlord = await this._keycloakAngular.getKeycloakInstance().subject;
-    if (idLandlord && idLandlord?.length > 0) {
-      const httpParams = new HttpParams().set('ID_Landlord', idLandlord).set('withHistory', this.withHistory);
+    this.globals.isLoading = true;
+    let httpParams = new HttpParams().set('withHistory', this.withHistory);
+    const idRenter = await this._keycloakAngular.getKeycloakInstance().subject;
+
+    if (idRenter && idRenter?.length > 0) {
+      httpParams = httpParams.append('ID_Renter', idRenter);
 
       this._reservationService.readReservations(httpParams).subscribe((reservations) => {
-        // this.globals.isLoading = false;
-        reservations.map((reservation) => this._parkingService.readParking(reservation.ID_Parking).subscribe((parking) => {
-          reservation.Parking = parking;
-        }));
-        this.reservations = reservations;
+        if (reservations) {
+          /*reservations.map((reservation) => this._parkingService.readParking(reservation.ID_Parking).subscribe((parking) => {
+            reservation.Parking = parking;
+          }));*/
+          this.reservations = reservations;
+          this.globals.isLoading = false;
+        } else {
+          this.globals.isLoading = false;
+          this._snackBar.open('Die Reservationen konnten nicht geladen werden.', 'Schliessen');
+        }
       });
     } else {
-      // this.globals.isLoading = false;
+      this.globals.isLoading = false;
       this._snackBar.open('Die Reservationen konnten nicht geladen werden.', 'Schliessen');
     }
   }

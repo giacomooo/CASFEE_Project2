@@ -1,26 +1,25 @@
 <app-shared-button-bar></app-shared-button-bar>
 <mat-card *ngFor="let parkItem of parkings">
-  <mat-selection-list [multiple]="false">
-    <mat-list-option class="reservationAddInside">
-      <mat-list-item>
-
-        <img mat-list-icon src="/assets/parking_logo.png" />
-        {{ parkItem.parking?.Street }} {{ parkItem.parking?.StreetNo}}{{ parkItem.parking?.StreetNoSuffix }}<br>
-        {{ parkItem.parking?.ZIP }}
-         {{ parkItem.parking?.Location }}
-        <button
-        (click)="onAddReservation(parkItem.parking?.id)"
-          mat-mini-fab
-          color="primary"
-        >
+  <div class="card-header">
+    <div class="card-left-header">
+      <div mat-card-avatar class="card-title-image"></div>
+      <div class="card-left-header-title">
+        <mat-card-title>{{ parkItem.parking?.Street }} {{ parkItem.parking?.StreetNo}}{{
+          parkItem.parking?.StreetNoSuffix }}</mat-card-title>
+        <mat-card-subtitle>{{ parkItem.parking?.ZIP }} {{ parkItem.parking?.Location }}</mat-card-subtitle>
+      </div>
+    </div>
+    <div>
+      <div class="card-right-header">{{ parkItem.parking?.PricePerHour }} CHF/h</div>
+      <div class="card-right-header card-right-header-add">
+        <button (click)="onAddReservation(parkItem.parking?.id)" mat-mini-fab color="primary" matTooltip="Reservieren" matTooltipPosition="right">
           <mat-icon *ngIf="parkItem.isPending">remove</mat-icon>
           <mat-icon *ngIf="!parkItem.isPending">add</mat-icon>
         </button>
-
-      </mat-list-item>
-        <app-reservation-add *ngIf="parkItem.isPending"
-          [parking]="parkItem.parking"
-        ></app-reservation-add>
-      </mat-list-option>
-  </mat-selection-list>
+      </div>
+    </div>
+  </div>
+  <div class="card-container">
+    <app-reservation-add *ngIf="parkItem.isPending" [parking]="parkItem.parking"></app-reservation-add>
+  </div>
 </mat-card>

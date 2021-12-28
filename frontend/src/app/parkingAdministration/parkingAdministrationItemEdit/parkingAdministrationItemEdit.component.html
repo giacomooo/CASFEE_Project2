@@ -2,7 +2,7 @@
   <button mat-mini-fab color="ancent" type="button" mat-button *ngIf="parking?.id" (click)="deleteParking(parking?.id)" class="deleteButton"><mat-icon>delete</mat-icon></button>
 </app-shared-button-bar>
 
-<form (submit)="onAddOrEdit(parkingForm.value)" [formGroup]="parkingForm">
+<form class="editForm" (submit)="onAddOrEdit(parkingForm.value)" [formGroup]="parkingForm">
   <mat-card>
       <mat-form-field class="hiddenField">
           <input matInput placeholder="ID" formControlName="id">
@@ -39,3 +39,5 @@
 
   <app-shared-button-bar-edit [backLink]="'/parkingAdministration'" [form]="parkingForm" [object]="parking" [resetFunction]="resetForm"></app-shared-button-bar-edit>
 </form>
+
+<app-parking-administration-item-reservations [parking]="parking"></app-parking-administration-item-reservations>

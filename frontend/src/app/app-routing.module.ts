@@ -16,7 +16,7 @@ const routes: Routes = [
   { path: 'reservation/:id', component: ReservationEditComponent, canActivate: [AppAuthGuard] },
   { path: 'account', component: AccountComponent, canActivate: [AppAuthGuard] },
   { path: 'parkingAdministration', component: ParkingAdministrationComponent, canActivate: [AppAuthGuard] },
-  { path: 'parkingAdministrationItemEdit', component: ParkingAdministrationItemEditComponent, canActivate: [AppAuthGuard] },
+  { path: 'parkingAdministration/:id', component: ParkingAdministrationItemEditComponent, canActivate: [AppAuthGuard] },
   { path: '', redirectTo: '/parking', pathMatch: 'full' },
 ];
 

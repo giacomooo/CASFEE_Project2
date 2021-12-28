@@ -1,6 +1,7 @@
-    <mat-card *ngFor="let reservation of reservations">
-      {{ reservation.Parking?.Street }} {{ reservation.Parking?.StreetNo }}{{ reservation.Parking?.StreetNoSuffix }}, {{ reservation.Parking?.ZIP }} {{ reservation.Parking?.Location }} <br>
-      {{ reservation.DateTimeFrom | date:'medium'}} - {{reservation.DateTimeTo | date:'shortTime'}}
-      CHF {{ reservation.Amount }}
-      <button mat-button (click)="clickEdit(reservation.id)">Edit</button>
-    </mat-card>
+<mat-card *ngFor="let reservation of reservations">
+  <mat-selection-list [multiple]="false">
+    <mat-list-option class="reservation-mat-list-option">
+      <app-reservation-item [reservation]="reservation"></app-reservation-item>
+    </mat-list-option>
+  </mat-selection-list>
+</mat-card>

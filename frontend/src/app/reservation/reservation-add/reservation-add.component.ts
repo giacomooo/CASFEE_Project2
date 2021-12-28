@@ -47,7 +47,7 @@ export class ReservationAddComponent implements AfterContentInit {
     public matDialog: MatDialog,
   ) {
     this.reservation = new Reservation();
-    this.reservation.Parking = new Parking();
+    this.reservation.ID_Parking = new Parking();
     this.reservationForm = this._formBuilder.group({
       id: new FormControl(this.reservation.id),
       ID_Renter: new FormControl(this.reservation.ID_Renter),
@@ -92,8 +92,7 @@ export class ReservationAddComponent implements AfterContentInit {
 
   private initNewReservation(parking: Parking): void {
     this.reservation.id = 0;
-    this.reservation.ID_Parking = parking.id ?? 0;
-    this.reservation.Parking = new Parking();
+    this.reservation.ID_Parking.id = parking.id ?? 0;
     this.reservation.ID_Renter = this._keycloakAngular.getKeycloakInstance().subject ?? '';
     this.reservation.DateTimeFrom = new Date();
     this.reservation.DateTimeFrom.setTime(this.reservation.DateTimeFrom.getTime() + (5 * 60 * 1000) /* plus 5 Minuten */);
@@ -166,14 +165,18 @@ export class ReservationAddComponent implements AfterContentInit {
   }
 
   public getButtonCaption(from: Date, to: Date): string {
-    const amount = this.getAmountByDateRange(from,to);
+    const amount = this.getAmountByDateRange(from, to);
     const minTotal = this.getMinutesByDateRange(from, to);
     const hours = Math.floor(minTotal / 60);
     const min = (minTotal - (hours * 60));
-    let result = `${min}min für ${amount.toFixed(2)} CHF ->`;
+    let result = ` für ${amount.toFixed(2)} CHF ->`;
+
+    if (min > 0) {
+      result = `${min}min ${result}`;
+    }
 
     if (hours > 0) {
-      return `${hours}h ${result}`;
+      result = `${hours}h ${result}`;
     }
 
     return result;

@@ -2,12 +2,34 @@ mat-card {
   padding: 2px;
 }
 
-mat-list-item {
+.card-header {
+  padding: 10px;
   display: flex;
-  flex-direction: column;
+  justify-content: space-between;
 }
 
-mat-list-option.mat-list-item-with-avatar.reservationAddInside {
-  height: auto;
-  cursor: default;
+.card-left-header {
+  display: flex;
+}
+
+.card-title-image {
+  background-image: url('/assets/parking_logo.png');
+  background-size: cover;
+}
+
+.card-left-header-title {
+  padding-left: 10px;
+}
+
+.card-right-header {
+  display: flex;
+  justify-content: right;
+}
+
+.card-right-header-add {
+  padding-top: 10px;
+}
+
+.card-container {
+  padding: 10px;
 }

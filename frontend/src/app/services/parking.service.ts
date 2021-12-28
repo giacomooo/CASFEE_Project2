@@ -4,6 +4,7 @@ import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { DeleteMessage } from '../models/DeleteMessage';
 import { Parking } from '../models/Parking';
+import { Reservation } from '../models/Reservation';
 
 @Injectable({
   providedIn: 'root',
@@ -35,5 +36,9 @@ export class ParkingService {
     return this.http.delete(`${this.url}parking/${id}/`).toPromise()
       .then(() => new DeleteMessage(true, ''))
       .catch(() => new DeleteMessage(false, 'Es existieren bereits Reservationen, der Parkplatz kann nicht gelöscht werden.'));
+  }
+
+  public readParkingReservations(id: number) {
+    return this.http.get<Reservation[]>(`${this.url}parking/${id}/reservation`);
   }
 }

@@ -16,24 +16,20 @@ export class ParkingListComponent implements OnInit {
 
   constructor(
     private parkingService: ParkingService,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
   ) {}
 
   ngOnInit() {
-    const httpParams = new HttpParams().set('Location', 'Appenzell');
     this.route.queryParams.subscribe((params) => {
-      console.log(params);
-      this.searchQuery = params['location'];
-      console.log(this.searchQuery);
-    });
+      const httpParams = new HttpParams().set('Location', params.location);
 
-    this.parkingService.readParkings(httpParams).subscribe((serviceResults) => {
-      serviceResults.map((parking) => {
-        const parkItem: ParkListItem = { parking: parking, isPending: false };
-        this.parkings?.push(parkItem);
+      this.parkingService.readParkings(httpParams).subscribe((serviceResults) => {
+        serviceResults.map((parking) => {
+          const parkItem: ParkListItem = { parking: parking, isPending: false };
+          this.parkings?.push(parkItem);
+        });
       });
     });
-
   }
 
   public onAddReservation(ID_Parking: number | undefined): void {

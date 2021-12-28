@@ -14,7 +14,7 @@ import { ParkingService } from '../services/parking.service';
 export class ParkingAdministrationComponent implements OnInit {
   public parkings?: Parking[];
 
-  constructor(private parkingService: ParkingService, protected _keycloakAngular: KeycloakService, private _snackBar: MatSnackBar, private globals: Globals) { }
+  constructor(private _parkingService: ParkingService, protected _keycloakAngular: KeycloakService, private _snackBar: MatSnackBar, private globals: Globals) { }
 
   async ngOnInit() {
     this.globals.isLoading = true;
@@ -24,7 +24,7 @@ export class ParkingAdministrationComponent implements OnInit {
       httpParams = httpParams.set('ID_Landlord', idLandlord);
       httpParams = httpParams.set('ordering', 'Street, StreetNo, StreetNoSuffix');
 
-      this.parkingService.readParkings(httpParams).subscribe((result) => {
+      this._parkingService.readParkings(httpParams).subscribe((result) => {
         this.parkings = result;
         this.globals.isLoading = false;
       });

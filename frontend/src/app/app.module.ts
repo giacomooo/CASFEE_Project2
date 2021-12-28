@@ -1,6 +1,8 @@
-import { APP_INITIALIZER, NgModule } from '@angular/core';
+import { APP_INITIALIZER, LOCALE_ID, NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { Globals } from 'src/app/globals';
+import { registerLocaleData } from '@angular/common';
+import localeDECH from '@angular/common/locales/de-CH';
 import { SharedModule } from 'src/app/shared/shared.module';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { NgxMatDatetimePickerModule, NgxMatTimepickerModule } from '@angular-material-components/datetime-picker';
@@ -21,6 +23,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
+import { MatTooltipModule } from '@angular/material/tooltip';
 import { NativeDateModule } from '@angular/material/core';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -38,10 +41,10 @@ import { ReservationEditComponent } from './reservation/reservation-edit/reserva
 import { NavBottomComponent } from './nav-bottom/nav-bottom.component';
 import { ReservationAddComponent } from './reservation/reservation-add/reservation-add.component';
 import { CustomNgxDateTimeModule } from './shared/dateTime-picker/dateTimeFormat';
+import { ReservationItemComponent } from './reservation/reservation-item/reservation-item.component';
+import { ParkingAdministrationItemReservationsComponent } from './parkingAdministration/parking-administration-item-reservations/parking-administration-item-reservations.component';
 
-// export function keycloakFactory(authService: AuthService) {
-//   return () => authService.init();
-// }
+registerLocaleData(localeDECH);
 
 function initializeKeycloak(keycloak: KeycloakService) {
   return () => keycloak.init({
@@ -74,6 +77,8 @@ function initializeKeycloak(keycloak: KeycloakService) {
     ReservationEditComponent,
     ReservationAddComponent,
     NavBottomComponent,
+    ReservationItemComponent,
+    ParkingAdministrationItemReservationsComponent,
   ],
   imports: [
     BrowserModule,
@@ -94,6 +99,7 @@ function initializeKeycloak(keycloak: KeycloakService) {
     MatSnackBarModule,
     MatDialogModule,
     MatDatepickerModule,
+    MatTooltipModule,
     NgxMatTimepickerModule,
     NgxMatDatetimePickerModule,
     NgxMatMomentModule,
@@ -103,13 +109,16 @@ function initializeKeycloak(keycloak: KeycloakService) {
     NativeDateModule,
     CustomNgxDateTimeModule,
   ],
-  providers: [{
-    provide: APP_INITIALIZER,
-    // useFactory: keycloakFactory,
-    useFactory: initializeKeycloak,
-    multi: true,
-    deps: [KeycloakService],
-  }, Globals],
+  providers: [
+    {
+      provide: APP_INITIALIZER,
+      // useFactory: keycloakFactory,
+      useFactory: initializeKeycloak,
+      multi: true,
+      deps: [KeycloakService],
+    },
+    { provide: LOCALE_ID, useValue: 'de-ch' },
+    Globals],
   bootstrap: [AppComponent],
 })
 export class AppModule { }

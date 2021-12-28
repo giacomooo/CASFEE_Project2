@@ -1,0 +1,16 @@
+<mat-card>
+    <div class="mat-list-item-row">
+        <p class="mat-title">Reservationen</p>
+        <mat-checkbox class="filterHistory" [checked]="withHistory" (change)="refresh($event.checked)" color="primary">Vergangene anzeigen
+        </mat-checkbox>
+    </div>
+    <div class="reservations" *ngFor="let reservation of reservations">
+        <div class="mat-list-item-row">
+            <p>{{ reservation?.DateTimeFrom | date: 'EEE, dd MMMM y hh:mm':'de-ch' }}</p>
+            <p>CHF {{ reservation?.Amount }}</p>
+        </div>
+        <div>
+            <p>bis {{ reservation?.DateTimeTo | date: 'EEE, dd MMMM y hh:mm':'de-ch' }}</p>
+        </div>
+    </div>
+</mat-card>

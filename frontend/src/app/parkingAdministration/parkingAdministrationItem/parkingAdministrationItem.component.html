@@ -1,5 +1,15 @@
-<mat-list-item routerLink="/parkingAdministrationItemEdit/" [queryParams]="{id: parking?.id}">
-  <img mat-list-icon src="/assets/parking_logo.png">
-  <div mat-line>{{ parking?.Street }} {{ parking?.StreetNo }}{{ parking?.StreetNoSuffix }}</div>
-  <div mat-line>{{ parking?.ZIP }} {{ parking?.Location }}</div>
+<mat-list-item routerLink="/parkingAdministration/{{ parking?.id }}" class="parking-mat-list-item">
+  <div class="mat-list-item-card">
+    <div class="parking-list-item-image">
+      <div mat-card-avatar class="card-title-image"></div>
+    </div>
+    <div class="parking-list-item-content">
+      <div class="mat-list-item-row">
+        <p class="mat-title">{{ parking?.Street }} {{ parking?.StreetNo }}{{ parking?.StreetNoSuffix }}</p>
+      </div>
+      <div class="mat-list-item-row">
+        <p class="mat-subheading-1">{{ parking?.ZIP }} {{ parking?.Location }}</p>
+      </div>
+    </div>
+  </div>
 </mat-list-item>

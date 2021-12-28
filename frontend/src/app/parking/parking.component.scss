@@ -1,16 +1,8 @@
-.buttonbox {
-  height: 50px;
+.spaceBetween {
   display: flex;
-  justify-content: flex-end;
+  justify-content: space-between;
 }
 
 .buttons {
-  display: flex;
-  justify-content: space-between;
   margin: 10px;
-}
-
-.deleteButton {
-  margin-top: 10px;
-  margin-right: 10px;
 }

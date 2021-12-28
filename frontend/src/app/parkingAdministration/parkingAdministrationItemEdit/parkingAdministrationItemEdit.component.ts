@@ -50,17 +50,17 @@ export class ParkingAdministrationItemEditComponent implements OnInit {
 
   readParking() {
     this.globals.isLoading = true;
-    this._activatedRoute.queryParams.subscribe((params) => {
-      if (params.id) {
-        this._parkingService.readParking(params.id).subscribe((result) => {
-          this.parking = result;
-          this.parkingForm.reset(this.parking);
-          this.globals.isLoading = false;
-        });
-      } else {
+    const { id } = this._activatedRoute.snapshot.params;
+
+    if (id) {
+      this._parkingService.readParking(id).subscribe((result) => {
+        this.parking = result;
+        this.parkingForm.reset(this.parking);
         this.globals.isLoading = false;
-      }
-    });
+      });
+    } else {
+      this.globals.isLoading = false;
+    }
   }
 
   onAddOrEdit(parking: Parking) {
