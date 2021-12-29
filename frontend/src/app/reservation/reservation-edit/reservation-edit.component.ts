@@ -31,6 +31,7 @@ export class ReservationEditComponent implements AfterContentInit {
   public reservation: Reservation;
   public reservationForm: FormGroup;
   public isServerPending = false;
+  private readonly indexFirstItem = 0;
 
   constructor(
     private _activatedRoute: ActivatedRoute,
@@ -70,20 +71,16 @@ export class ReservationEditComponent implements AfterContentInit {
     this.reservationForm.controls.DateTimeFrom.valueChanges.subscribe(
       (dateTimeFrom) => {
         this.reservation.DateTimeFrom = dateTimeFrom;
-        this.reservation.Amount = this.currencyRound(this.calculateDiff(dateTimeFrom, this.reservation.DateTimeTo));
+        this.reservation.Amount = this.calculateDiff(dateTimeFrom, this.reservation.DateTimeTo);
       }
     );
 
     this.reservationForm.controls.DateTimeTo.valueChanges.subscribe(
       (dateTimeTo) => {
-        this.reservation.Amount = this.currencyRound(this.calculateDiff(this.reservation.DateTimeFrom, dateTimeTo));
+        this.reservation.Amount = this.calculateDiff(this.reservation.DateTimeFrom, dateTimeTo);
         this.reservation.DateTimeTo = dateTimeTo;
       },
     );
-  }
-
-  private currencyRound(unRounded: number, precision: number = 0.05): number {
-    return (Math.round(unRounded / precision))*precision;
   }
 
   private initNewReservation(parking: Parking): void {
@@ -96,7 +93,7 @@ export class ReservationEditComponent implements AfterContentInit {
     this.reservation.DateTimeTo.setTime(this.reservation.DateTimeFrom.getTime() + (1 * 60 * 60 * 1000) /* plus eine Stunde */);
     this.reservation.PricePerHour = parking.PricePerHour ?? 1.0;
     this.reservation.IsCanceled = false;
-    this.reservation.Amount = this.currencyRound(this.calculateDiff(this.reservation.DateTimeFrom, this.reservation.DateTimeTo));
+    this.reservation.Amount = this.calculateDiff(this.reservation.DateTimeFrom, this.reservation.DateTimeTo);
     this.reservationForm.reset(this.reservation);
   }
 
@@ -109,7 +106,7 @@ export class ReservationEditComponent implements AfterContentInit {
       this._reservationService
         .readReservations(httpParams)
         .subscribe((result) => {
-          this.reservation = result[0];
+          this.reservation = result[this.indexFirstItem];
           this.reservationForm.reset(this.reservation);
           this.globals.isLoading = false;
         });
@@ -156,48 +153,48 @@ export class ReservationEditComponent implements AfterContentInit {
     });
   }
 
-  resetForm = (): void => {
-    this.reservationForm.reset();
-    this.reservationForm.markAsUntouched();
+    resetForm = (): void => {
+      this.reservationForm.reset();
+      this.reservationForm.markAsUntouched();
 
-    if (this.reservationForm.controls.id) {
-      this.readReservations();
-    }
-  };
-
-  public showError(content: string): void {
-    this._snackBar.open(content, 'Schliessen', { duration: 5000 });
-  }
-
-  public calculateDiff(from: Date, to: Date): number {
-    const _from = new Date(from);
-    const _to = new Date(to);
-
-    const minutes = Math.floor(
-      (Date.UTC(_to.getFullYear(), _to.getMonth(), _to.getDate(), _to.getHours(), _to.getMinutes())
-        - Date.UTC(_from.getFullYear(), _from.getMonth(), _from.getDate(), _from.getHours(), _from.getMinutes()))
-        / (1000 * 60),
-    );
-    const pricePerMinute = this.reservation.PricePerHour / 60;
-    return pricePerMinute * minutes;
-  }
-
-  public openModal() {
-    const dialogConfig = new MatDialogConfig();
-
-    dialogConfig.disableClose = true;
-    dialogConfig.id = 'modal-component';
-    dialogConfig.height = '170px';
-    dialogConfig.width = '550px';
-    dialogConfig.data = {
-      title: 'Wollen sie die Reservation wirklich löschen?',
-      description: 'Dieser Vorgang kann nicht rückgängig gemacht werden.',
+      if (this.reservationForm.controls.id) {
+        this.readReservations();
+      }
     };
 
-    return this.matDialog.open(ModalComponent, dialogConfig);
-  }
+    public showError(content: string): void {
+      this._snackBar.open(content, 'Schliessen', { duration: 5000 });
+    }
 
-  get f() {
-    return this.reservationForm.controls;
-  }
+    public calculateDiff(from: Date, to: Date): number {
+      const _from = new Date(from);
+      const _to = new Date(to);
+
+      const minutes = Math.floor(
+        (Date.UTC(_to.getFullYear(), _to.getMonth(), _to.getDate(), _to.getHours(), _to.getMinutes())
+        - Date.UTC(_from.getFullYear(), _from.getMonth(), _from.getDate(), _from.getHours(), _from.getMinutes()))
+        / (1000 * 60),
+      );
+      const pricePerMinute = this.reservation.PricePerHour / 60;
+      return Math.round((pricePerMinute * minutes) * 20) * 0.05;
+    }
+
+    public openModal() {
+      const dialogConfig = new MatDialogConfig();
+
+      dialogConfig.disableClose = true;
+      dialogConfig.id = 'modal-component';
+      dialogConfig.height = '170px';
+      dialogConfig.width = '550px';
+      dialogConfig.data = {
+        title: 'Wollen sie die Reservation wirklich löschen?',
+        description: 'Dieser Vorgang kann nicht rückgängig gemacht werden.',
+      };
+
+      return this.matDialog.open(ModalComponent, dialogConfig);
+    }
+
+    get f() {
+      return this.reservationForm.controls;
+    }
 }

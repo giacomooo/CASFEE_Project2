@@ -12,11 +12,10 @@ import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute, Router } from '@angular/router';
 import { KeycloakService } from 'keycloak-angular';
-import * as moment from 'moment';
 import { BehaviorSubject } from 'rxjs';
 import { Globals } from 'src/app/globals';
 import { Parking } from 'src/app/models/Parking';
-import { CreateReservation, Reservation } from 'src/app/models/Reservation';
+import { Reservation } from 'src/app/models/Reservation';
 import { ReservationService } from 'src/app/services/reservation.service';
 import { dateBeforeValidator } from 'src/app/shared/common-validators/dateBefore-validators.directive';
 import { dateInPastValidator } from 'src/app/shared/common-validators/dateInPast-validators.directive';
@@ -34,6 +33,7 @@ export class ReservationAddComponent implements AfterContentInit {
   public reservation: Reservation;
   public reservationForm: FormGroup;
   public isServerPending = false;
+  private readonly indexFirstItem = 0;
   public buttonCaption$: BehaviorSubject<string> = new BehaviorSubject<string>('wait and see ->');
 
   constructor(
@@ -73,6 +73,7 @@ export class ReservationAddComponent implements AfterContentInit {
   private onValueChanges(): void {
     this.reservationForm.controls.DateTimeFrom.valueChanges.subscribe(
       (dateTimeFrom) => {
+        this.reservation.DateTimeFrom = dateTimeFrom;
         this.reservation.Amount = this.getAmountByDateRange(dateTimeFrom, this.reservation.DateTimeTo);
         this.buttonCaption$.next(this.getButtonCaption(dateTimeFrom, this.reservation.DateTimeTo));
       },
@@ -80,14 +81,11 @@ export class ReservationAddComponent implements AfterContentInit {
 
     this.reservationForm.controls.DateTimeTo.valueChanges.subscribe(
       (dateTimeTo) => {
+        this.reservation.DateTimeTo = dateTimeTo;
         this.reservation.Amount = this.getAmountByDateRange(this.reservation.DateTimeFrom, dateTimeTo);
         this.buttonCaption$.next(this.getButtonCaption(this.reservation.DateTimeFrom, dateTimeTo));
       },
     );
-  }
-
-  private currencyRound(unRounded: number, precision = 0.05): number {
-    return (Math.round(unRounded / precision)) * precision;
   }
 
   private initNewReservation(parking: Parking): void {
@@ -114,7 +112,7 @@ export class ReservationAddComponent implements AfterContentInit {
       this._reservationService
         .readReservations(httpParams)
         .subscribe((result) => {
-          this.reservation = result[0];
+          this.reservation = result[this.indexFirstItem];
           this.reservationForm.reset(this.reservation);
           this.globals.isLoading = false;
         });
@@ -123,29 +121,14 @@ export class ReservationAddComponent implements AfterContentInit {
     }
   }
 
-  public onAdd(reservation: Reservation): void {
+  public onAdd(): void {
     this.isServerPending = true;
 
-    reservation.DateTimeFrom = new Date(moment(reservation.DateTimeFrom).toDate());
-    const ID_Renter = this._keycloakAngular.getKeycloakInstance().subject;
+    const idRenter = this._keycloakAngular.getKeycloakInstance().subject;
 
-    if (ID_Renter) {
-      reservation.ID_Renter = ID_Renter;
-
-      const createReservation: CreateReservation = {
-        id: this.reservation.id,
-        ID_Parking: this.reservation.ID_Parking ?? new Parking(),
-        ID_Renter: this.reservation.ID_Renter,
-        DateTimeFrom: this.reservation.DateTimeFrom,
-        DateTimeTo: this.reservation.DateTimeTo,
-        PricePerHour: this.reservation.PricePerHour,
-        Amount: this.reservation.Amount,
-        IsCanceled: this.reservation.IsCanceled,
-      };
-      createReservation.ID_Parking.id = this.reservation.ID_Parking.id;
-
+    if (idRenter) {
       this._reservationService
-        .createReservation(createReservation)
+        .createReservation(this.reservation)
         .subscribe((result) => {
           if (result) {
             this._router.navigate(['reservation']);
@@ -160,13 +143,13 @@ export class ReservationAddComponent implements AfterContentInit {
     this._snackBar.open(content, 'Schliessen', { duration: 5000 });
   }
 
-  public getAmountByDateRange(from: Date, to: Date): number {
+  private getAmountByDateRange(from: Date, to: Date): number {
     const minutes = this.getMinutesByDateRange(from, to);
     const pricePerMinute = this.reservation.PricePerHour / 60;
-    return this.currencyRound(pricePerMinute * minutes);
+    return Math.round((pricePerMinute * minutes) * 20) * 0.05;
   }
 
-  public getMinutesByDateRange(_from: Date, _to: Date): number {
+  private getMinutesByDateRange(_from: Date, _to: Date): number {
     const from = new Date(_from);
     const to = new Date(_to);
     return Math.floor(
@@ -176,7 +159,7 @@ export class ReservationAddComponent implements AfterContentInit {
     );
   }
 
-  public getButtonCaption(from: Date, to: Date): string {
+  private getButtonCaption(from: Date, to: Date): string {
     const amount = this.getAmountByDateRange(from, to);
     const minTotal = this.getMinutesByDateRange(from, to);
     const hours = Math.floor(minTotal / 60);

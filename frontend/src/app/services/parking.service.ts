@@ -38,7 +38,7 @@ export class ParkingService {
       .catch(() => new DeleteMessage(false, 'Es existieren bereits Reservationen, der Parkplatz kann nicht gelöscht werden.'));
   }
 
-  public readParkingReservations(id: number) {
+  public readParkingReservations(id: number): Observable<Reservation[]> {
     return this.http.get<Reservation[]>(`${this.url}parking/${id}/reservation`);
   }
 }
