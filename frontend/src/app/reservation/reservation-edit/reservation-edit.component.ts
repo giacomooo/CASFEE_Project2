@@ -5,7 +5,9 @@ import {
   Input,
   ViewChild,
 } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import {
+  FormBuilder, FormControl, FormGroup, Validators,
+} from '@angular/forms';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -17,6 +19,7 @@ import { Reservation } from 'src/app/models/Reservation';
 import { ReservationService } from 'src/app/services/reservation.service';
 import { dateBeforeValidator } from 'src/app/shared/common-validators/dateBefore-validators.directive';
 import { dateInPastValidator } from 'src/app/shared/common-validators/dateInPast-validators.directive';
+import { AsyncService } from 'src/app/shared/common-validators/existsReservation-validators.directive';
 import { ModalComponent } from 'src/app/shared/modal/modal.component';
 
 @Component({
@@ -26,8 +29,8 @@ import { ModalComponent } from 'src/app/shared/modal/modal.component';
 })
 export class ReservationEditComponent implements AfterContentInit {
   @Input() public parking: Parking | undefined;
-  @ViewChild('fromPicker') fromPicker: any;
-  @ViewChild('toPicker') picker: any;
+  @ViewChild('fromPicker') fromPicker: unknown;
+  @ViewChild('toPicker') picker: unknown;
   public reservation: Reservation;
   public reservationForm: FormGroup;
   public isServerPending = false;
@@ -42,6 +45,7 @@ export class ReservationEditComponent implements AfterContentInit {
     public globals: Globals,
     private _keycloakAngular: KeycloakService,
     public matDialog: MatDialog,
+    private asyncService: AsyncService,
   ) {
     this.reservation = new Reservation();
     this.reservation.ID_Parking = new Parking();
@@ -56,6 +60,7 @@ export class ReservationEditComponent implements AfterContentInit {
       PricePerHour: new FormControl({ value: this.reservation.PricePerHour, disabled: true }),
     });
     this.reservationForm.addValidators(dateBeforeValidator('DateTimeFrom', 'DateTimeTo'));
+    this.reservationForm.addValidators(asyncService.existsReservationValidator('ID_Parking', 'id', 'DateTimeFrom', 'DateTimeTo'));
     this.onValueChanges();
   }
 
@@ -72,7 +77,7 @@ export class ReservationEditComponent implements AfterContentInit {
       (dateTimeFrom) => {
         this.reservation.DateTimeFrom = dateTimeFrom;
         this.reservation.Amount = this.calculateDiff(dateTimeFrom, this.reservation.DateTimeTo);
-      }
+      },
     );
 
     this.reservationForm.controls.DateTimeTo.valueChanges.subscribe(
@@ -117,7 +122,6 @@ export class ReservationEditComponent implements AfterContentInit {
 
   public onEdit(reservation: Reservation): void {
     this.isServerPending = true;
-
     this.reservation.DateTimeFrom = new Date(moment(reservation.DateTimeFrom).toDate());
     this.reservation.DateTimeTo = new Date(moment(reservation.DateTimeTo).toDate());
     this._reservationService
@@ -146,7 +150,7 @@ export class ReservationEditComponent implements AfterContentInit {
           })
           .catch(() => {
             this.showError(
-              'Die Reservation konnte nicht gelöscht werden, bitte versuchen sie es später erneut.'
+              'Die Reservation konnte nicht gelöscht werden, bitte versuchen sie es später erneut.',
             );
           });
       }
@@ -176,9 +180,11 @@ export class ReservationEditComponent implements AfterContentInit {
         / (1000 * 60),
       );
       const pricePerMinute = this.reservation.PricePerHour / 60;
-      return Math.round((pricePerMinute * minutes) * 20) * 0.05;
+      const amount = (Math.round((pricePerMinute * minutes) * 20)) * 0.05;
+      return (Math.floor(amount * 100)) / 100;
     }
 
+    // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
     public openModal() {
       const dialogConfig = new MatDialogConfig();
 
@@ -194,6 +200,7 @@ export class ReservationEditComponent implements AfterContentInit {
       return this.matDialog.open(ModalComponent, dialogConfig);
     }
 
+    // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
     get f() {
       return this.reservationForm.controls;
     }

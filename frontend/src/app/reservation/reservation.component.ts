@@ -1,7 +1,7 @@
 import { HttpParams } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 import { KeycloakService } from 'keycloak-angular';
 import { Globals } from '../globals';
 import { Reservation } from '../models/Reservation';
@@ -11,19 +11,21 @@ import { ReservationService } from '../services/reservation.service';
 @Component({
   selector: 'app-reservation',
   templateUrl: './reservation.component.html',
-  styleUrls: ['./reservation.component.scss']
+  styleUrls: ['./reservation.component.scss'],
 })
 
 export class ReservationComponent implements OnInit {
   public reservations?: Reservation[];
-  public withHistory: boolean = false;
+  public withHistory = false;
 
-  constructor(private readonly _reservationService: ReservationService,
+  constructor(
+    private readonly _reservationService: ReservationService,
     private readonly _parkingService: ParkingService,
     protected _keycloakAngular: KeycloakService,
     private _snackBar: MatSnackBar,
     public globals: Globals,
-    private _activatedRoute: ActivatedRoute) {
+    private _activatedRoute: ActivatedRoute,
+  ) {
     // do nothing
   }
 
@@ -31,7 +33,7 @@ export class ReservationComponent implements OnInit {
     this.backendCall();
   }
 
-  public refresh(event: Boolean): void {
+  public refresh(): void {
     this.withHistory = !this.withHistory;
     this.backendCall();
   }
@@ -46,9 +48,6 @@ export class ReservationComponent implements OnInit {
 
       this._reservationService.readReservations(httpParams).subscribe((reservations) => {
         if (reservations) {
-          /*reservations.map((reservation) => this._parkingService.readParking(reservation.ID_Parking).subscribe((parking) => {
-            reservation.Parking = parking;
-          }));*/
           this.reservations = reservations;
           this.globals.isLoading = false;
         } else {

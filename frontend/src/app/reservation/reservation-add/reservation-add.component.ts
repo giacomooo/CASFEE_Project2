@@ -19,6 +19,7 @@ import { Reservation } from 'src/app/models/Reservation';
 import { ReservationService } from 'src/app/services/reservation.service';
 import { dateBeforeValidator } from 'src/app/shared/common-validators/dateBefore-validators.directive';
 import { dateInPastValidator } from 'src/app/shared/common-validators/dateInPast-validators.directive';
+import { AsyncService } from 'src/app/shared/common-validators/existsReservation-validators.directive';
 
 @Component({
   selector: 'app-reservation-add',
@@ -28,8 +29,8 @@ import { dateInPastValidator } from 'src/app/shared/common-validators/dateInPast
 
 export class ReservationAddComponent implements AfterContentInit {
   @Input() public parking: Parking | undefined;
-  @ViewChild('fromPicker') fromPicker: any;
-  @ViewChild('toPicker') picker: any;
+  @ViewChild('fromPicker') fromPicker: unknown;
+  @ViewChild('toPicker') picker: unknown;
   public reservation: Reservation;
   public reservationForm: FormGroup;
   public isServerPending = false;
@@ -45,6 +46,7 @@ export class ReservationAddComponent implements AfterContentInit {
     public globals: Globals,
     private _keycloakAngular: KeycloakService,
     public matDialog: MatDialog,
+    private readonly asyncService: AsyncService,
   ) {
     this.reservation = new Reservation();
     this.reservation.ID_Parking = new Parking();
@@ -59,6 +61,7 @@ export class ReservationAddComponent implements AfterContentInit {
       PricePerHour: new FormControl({ value: this.reservation.PricePerHour, disabled: true }),
     });
     this.reservationForm.addValidators(dateBeforeValidator('DateTimeFrom', 'DateTimeTo'));
+    this.reservationForm.addValidators(asyncService.existsReservationValidator('ID_Parking', 'id', 'DateTimeFrom', 'DateTimeTo'));
     this.onValueChanges();
   }
 
@@ -146,7 +149,8 @@ export class ReservationAddComponent implements AfterContentInit {
   private getAmountByDateRange(from: Date, to: Date): number {
     const minutes = this.getMinutesByDateRange(from, to);
     const pricePerMinute = this.reservation.PricePerHour / 60;
-    return Math.round((pricePerMinute * minutes) * 20) * 0.05;
+    const amount = Math.round((pricePerMinute * minutes) * 20) * 0.05;
+    return (Math.floor(amount * 100)) / 100;
   }
 
   private getMinutesByDateRange(_from: Date, _to: Date): number {
@@ -177,6 +181,7 @@ export class ReservationAddComponent implements AfterContentInit {
     return result;
   }
 
+  // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
   get f() {
     return this.reservationForm.controls;
   }
