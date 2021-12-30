@@ -22,8 +22,8 @@
       <mat-error *ngIf="f.DateTimeFrom.errors?.dateInPast" class="alert alert-danger">
         {{f.DateTimeFrom.errors?.dateInPast.value}}</mat-error>
       <mat-error *ngIf="f.DateTimeFrom.errors?.existsReservationValidator" class="alert alert-danger">
-          {{f.DateTimeFrom.errors?.existsReservationValidator.value}}</mat-error>
-        <mat-error *ngIf="f.DateTimeFrom.errors?.dateBeforeValidator" class="alert alert-danger">
+        {{f.DateTimeFrom.errors?.existsReservationValidator.value}}</mat-error>
+      <mat-error *ngIf="f.DateTimeFrom.errors?.dateBeforeValidator" class="alert alert-danger">
         {{f.DateTimeFrom.errors?.dateBeforeValidator.value}}</mat-error>
     </mat-form-field>
     <mat-form-field>
@@ -33,6 +33,8 @@
       </mat-datepicker-toggle>
       <ngx-mat-datetime-picker #toPicker>
       </ngx-mat-datetime-picker>
+      <mat-error *ngIf="f.DateTimeTo.errors?.existsReservationValidator" class="alert alert-danger">
+        {{f.DateTimeTo.errors?.existsReservationValidator.value}}</mat-error>
       <mat-error *ngIf="f.DateTimeTo.errors?.dateInPast" class="alert alert-danger">
         {{f.DateTimeTo.errors?.dateInPast.value}}</mat-error>
     </mat-form-field>

@@ -10,7 +10,7 @@ export function dateBeforeValidator(
 
     if (!dateTimeFromControl || !dateTimeToControl || (dateTimeToControl.pristine && dateTimeFromControl.pristine)) return null;
 
-    // dateTimeFromControl?.setErrors(null); Reset nochmals prüfen
+    dateTimeFromControl?.setErrors(null);
 
     if (new Date(form.get(dateTimeToFieldName)?.value) < new Date(dateTimeFromControl?.value)) {
       const msg = { value: 'Bitte korrekten Zeitraum wählen.' };
