@@ -42,9 +42,6 @@
     <mat-form-field style="display: none">
       <input matInput placeholder="ID_Parking" formControlName="ID_Parking" />
     </mat-form-field>
-    <mat-form-field class="hiddenField">
-      <input matInput placeholder="IsCanceled" formControlName="IsCanceled" />
-    </mat-form-field>
     <mat-form-field>
       <input matInput placeholder="Betrag" formControlName="Amount"
         [value]="this.reservation.Amount | currency: 'CHF' " />

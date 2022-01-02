@@ -19,7 +19,7 @@ import { Reservation } from 'src/app/models/Reservation';
 import { ReservationService } from 'src/app/services/reservation.service';
 import { dateBeforeValidator } from 'src/app/shared/common-validators/dateBefore-validators.directive';
 import { dateInPastValidator } from 'src/app/shared/common-validators/dateInPast-validators.directive';
-import { AsyncService } from 'src/app/shared/common-validators/existsReservation-validators.directive';
+import { ExistsReservationValidator } from 'src/app/shared/common-validators/existsReservation-validators.directive';
 
 @Component({
   selector: 'app-reservation-add',
@@ -46,31 +46,26 @@ export class ReservationAddComponent implements AfterContentInit {
     public globals: Globals,
     private _keycloakAngular: KeycloakService,
     public matDialog: MatDialog,
-    private readonly asyncService: AsyncService,
+    private readonly existsReservationValidator: ExistsReservationValidator,
   ) {
     this.reservation = new Reservation();
-    this.reservation.ID_Parking = new Parking();
+    this.reservation.ID_Parking = this.parking ?? new Parking();
     this.reservationForm = this._formBuilder.group({
       id: new FormControl(this.reservation.id),
       ID_Renter: new FormControl(this.reservation.ID_Renter),
       DateTimeFrom: new FormControl(this.reservation.DateTimeFrom, [Validators.required, dateInPastValidator]),
       DateTimeTo: new FormControl(this.reservation.DateTimeTo, [Validators.required, dateInPastValidator]),
-      ID_Parking: new FormControl(this.reservation.Parking?.id),
-      IsCanceled: new FormControl(this.reservation.IsCanceled),
+      ID_Parking: new FormControl(this.reservation.ID_Parking?.id),
       Amount: new FormControl({ value: this.reservation.Amount, disabled: true }),
       PricePerHour: new FormControl({ value: this.reservation.PricePerHour, disabled: true }),
     });
     this.reservationForm.addValidators(dateBeforeValidator('DateTimeFrom', 'DateTimeTo'));
-    this.reservationForm.addValidators(asyncService.existsReservationValidator('ID_Parking', 'id', 'DateTimeFrom', 'DateTimeTo'));
+    this.reservationForm.addValidators(existsReservationValidator.validate('ID_Parking', 'id', 'DateTimeFrom', 'DateTimeTo'));
     this.onValueChanges();
   }
 
   ngAfterContentInit(): void {
-    if (this.parking) {
-      this.initNewReservation(this.parking);
-      return;
-    }
-    this.readReservations();
+    this.initNewReservation(this.parking);
   }
 
   private onValueChanges(): void {
@@ -91,17 +86,16 @@ export class ReservationAddComponent implements AfterContentInit {
     );
   }
 
-  private initNewReservation(parking: Parking): void {
+  private initNewReservation(parking: Parking | undefined): void {
     this.reservation.id = 0;
-    this.reservation.ID_Parking.id = parking.id ?? 0;
+    this.reservation.ID_Parking.id = parking?.id ?? 0;
     this.reservation.ID_Renter = this._keycloakAngular.getKeycloakInstance().subject ?? '';
     this.reservation.DateTimeFrom = new Date();
     this.reservation.DateTimeFrom.setTime(this.reservation.DateTimeFrom.getTime() + (5 * 60 * 1000) /* plus 5 Minuten */);
 
     this.reservation.DateTimeTo = new Date();
     this.reservation.DateTimeTo.setTime(this.reservation.DateTimeFrom.getTime() + (1 * 60 * 60 * 1000) /* plus eine Stunde */);
-    this.reservation.PricePerHour = parking.PricePerHour ?? 1.0;
-    this.reservation.IsCanceled = false;
+    this.reservation.PricePerHour = parking?.PricePerHour ?? 1.0;
     this.reservation.Amount = this.getAmountByDateRange(this.reservation.DateTimeFrom, this.reservation.DateTimeTo);
     this.reservationForm.reset(this.reservation);
   }
@@ -153,13 +147,14 @@ export class ReservationAddComponent implements AfterContentInit {
     return (Math.floor(amount * 100)) / 100;
   }
 
+  // eslint-disable-next-line class-methods-use-this
   private getMinutesByDateRange(_from: Date, _to: Date): number {
     const from = new Date(_from);
     const to = new Date(_to);
     return Math.floor(
-      (Date.UTC(to.getFullYear(),to.getMonth(), to.getDate(), to.getHours(),to.getMinutes()) -
-      Date.UTC(from.getFullYear(), from.getMonth(), from.getDate(), from.getHours(), from.getMinutes())) /
-      (1000 * 60 )
+      (Date.UTC(to.getFullYear(), to.getMonth(), to.getDate(), to.getHours(), to.getMinutes())
+      - Date.UTC(from.getFullYear(), from.getMonth(), from.getDate(), from.getHours(), from.getMinutes()))
+      / (1000 * 60),
     );
   }
 

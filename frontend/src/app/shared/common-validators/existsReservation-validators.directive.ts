@@ -6,11 +6,11 @@ import { ParkingService } from 'src/app/services/parking.service';
 @Injectable({
   providedIn: 'root',
 })
-export class AsyncService {
+export class ExistsReservationValidator {
   constructor(private readonly parkingService: ParkingService) {
   }
 
-  public existsReservationValidator(
+  public validate(
     idParkingFieldName: string,
     idReservationFieldName: string,
     dateTimeFromFieldName: string,

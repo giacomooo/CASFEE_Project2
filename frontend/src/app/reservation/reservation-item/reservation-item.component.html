@@ -5,8 +5,8 @@
         </div>
         <div class="reservation-list-item-content">
             <div class="mat-list-item-row">
-                <p class="mat-title">{{ reservation?.DateTimeFrom | date: 'EEE, dd MMMM y hh:mm':'de-ch' }}</p>
-                <p class="mat-title">{{ reservation?.DateTimeTo | date: 'hh:mm':'de-ch' }}</p>
+                <p class="mat-title">{{ reservation?.DateTimeFrom | date: 'EEE, dd MMMM y HH:mm':'de-ch' }}</p>
+                <p class="mat-title">{{ reservation?.DateTimeTo | date: 'HH:mm':'de-ch' }}</p>
             </div>
             <div class="mat-list-item-row">
                 <p class="mat-subheading-1">{{ reservation?.ID_Parking?.Street }} {{ reservation?.ID_Parking?.StreetNo }}{{

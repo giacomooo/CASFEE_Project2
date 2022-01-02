@@ -9,8 +9,6 @@ export interface Reservation {
   DateTimeTo: Date;
   PricePerHour: number;
   Amount: number;
-  IsCanceled: boolean;
-  Parking?: Parking;
 }
 
 export class Reservation implements Reservation {
