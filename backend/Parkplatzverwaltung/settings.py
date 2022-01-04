@@ -6,6 +6,8 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 SECRET_KEY = 'django-insecure-3atbfptp&m=)#2p482^so%4gc!l_-97n1z!@$dd39(@axu*(2^'
 DEBUG = True
+USE_TZ = True
+TIME_ZONE='Europe/Zurich'
 
 CORS_ALLOWED_ORIGINS = [
     'http://127.0.0.1:4200',
@@ -81,7 +83,7 @@ REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': (                                                     # Verify permission (roles) by this Class as default
         'rest_framework.permissions.IsAuthenticated',                                   # NOTE: This is the default-value and Views can disable this default using
         'api.permissions.KeycloakRolePermissions',                                      # permission_classes=[] (Class Based Views) and @permission_classes([]) (Function Based Views)
-        # 'rest_framework.permissions.AllowAny',                                        # ---> can be use to run without OAuth 2.0
+        'rest_framework.permissions.AllowAny',                                        # ---> can be use to run without OAuth 2.0
     ),
     'DEFAULT_AUTHENTICATION_CLASSES': (                                                 # Verify jwt-token in Header of each request as default
         'rest_framework_jwt.authentication.JSONWebTokenAuthentication',                 # NOTE: This is the default-value and Views can disable this default using
@@ -129,7 +131,7 @@ KEYCLOAK = {
     'HOST' : 'https://login-staging.optimatik.ch',
     'CLIENT_ID': 'Parkplatzverwaltung',
     'PERMISSION_MAPPING' : {
-        'user' :  ['GET', 'POST', 'PUT'],
+        'user' :  ['GET', 'POST', 'PUT', 'PATCH', 'DELETE'],
         'admin' : ['GET', 'POST', 'PUT', 'PATCH', 'DELETE'],
     },
 }

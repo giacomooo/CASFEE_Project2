@@ -3,13 +3,12 @@ from django_filters import rest_framework
 from rest_framework import permissions, viewsets, filters, status
 from rest_framework import decorators
 from rest_framework.decorators import action
-from rest_framework.generics import get_object_or_404
 from rest_framework.response import Response
+
+from api.permissions import KeycloakRolePermissions
 
 from . import serializers, models
 
-@decorators.authentication_classes([])
-@decorators.permission_classes([permissions.IsAuthenticatedOrReadOnly])
 class ParkingViewSet(viewsets.ModelViewSet):
     pagination_class = None
     filter_backends = [rest_framework.DjangoFilterBackend, filters.OrderingFilter, filters.SearchFilter]
@@ -17,23 +16,14 @@ class ParkingViewSet(viewsets.ModelViewSet):
     serializer_class = serializers.ParkingSerializer
     queryset = models.Parking.objects.all()
     search_fields = ['Location', 'ZIP']
-    http_method_names = ['get', 'post', 'put', 'patch', 'delete']
 
-    # def get_authenticators(self):
-    #     if self.request.method in ['GET'] and self.action_map['get'] in ['list']:
-    #         return [] 
-    #     else: 
-    #         authentication_classes = [auth() for auth in self.authentication_classes]
-    #         return authentication_classes
-
-    # def get_permissions(self):
-    #     if self.action in ['list']:
-    #         return [permissions.AllowAny()]
-    #     else: 
-    #         return [permissions.IsAuthenticatedOrReadOnly()]
-
-    # def get_permissions(self):
-    #     return [permissions.IsAuthenticatedOrReadOnly()]
+    def get_permissions(self):
+        if self.action in ['list', 'retrieve']:
+            return [permissions.AllowAny()]
+        else: 
+            permission_classes =  [permission() for permission in self.permission_classes]
+            permission_classes += (KeycloakRolePermissions(), )
+            return permission_classes
 
     @action(methods=['get'], detail=True)
     def reservation(self, request, pk=None):
@@ -57,7 +47,14 @@ class ReservationViewSet(viewsets.ModelViewSet):
     filterset_class = models.ReservationFilter
     serializer_class = serializers.ReservationwithParkingSerializer
     queryset = models.Reservation.objects.all()
-    http_method_names = ['get', 'post', 'put', 'patch', 'delete']
+
+    def get_permissions(self):
+        if self.action in ['list', 'retrieve']:
+            return [permissions.AllowAny()]
+        else: 
+            permission_classes =  [permission() for permission in self.permission_classes]
+            permission_classes += (KeycloakRolePermissions(), )
+            return permission_classes
 
     def get_serializer_class(self):
          if self.request.method in ['GET']:

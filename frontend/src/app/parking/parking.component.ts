@@ -59,9 +59,9 @@ export class ParkingComponent {
     this.parkingService.readParkings(httpParams).subscribe((serviceResults) => {
       if (serviceResults.length > 0) {
         if (withTimeRange) {
-          this.router.navigate(['parking', 'list'], { queryParams: { search: this.parkingForm.value.location } });
-        } else {
           this.router.navigate(['parking', 'list'], { queryParams: { search: this.parkingForm.value.location, dateTimeFrom: this.parkingForm.value.dateTimeFrom, duration: this.parkingForm.value.duration } });
+        } else {
+          this.router.navigate(['parking', 'list'], { queryParams: { search: this.parkingForm.value.location } });
         }
       } else {
         this.showError(`Keine Parkplätze in ${this.parkingForm.value.location} gefunden.`);

@@ -118,39 +118,3 @@ class KeycloakRolePermissions(permissions.BasePermission):
     def has_object_permission(self, request, view, obj):
         # No Object-Based permissions intended/planned.
         return self.has_permission(request, view)
-
-#region KeycloakIsAdminPermission()
-
-#region Descrition:
-class KeycloakIsAdminPermission(permissions.BasePermission):
-
-    #region has_permission()
-    def has_permission(self, request, view):
-        try:
-            if request.user.isAdmin:
-                return True
-
-            raise permissions.exceptions.PermissionDenied()
-
-        except permissions.exceptions.PermissionDenied as ex:
-            message = {
-                "type": "ebp.permissions.KeycloakIsAdminPermission.PermissionDenied", \
-                "message": "Not allowed. Admin-role in claim 'resource_access." + settings.KEYCLOAK['CLIENT_ID']+".roles[]' of access_token not found! You need to be an administrator to execute this request.", \
-            }
-            raise exceptions.PermissionDenied(detail=message) from ex
-
-        except Exception as ex:
-            message = {
-                "error": "epb.permissions.KeycloakIsAdminPermission.PermissionDenied", \
-                "message": "An exception is raised by testing permission admin-role.", \
-                "exception": {
-                    "type": str(ex.__class__.__name__), \
-                    "message": str(ex) \
-                } \
-            }
-            raise exceptions.PermissionDenied(detail=message)
-
-    #region has_object_permission()
-    def has_object_permission(self, request, view, obj):
-        # No Object-Based permissions intended/planned.
-        return self.has_permission(request, view)
