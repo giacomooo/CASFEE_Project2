@@ -21,6 +21,8 @@
       </ngx-mat-datetime-picker>
       <mat-error *ngIf="f.DateTimeFrom.errors?.dateInPast" class="alert alert-danger">
         {{f.DateTimeFrom.errors?.dateInPast.value}}</mat-error>
+      <mat-error *ngIf="f.DateTimeFrom.errors?.existsReservationValidator" class="alert alert-danger">
+        {{f.DateTimeFrom.errors?.existsReservationValidator.value}}</mat-error>
       <mat-error *ngIf="f.DateTimeFrom.errors?.dateBeforeValidator" class="alert alert-danger">
         {{f.DateTimeFrom.errors?.dateBeforeValidator.value}}</mat-error>
     </mat-form-field>
@@ -31,15 +33,14 @@
       </mat-datepicker-toggle>
       <ngx-mat-datetime-picker #toPicker>
       </ngx-mat-datetime-picker>
+      <mat-error *ngIf="f.DateTimeTo.errors?.existsReservationValidator" class="alert alert-danger">
+        {{f.DateTimeTo.errors?.existsReservationValidator.value}}</mat-error>
       <mat-error *ngIf="f.DateTimeTo.errors?.dateInPast" class="alert alert-danger">
         {{f.DateTimeTo.errors?.dateInPast.value}}</mat-error>
     </mat-form-field>
     <br />
     <mat-form-field style="display: none">
       <input matInput placeholder="ID_Parking" formControlName="ID_Parking" />
-    </mat-form-field>
-    <mat-form-field class="hiddenField">
-      <input matInput placeholder="IsCanceled" formControlName="IsCanceled" />
     </mat-form-field>
     <mat-form-field>
       <input matInput placeholder="Betrag" formControlName="Amount"

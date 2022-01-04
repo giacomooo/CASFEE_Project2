@@ -4,7 +4,7 @@ import { KeycloakService } from 'keycloak-angular';
 import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { DeleteMessage } from '../models/DeleteMessage';
-import { CreateReservation, Reservation } from '../models/Reservation';
+import { Reservation } from '../models/Reservation';
 
 @Injectable({ providedIn: 'root' })
 export class ReservationService {
@@ -18,7 +18,7 @@ export class ReservationService {
     return this.http.get<Reservation[]>(`${this.url}reservation/?${search}`);
   }
 
-  public createReservation(reservation: CreateReservation): Observable<Reservation> {
+  public createReservation(reservation: Reservation): Observable<Reservation> {
     return this.http.post<Reservation>(`${this.url}reservation/`, reservation);
   }
 
