@@ -153,6 +153,8 @@ export class ReservationAddComponent implements AfterContentInit {
             this.showError('Die Resevation konnte nicht hinzugefügt werden.');
           }
         });
+    } else {
+      this._keycloakAngular.login();
     }
   }
 

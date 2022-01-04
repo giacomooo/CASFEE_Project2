@@ -40,4 +40,4 @@
   <app-shared-button-bar-edit [backLink]="'/parkingAdministration'" [form]="parkingForm" [object]="parking" [resetFunction]="resetForm"></app-shared-button-bar-edit>
 </form>
 
-<app-parking-administration-item-reservations [parking]="parking"></app-parking-administration-item-reservations>
+<app-parking-administration-item-reservations *ngIf="parking.id" [parking]="parking"></app-parking-administration-item-reservations>

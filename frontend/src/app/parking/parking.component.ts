@@ -1,6 +1,8 @@
+import { HttpParams } from '@angular/common/http';
 import { Component, ViewChild } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
-import { Router } from '@angular/router';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { Params, Router } from '@angular/router';
 import { KeycloakService } from 'keycloak-angular';
 import { KeycloakProfile } from 'keycloak-js';
 import { Globals } from '../globals';
@@ -20,7 +22,14 @@ export class ParkingComponent {
   public alternativeDateTime = false;
   public defaultTime = [new Date().getHours(), 0, 0];
 
-  constructor(private readonly keycloak: KeycloakService, private parkingService: ParkingService, private router: Router, private _formBuilder: FormBuilder, public globals: Globals) {
+  constructor(
+    private readonly keycloak: KeycloakService,
+    private _snackBar: MatSnackBar,
+    private parkingService: ParkingService,
+    private router: Router,
+    private _formBuilder: FormBuilder,
+    public globals: Globals,
+  ) {
     this.parkingForm = this._formBuilder.group({
       location: new FormControl('', Validators.required),
       dateTimeFrom: new FormControl('', [dateInPastValidator]),
@@ -40,12 +49,28 @@ export class ParkingComponent {
     this.globals.isLoading = false;
   }
 
-  callFromNow() {
-    this.router.navigate(['parking', 'list'], { queryParams: { location: this.parkingForm.value.location } });
+  callParkings(withTimeRange: boolean) {
+    let httpParams = new HttpParams().set('search', this.parkingForm.value.location);
+
+    if (withTimeRange) {
+      httpParams = httpParams.set('dateTimeFrom', this.parkingForm.value.dateTimeFrom).set('duration', this.parkingForm.value.duration);
+    }
+
+    this.parkingService.readParkings(httpParams).subscribe((serviceResults) => {
+      if (serviceResults.length > 0) {
+        if (withTimeRange) {
+          this.router.navigate(['parking', 'list'], { queryParams: { search: this.parkingForm.value.location } });
+        } else {
+          this.router.navigate(['parking', 'list'], { queryParams: { search: this.parkingForm.value.location, dateTimeFrom: this.parkingForm.value.dateTimeFrom, duration: this.parkingForm.value.duration } });
+        }
+      } else {
+        this.showError(`Keine Parkplätze in ${this.parkingForm.value.location} gefunden.`);
+      }
+    });
   }
 
-  callFromTo() {
-    this.router.navigate(['parking', 'list'], { queryParams: { location: this.parkingForm.value.location, dateTimeFrom: this.parkingForm.value.dateTimeFrom, duration: this.parkingForm.value.duration } });
+  showError(content: string) {
+    this._snackBar.open(content, 'Schliessen', { duration: 5000, panelClass: ['red-snackbar'] });
   }
 
   get f() {

@@ -1,20 +1,39 @@
 from datetime import datetime
 from django_filters import rest_framework
-from rest_framework import viewsets, filters, status
+from rest_framework import permissions, viewsets, filters, status
+from rest_framework import decorators
 from rest_framework.decorators import action
 from rest_framework.generics import get_object_or_404
 from rest_framework.response import Response
 
 from . import serializers, models
 
+@decorators.authentication_classes([])
+@decorators.permission_classes([permissions.IsAuthenticatedOrReadOnly])
 class ParkingViewSet(viewsets.ModelViewSet):
     pagination_class = None
     filter_backends = [rest_framework.DjangoFilterBackend, filters.OrderingFilter, filters.SearchFilter]
     filterset_class = models.ParkingFilter
     serializer_class = serializers.ParkingSerializer
     queryset = models.Parking.objects.all()
-    search_fields = ['Location']
+    search_fields = ['Location', 'ZIP']
     http_method_names = ['get', 'post', 'put', 'patch', 'delete']
+
+    # def get_authenticators(self):
+    #     if self.request.method in ['GET'] and self.action_map['get'] in ['list']:
+    #         return [] 
+    #     else: 
+    #         authentication_classes = [auth() for auth in self.authentication_classes]
+    #         return authentication_classes
+
+    # def get_permissions(self):
+    #     if self.action in ['list']:
+    #         return [permissions.AllowAny()]
+    #     else: 
+    #         return [permissions.IsAuthenticatedOrReadOnly()]
+
+    # def get_permissions(self):
+    #     return [permissions.IsAuthenticatedOrReadOnly()]
 
     @action(methods=['get'], detail=True)
     def reservation(self, request, pk=None):

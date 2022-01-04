@@ -21,7 +21,7 @@ export class ParkingListComponent implements OnInit {
 
   ngOnInit() {
     this.route.queryParams.subscribe((params) => {
-      const httpParams = new HttpParams().set('Location', params.location);
+      const httpParams = new HttpParams().set('search', params.search);
 
       this.parkingService.readParkings(httpParams).subscribe((serviceResults) => {
         serviceResults.map((parking) => {

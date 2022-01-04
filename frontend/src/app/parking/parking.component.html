@@ -6,7 +6,7 @@
   <form class="search-form" [formGroup]="parkingForm">
     <mat-card>
       <mat-form-field class="field300">
-        <input matInput placeholder="Ort" formControlName="location" (keyup.enter)="callFromNow()">
+        <input matInput placeholder="Ort/Postleitzahl eingeben" formControlName="location" (keyup.enter)="callParkings(false)">
       </mat-form-field>
       <br />
       <div class="spaceBetween">
@@ -27,9 +27,9 @@
 </div>
 <div class="spaceBetween buttons" *ngIf="!alternativeDateTime">
   <button mat-raised-button type="button" (click)="alternativeDateTime = !alternativeDateTime">Datum/Zeit <mat-icon>arrow_right_alt</mat-icon></button>
-  <button mat-raised-button color="primary" (click)="callFromNow()">ab sofort <mat-icon>arrow_right_alt</mat-icon></button>
+  <button mat-raised-button color="primary" (click)="callParkings(false)">ab sofort <mat-icon>arrow_right_alt</mat-icon></button>
 </div>
 <div class="spaceBetween buttons" *ngIf="alternativeDateTime">
   <button mat-raised-button type="button" (click)="alternativeDateTime = !alternativeDateTime"><mat-icon>arrow_left_alt</mat-icon></button>
-  <button mat-raised-button color="primary" (click)="callFromTo()">Parkplatz finden <mat-icon>arrow_right_alt</mat-icon></button>
+  <button mat-raised-button color="primary" (click)="callParkings(true)">Parkplatz finden <mat-icon>arrow_right_alt</mat-icon></button>
 </div>

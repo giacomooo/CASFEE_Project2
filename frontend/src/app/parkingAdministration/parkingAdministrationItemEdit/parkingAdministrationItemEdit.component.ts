@@ -51,8 +51,11 @@ export class ParkingAdministrationItemEditComponent implements OnInit {
   readParking() {
     this.globals.isLoading = true;
     const { id } = this._activatedRoute.snapshot.params;
+    if (id && id !== 'create') {
+      this.parking.id = id;
+    }
 
-    if (id) {
+    if (this.parking.id) {
       this._parkingService.readParking(id).subscribe((result) => {
         this.parking = result;
         this.parkingForm.reset(this.parking);
