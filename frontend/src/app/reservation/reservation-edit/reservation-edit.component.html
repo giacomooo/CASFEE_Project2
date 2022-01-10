@@ -1,5 +1,5 @@
 <app-shared-button-bar>
-  <button mat-mini-fab color="ancent" type="button" mat-button *ngIf="reservation?.id"
+  <button mat-mini-fab color="ancent" type="button" mat-button *ngIf="reservation?.id" data-cy="delete-button"
     (click)="deleteReservation(reservation.id)" class="deleteButton">
     <mat-icon>delete</mat-icon>
   </button>
@@ -28,7 +28,7 @@
     </mat-form-field>
     <mat-form-field>
       <input matInput [ngxMatDatetimePicker]="toPicker" placeholder="bis" formControlName="DateTimeTo"
-        [value]="this.reservation.DateTimeTo">
+        [value]="this.reservation.DateTimeTo" data-cy="data-to">
       <mat-datepicker-toggle matSuffix [for]="$any(toPicker)">
       </mat-datepicker-toggle>
       <ngx-mat-datetime-picker #toPicker>

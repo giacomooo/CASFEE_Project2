@@ -1,11 +1,11 @@
 <nav class="bottom-nav">
   <a class="bottom-nav__destination action-findParking" routerLink="/parking" routerLinkActive="bottom-nav__destination--active">
     <mat-icon>local_parking</mat-icon>
-    <span class="bottom-nav__label">Parkplatz finden</span>
+    <span class="bottom-nav__label" data-cy="nav-parkings">Parkplatz finden</span>
   </a>
   <a class="bottom-nav__destination action-reservations" routerLink="/reservation" routerLinkActive="bottom-nav__destination--active" *ngIf="isLoggedIn">
     <mat-icon>receipt_long</mat-icon>
-    <span class="bottom-nav__label">Reservationen</span>
+    <span class="bottom-nav__label" data-cy="nav-reservations">Reservationen</span>
   </a>
   <a class="bottom-nav__destination action-settings" routerLink="/account" routerLinkActive="bottom-nav__destination--active" *ngIf="isLoggedIn">
     <mat-icon>person</mat-icon>
