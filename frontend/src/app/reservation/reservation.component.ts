@@ -50,6 +50,9 @@ export class ReservationComponent implements OnInit {
         if (reservations) {
           this.reservations = reservations;
           this.globals.isLoading = false;
+          if (reservations.length === 0) {
+            this._snackBar.open('kein aktuellen Reservationen gefunden.', 'Schliessen', { duration: 3000, panelClass: ['red-snackbar'] });
+          }
         } else {
           this.globals.isLoading = false;
           this._snackBar.open('Die Reservationen konnten nicht geladen werden.', 'Schliessen');
