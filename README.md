@@ -1,6 +1,18 @@
 # CASFEE_Project2
 CASFEE_Project2
 
+## Highlights
+- Einsatz von Backend auf Basis von Python/Django
+- ORM Mapper durch Python im Einsatz 
+- Implementation von Keycloak als UAM über OIDC
+- Integrationstests mit Cypress
+- Linting mit Pylint und eslint
+- Verwendung optimierter Bilder (WebP)
+- Repsonsive Design, Mobile First
+- Postman Collection
+- Wireframes mit Figma
+
+
 ## Github Repo
 https://github.com/giacomooo/CASFEE_Project2
 
