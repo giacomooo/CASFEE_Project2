@@ -17,7 +17,7 @@
       <input matInput [ngxMatDatetimePicker]="fromPicker" placeholder="von" formControlName="DateTimeFrom">
       <mat-datepicker-toggle matSuffix [for]="$any(fromPicker)">
       </mat-datepicker-toggle>
-      <ngx-mat-datetime-picker #fromPicker>
+      <ngx-mat-datetime-picker #fromPicker [stepMinute]="5">
       </ngx-mat-datetime-picker>
       <mat-error *ngIf="f.DateTimeFrom.errors?.dateInPast" class="alert alert-danger">
         {{f.DateTimeFrom.errors?.dateInPast.value}}</mat-error>
@@ -31,7 +31,7 @@
         [value]="this.reservation.DateTimeTo" data-cy="data-to">
       <mat-datepicker-toggle matSuffix [for]="$any(toPicker)">
       </mat-datepicker-toggle>
-      <ngx-mat-datetime-picker #toPicker>
+      <ngx-mat-datetime-picker #toPicker [stepMinute]="5">
       </ngx-mat-datetime-picker>
       <mat-error *ngIf="f.DateTimeTo.errors?.existsReservationValidator" class="alert alert-danger">
         {{f.DateTimeTo.errors?.existsReservationValidator.value}}</mat-error>

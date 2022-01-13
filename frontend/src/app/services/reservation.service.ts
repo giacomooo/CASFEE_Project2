@@ -2,6 +2,7 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { KeycloakService } from 'keycloak-angular';
 import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
 import { DeleteMessage } from '../models/DeleteMessage';
 import { Reservation } from '../models/Reservation';
@@ -15,7 +16,18 @@ export class ReservationService {
   }
 
   public readReservations(search?: HttpParams): Observable<Reservation[]> {
-    return this.http.get<Reservation[]>(`${this.url}reservation/?${search}`);
+    return this.http.get<Reservation[]>(`${this.url}reservation/?${search}`).pipe(
+      map((results) => {
+        results.map((result) => {
+          const dateTimeFrom = new Date(result.DateTimeFrom);
+          result.DateTimeFrom = new Date(dateTimeFrom.setHours(dateTimeFrom.getHours() - (dateTimeFrom.getTimezoneOffset() / 60)));
+          const dateTimeTo = new Date(result.DateTimeTo);
+          result.DateTimeTo = new Date(dateTimeTo.setHours(dateTimeTo.getHours() - (dateTimeTo.getTimezoneOffset() / 60)));
+          return result;
+        });
+        return results;
+      }),
+    );
   }
 
   public createReservation(reservation: Reservation): Observable<Reservation> {
