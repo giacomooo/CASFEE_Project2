@@ -18,12 +18,13 @@ export class ReservationService {
   public readReservations(search?: HttpParams): Observable<Reservation[]> {
     return this.http.get<Reservation[]>(`${this.url}reservation/?${search}`).pipe(
       map((results) => {
-        results.map((result) => {
-          const dateTimeFrom = new Date(result.DateTimeFrom);
-          result.DateTimeFrom = new Date(dateTimeFrom.setHours(dateTimeFrom.getHours() - (dateTimeFrom.getTimezoneOffset() / 60)));
-          const dateTimeTo = new Date(result.DateTimeTo);
-          result.DateTimeTo = new Date(dateTimeTo.setHours(dateTimeTo.getHours() - (dateTimeTo.getTimezoneOffset() / 60)));
-          return result;
+        results.map((serviceResult) => {
+          const reservation = serviceResult;
+          const dateTimeFrom = new Date(serviceResult.DateTimeFrom);
+          const dateTimeTo = new Date(serviceResult.DateTimeTo);
+          reservation.DateTimeFrom = new Date(dateTimeFrom.setHours(dateTimeFrom.getHours() - (dateTimeFrom.getTimezoneOffset() / 60)));
+          reservation.DateTimeTo = new Date(dateTimeTo.setHours(dateTimeTo.getHours() - (dateTimeTo.getTimezoneOffset() / 60)));
+          return reservation;
         });
         return results;
       }),
