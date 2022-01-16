@@ -88,24 +88,7 @@ describe('Parking Administration Tests', () => {
   });
 });
 
-// describe('Parking Tests', () => {
-//   it('loads examples', () => {
-//     expect(true).to.equal(true);
-//   });
-// });
-
 describe('Reservation Tests', () => {
-  // const newParking = new Parking(6441, '[AAAAA_Cypress] Seelisberg', 8.50, '[AAAAA_Cypress] Rütli', 5, 'a');
-  // const newReservation: Reservation = { id: 1,
-  //   ID_Parking: newParking,
-  //   ID_Renter: '557eae58-16b3-4dd7-b3a9-f30c1098f292',
-  //   DateTimeFrom: new Date('2022-03-07T10:00:00'),
-  //   07.03.2022 10:00
-  //   DateTimeTo: new Date('2022-03-07T11:00:00'),
-  //   PricePerHour: 1.1,
-  //   Amount: 2.2,
-  // };
-
   beforeEach(() => {
     cy.visit('http://localhost:4200');
   });
@@ -115,17 +98,20 @@ describe('Reservation Tests', () => {
     cy.get('[formcontrolname="location"]').type('St. Gallen');
     cy.get('button:contains("ab sofort")').click();
     cy.get('[ng-reflect-message="Reservieren"]').first().click();
-    // cy.get('[data-cy="add-reservation"]').click();
+    cy.get('[data-cy="add-reservation"]').click();
   });
 
   it('update Reservation', () => {
     cy.get('[data-cy="nav-reservations"]').click();
     cy.get('[data-cy="select-to-edit"]').first().click();
-    cy.get('[data-cy="data-to"]').click();
+    // cy.get('[data-cy="data-to"]').click();
+    // cy.get('[data-cy="data-to"]').type('0');
+    cy.wait(3000);
     cy.get('[data-cy="data-to"]').clear();
     cy.get('[data-cy="data-to"]').invoke('val', '07.04.2022 10:00');
-    cy.get('[data-cy="data-to"]').tab();
-//    cy.get('button:contains("Ändern")').click();
+    // cy.get('[data-cy="data-to"]').tab();
+    cy.get('[data-cy="data-to"]').type('{backspace}');
+    cy.get('button:contains("Ändern")').click();
   });
 
   it('Delete Reservation', () => {
@@ -133,5 +119,5 @@ describe('Reservation Tests', () => {
     cy.get('[data-cy="select-to-edit"]').first().click();
     cy.get('[data-cy="delete-button"]').click();
     cy.get('button:contains("Ja")').click();
-});
+  });
 });
