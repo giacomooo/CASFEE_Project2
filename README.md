@@ -12,6 +12,11 @@ CASFEE_Project2
 - Postman Collection
 - Wireframes mit Figma
 
+## offene Punkte (alles serverseitige Erweiterungen daher ohne Prio behandelt)
+- Serverseitige Validierungen bezüglich Reservations-Mutationen generell
+- Überprüfungen auf bestehende Reservationen müsste bei grösseren Datenmengen sicher für Performance noch gecacht werden. (Zusätzlich zur serverseitigen Validierung)
+- Vorschlag (Default) bei Neu-Anlegung der Reservation nicht fix auf die nächste Stunde sondern auf nächste freie Stunde setzen
+- Suche mittels Angabe von Zeit und Dauer auf freie Parkplätze beschränken
 
 ## Github Repo
 https://github.com/giacomooo/CASFEE_Project2
