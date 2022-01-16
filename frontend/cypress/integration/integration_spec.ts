@@ -19,19 +19,6 @@ describe('Login Tests', () => {
     cy.get('#kc-login').click();
     cy.get('.action-settings span').should('have.text', 'Hans Keller');
   });
-
-  it('Clear old unsuccessful testings', () => {
-    cy.get('.action-settings').click();
-    cy.get('mat-nav-list').first().click();
-    cy.get('.mat-line').first().click();
-    cy.get('[formcontrolname="Location"]').invoke('val').should('not.be.empty');
-
-    const parking = cy.get('[formcontrolname="Location"]').invoke('val').contains('[AAAAA_Cypress]');
-    if (parking) {
-      cy.get('.deleteButton').click();
-      cy.get('#modal-action-button').click();
-    }
-  });
 });
 
 describe('Parking Administration Tests', () => {
@@ -55,12 +42,12 @@ describe('Parking Administration Tests', () => {
     cy.get('[formcontrolname="PricePerHour"]').type(newParking.PricePerHour);
     cy.get('form').submit();
 
-    cy.get('.mat-line').first().should('have.text', `${newParking.Street} ${newParking.StreetNo}${newParking.StreetNoSuffix}`);
-    cy.get('.mat-line').eq(1).should('have.text', `${newParking.ZIP} ${newParking.Location}`);
+    cy.get('.mat-list-item-row').first().should('have.text', `${newParking.Street} ${newParking.StreetNo}${newParking.StreetNoSuffix}`);
+    cy.get('.mat-list-item-row').eq(1).should('have.text', `${newParking.ZIP} ${newParking.Location}`);
   });
 
   it('Update Parking', () => {
-    cy.get('.mat-line').first().click();
+    cy.get('.mat-list-item-row').first().click();
     cy.get('[formcontrolname="Location"]').invoke('val').should('not.be.empty');
     cy.get('[formcontrolname="Street"]').type(' edited');
     cy.get('[formcontrolname="StreetNo"]').type('1');
@@ -71,20 +58,22 @@ describe('Parking Administration Tests', () => {
     cy.get('[formcontrolname="PricePerHour"]').clear();
     cy.get('[formcontrolname="PricePerHour"]').type(99);
     cy.get('form').submit();
+    cy.wait(3000);
 
-    cy.get('.mat-line').first().should('have.text', `${updatedParking.Street} ${updatedParking.StreetNo}${updatedParking.StreetNoSuffix}`);
-    cy.get('.mat-line').eq(1).should('have.text', `${updatedParking.ZIP} ${updatedParking.Location}`);
+    cy.get('.mat-list-item-row').first().should('have.text', `${updatedParking.Street} ${updatedParking.StreetNo}${updatedParking.StreetNoSuffix}`);
+    cy.get('.mat-list-item-row').eq(1).should('have.text', `${updatedParking.ZIP} ${updatedParking.Location}`);
   });
 
   it('Delete Parking', () => {
-    cy.get('.mat-line').first().click();
+    cy.get('.mat-list-item-row').first().click();
     cy.get('[formcontrolname="Location"]').invoke('val').should('not.be.empty');
     cy.get('[formcontrolname="Location"]').invoke('val').should('eq', updatedParking.Location);
     cy.get('.deleteButton').click();
     cy.get('#modal-action-button').click();
+    cy.wait(3000);
 
-    cy.get('.mat-line').first().should('not.have.text', `${updatedParking.Street} ${updatedParking.StreetNo}${updatedParking.StreetNoSuffix}`);
-    cy.get('.mat-line').eq(1).should('not.have.text', `${updatedParking.ZIP} ${updatedParking.Location}`);
+    cy.get('.mat-list-item-row').first().should('not.have.text', `${updatedParking.Street} ${updatedParking.StreetNo}${updatedParking.StreetNoSuffix}`);
+    cy.get('.mat-list-item-row').eq(1).should('not.have.text', `${updatedParking.ZIP} ${updatedParking.Location}`);
   });
 });
 
