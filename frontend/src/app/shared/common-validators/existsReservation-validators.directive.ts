@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { AbstractControl, ValidatorFn } from '@angular/forms';
+import { AbstractControl, ValidationErrors, ValidatorFn } from '@angular/forms';
 import * as moment from 'moment';
 import { ParkingService } from 'src/app/services/parking.service';
 
@@ -16,7 +16,7 @@ export class ExistsReservationValidator {
     dateTimeFromFieldName: string,
     dateTimeToFieldName: string,
   ): ValidatorFn {
-    return (form: AbstractControl): { [key: string]: boolean } | null => {
+    return (form: AbstractControl): ValidationErrors | null => {
       const idParking = form.get(idParkingFieldName);
       const idReservation = form.get(idReservationFieldName);
       const dateTimeFromControl = form.get(dateTimeFromFieldName);
@@ -28,31 +28,39 @@ export class ExistsReservationValidator {
       const newTo = new Date(dateTimeToControl.value);
 
       this.parkingService.readParkingReservations(idParking?.value.id).subscribe((result) => {
-        const otherReservations = result.filter((reservation) => reservation.id !== idReservation?.value);
+        dateTimeFromControl?.setErrors(null);
+        dateTimeToControl?.setErrors(null);
 
+        const otherReservations = result.filter((reservation) => reservation.id !== idReservation?.value);
         const toInRange = otherReservations.filter((reservation) => new Date(reservation.DateTimeTo) > newFrom
-            && new Date(reservation.DateTimeTo) < newTo);
+          && new Date(reservation.DateTimeTo) < newTo);
+        const fromInRange = otherReservations.filter((reservation) => new Date(reservation.DateTimeFrom) < newTo
+          && new Date(reservation.DateTimeFrom) > newFrom);
+        const overRange = otherReservations.filter((reservation) => new Date(reservation.DateTimeFrom) < newFrom
+          && new Date(reservation.DateTimeTo) > newTo);
+
         if (toInRange.length > 0) {
           const msg = { value: `Parkplatz ist erst ab ${moment(toInRange[0].DateTimeTo).format('HH:mm')} frei.` };
           const err = { existsReservationValidator: msg };
           dateTimeFromControl?.setErrors(err);
+          return { dateTimeFromFieldName: { value: true } };
         }
 
-        const fromInRange = otherReservations.filter((reservation) => new Date(reservation.DateTimeFrom) < newTo
-            && new Date(reservation.DateTimeFrom) > newFrom);
         if (fromInRange.length > 0) {
           const msg = { value: `Parkplatz ist nur bis ${moment(fromInRange[0].DateTimeFrom).format('HH:mm')} frei.` };
           const err = { existsReservationValidator: msg };
           dateTimeToControl?.setErrors(err);
+          return { dateTimeToFieldName: { value: true } };
         }
 
-        const overRange = otherReservations.filter((reservation) => new Date(reservation.DateTimeFrom) < newFrom
-            && new Date(reservation.DateTimeTo) > newTo);
         if (overRange.length > 0) {
           const msg = { value: 'Parkplatz in Zeitraum bereits besetzt.' };
           const err = { existsReservationValidator: msg };
           dateTimeFromControl?.setErrors(err);
+          dateTimeToControl?.setErrors(err);
+          return { dateTimeFromFieldName: { value: true }, dateTimeToFieldName: { value: true } };
         }
+        return null;
       });
       return null;
     };

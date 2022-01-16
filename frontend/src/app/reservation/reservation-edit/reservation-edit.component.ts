@@ -2,7 +2,6 @@ import { HttpParams } from '@angular/common/http';
 import {
   AfterContentInit,
   Component,
-  Input,
   ViewChild,
 } from '@angular/core';
 import {
@@ -137,51 +136,51 @@ export class ReservationEditComponent implements AfterContentInit {
     });
   }
 
-    resetForm = (): void => {
-      this.reservationForm.reset();
-      this.reservationForm.markAsUntouched();
+  resetForm = (): void => {
+    this.reservationForm.reset();
+    this.reservationForm.markAsUntouched();
 
-      if (this.reservationForm.controls.id) {
-        this.readReservations();
-      }
-    };
-
-    public showError(content: string): void {
-      this._snackBar.open(content, 'Schliessen', { duration: 5000 });
+    if (this.reservationForm.controls.id) {
+      this.readReservations();
     }
+  };
 
-    public calculateDiff(from: Date, to: Date): number {
-      const _from = new Date(from);
-      const _to = new Date(to);
+  public showError(content: string): void {
+    this._snackBar.open(content, 'Schliessen', { duration: 5000 });
+  }
 
-      const minutes = Math.floor(
-        (Date.UTC(_to.getFullYear(), _to.getMonth(), _to.getDate(), _to.getHours(), _to.getMinutes())
+  public calculateDiff(from: Date, to: Date): number {
+    const _from = new Date(from);
+    const _to = new Date(to);
+
+    const minutes = Math.floor(
+      (Date.UTC(_to.getFullYear(), _to.getMonth(), _to.getDate(), _to.getHours(), _to.getMinutes())
         - Date.UTC(_from.getFullYear(), _from.getMonth(), _from.getDate(), _from.getHours(), _from.getMinutes()))
         / (1000 * 60),
-      );
-      const pricePerMinute = this.reservation.PricePerHour / 60;
-      const amount = (Math.round((pricePerMinute * minutes) * 20)) * 0.05;
-      return (Math.floor(amount * 100)) / 100;
-    }
+    );
+    const pricePerMinute = this.reservation.PricePerHour / 60;
+    const amount = (Math.round((pricePerMinute * minutes) * 20)) * 0.05;
+    return (Math.floor(amount * 100)) / 100;
+  }
 
-    // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
-    public openModal() {
-      const dialogConfig = new MatDialogConfig();
+  // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
+  public openModal() {
+    const dialogConfig = new MatDialogConfig();
 
-      dialogConfig.disableClose = true;
-      dialogConfig.id = 'modal-component';
-      dialogConfig.height = '170px';
-      dialogConfig.width = '550px';
-      dialogConfig.data = {
-        title: 'Wollen sie die Reservation wirklich löschen?',
-        description: 'Dieser Vorgang kann nicht rückgängig gemacht werden.',
-      };
+    dialogConfig.disableClose = true;
+    dialogConfig.id = 'modal-component';
+    dialogConfig.height = '170px';
+    dialogConfig.width = '550px';
+    dialogConfig.data = {
+      title: 'Wollen sie die Reservation wirklich löschen?',
+      description: 'Dieser Vorgang kann nicht rückgängig gemacht werden.',
+    };
 
-      return this.matDialog.open(ModalComponent, dialogConfig);
-    }
+    return this.matDialog.open(ModalComponent, dialogConfig);
+  }
 
-    // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
-    get f() {
-      return this.reservationForm.controls;
-    }
+  // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
+  get f() {
+    return this.reservationForm.controls;
+  }
 }
